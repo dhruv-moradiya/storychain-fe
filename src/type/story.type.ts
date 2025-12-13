@@ -22,6 +22,28 @@ enum StoryCollaboratorStatus {
   REMOVED = 'REMOVED',
 }
 
+enum StoryGenre {
+  FANTASY = 'FANTASY',
+  SCI_FI = 'SCI_FI',
+  MYSTERY = 'MYSTERY',
+  ROMANCE = 'ROMANCE',
+  HORROR = 'HORROR',
+  THRILLER = 'THRILLER',
+  ADVENTURE = 'ADVENTURE',
+  DRAMA = 'DRAMA',
+  COMEDY = 'COMEDY',
+  OTHER = 'OTHER',
+}
+
+enum StoryContentRating {
+  GENERAL = 'GENERAL',
+  TEEN = 'TEEN',
+  MATURE = 'MATURE',
+}
+
+type TStoryGenre = keyof typeof StoryGenre;
+type TStoryContentRating = keyof typeof StoryContentRating;
+
 const ROLE_HIERARCHY = {
   CONTRIBUTOR: 0,
   REVIEWER: 1,
@@ -105,6 +127,20 @@ type TStoryCollaboratorStatus = keyof typeof StoryCollaboratorStatus;
 type TStoryStatus = keyof typeof StoryStatus;
 
 // ---------------------------------
+// API REQUEST TYPES
+// ---------------------------------
+interface IStoryUpdateSetting {
+  storyId: string;
+  isPublic: boolean;
+  allowBranching: boolean;
+  requireApproval: boolean;
+  allowComments: boolean;
+  allowVoting: boolean;
+  genre: TStoryGenre;
+  contentRating: TStoryContentRating;
+}
+
+// ---------------------------------
 // API RESPONSE TYPES
 // ---------------------------------
 
@@ -131,6 +167,10 @@ interface ICreateInvitation extends IBaseType {
   data: IStoryCollaborator;
 }
 
+interface IStoryUpdateSettingResponse extends IBaseType {
+  data: IStoryUpdateSetting;
+}
+
 // ---------------------------------
 // Exports
 // ---------------------------------
@@ -147,5 +187,7 @@ export type {
   IGetAllUserStoryCollaboratorResponse,
   IStoryCollaboratorWithUser,
   ICreateInvitation,
+  IStoryUpdateSetting,
+  IStoryUpdateSettingResponse,
 };
 export { StoryStatus, StoryCollaboratorRole, StoryCollaboratorStatus, ROLE_HIERARCHY };

@@ -84,6 +84,7 @@ function useCreateInvitation() {
       storyId: string;
       role: TStoryCollaboratorRole;
       invitedUserId: string;
+      invitedUserName: string;
     }) => {
       const { storyId, ...body } = payload;
 
@@ -93,6 +94,8 @@ function useCreateInvitation() {
     },
   });
 }
+
+function useUpdateStorySetting() {}
 
 export {
   useGetUserStories,

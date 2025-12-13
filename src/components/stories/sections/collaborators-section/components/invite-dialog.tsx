@@ -54,13 +54,14 @@ function InviteDialog({ open, onOpenChange, storyId }: InviteDialogProps) {
   const { mutate, isPending } = useCreateInvitation();
   const queryClient = useQueryClient();
 
-  const handleInvite = (userId: string, email: string) => {
+  const handleInvite = (userId: string, username: string, email: string) => {
     if (!selectedRole) return;
 
     mutate(
       {
         storyId,
         invitedUserId: userId,
+        invitedUserName: username,
         role: selectedRole,
       },
       {
@@ -168,7 +169,7 @@ function InviteDialog({ open, onOpenChange, storyId }: InviteDialogProps) {
                     size="sm"
                     variant="outline"
                     disabled={!selectedRole || isPending}
-                    onClick={() => handleInvite(user.clerkId, user.email)}
+                    onClick={() => handleInvite(user.clerkId, user.username, user.email)}
                     className="flex items-center gap-1"
                   >
                     <Mail size={12} />

@@ -231,6 +231,30 @@
   }
 }
 
+/* Minimal toolbar container */
+.notion-toolbar {
+  @apply bg-background/70 flex items-center gap-1 rounded-xl border px-2 py-1 shadow-sm backdrop-blur supports-[backdrop-filter]:backdrop-blur-md;
+}
+
+/* Icon button (Notion style) */
+.notion-btn {
+  @apply hover:bg-muted/40 text-muted-foreground flex h-8 w-8 items-center justify-center rounded-md transition;
+}
+
+.notion-btn-active {
+  @apply bg-muted text-foreground;
+}
+
+/* Dropdown trigger */
+.notion-trigger {
+  @apply bg-background hover:bg-muted/20 flex h-8 items-center gap-1 rounded-md border px-2 text-sm;
+}
+
+/* Bubble menu */
+.notion-bubble {
+  @apply bg-background/95 flex items-center gap-1 rounded-xl border px-2 py-1 shadow-md backdrop-blur-md;
+}
+
 .error-toast {
   @apply rounded-md bg-gradient-to-r from-red-100 to-red-600 p-4 text-white shadow-md;
 }
