@@ -1,4 +1,4 @@
-import type { Edge, Node, NodeProps } from "@xyflow/react";
+import type { Edge, Node, NodeProps } from '@xyflow/react';
 
 type StoryNodeData = {
   title: string;
@@ -13,7 +13,7 @@ type StoryNodeData = {
   onCommentClick: (nodeId: string) => void;
 };
 
-export type CustomNodeType = Node<StoryNodeData, "customCard">;
+export type CustomNodeType = Node<StoryNodeData, 'customCard'>;
 
 export type CustomNodeProps = NodeProps<Node<StoryNodeData>>;
 
@@ -21,12 +21,12 @@ export type CustomEdgeData = {
   onButtonClick: (id: string) => void;
 };
 
-export type CustomEdge = Edge<CustomEdgeData, "custom">;
+export type CustomEdge = Edge<CustomEdgeData, 'custom'>;
 export type { StoryNodeData };
 
 // Updated TypeScript type
-export type RequestStatus = "open" | "approved" | "rejected" | "merged";
-export type ChangeType = "new" | "update";
+export type RequestStatus = 'open' | 'approved' | 'rejected' | 'merged';
+export type ChangeType = 'new' | 'update';
 
 export interface User {
   name: string;
@@ -51,7 +51,9 @@ export interface Request {
   timeAgo: string;
   status: RequestStatus;
   changeType: ChangeType; // NEW FIELD: new or update
-  priority?: "low" | "medium" | "high";
+  priority?: 'low' | 'medium' | 'high';
   tags?: string[];
   comments?: Comment[];
 }
+
+// NEW TYPES

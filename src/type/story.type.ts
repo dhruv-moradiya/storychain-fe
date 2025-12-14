@@ -1,4 +1,6 @@
 import type { IBaseType } from '.';
+import type { IChapter } from './chapter.type';
+import type { IChapterNodeData } from './story-canvas.type';
 
 enum StoryStatus {
   DRAFT = 'DRAFT',
@@ -171,6 +173,17 @@ interface IStoryUpdateSettingResponse extends IBaseType {
   data: IStoryUpdateSetting;
 }
 
+interface IChapterTree extends IChapter {
+  children: IChapterNodeData[];
+}
+
+interface IStoryTreeResponse extends IBaseType {
+  data: {
+    storyId: string;
+    chapters: IChapterNodeData[];
+  };
+}
+
 // ---------------------------------
 // Exports
 // ---------------------------------
@@ -189,5 +202,7 @@ export type {
   ICreateInvitation,
   IStoryUpdateSetting,
   IStoryUpdateSettingResponse,
+  IStoryTreeResponse,
+  IChapterTree,
 };
 export { StoryStatus, StoryCollaboratorRole, StoryCollaboratorStatus, ROLE_HIERARCHY };

@@ -1,10 +1,12 @@
 import { useApi } from '@/hook/useApi';
+import { QueryKey } from '@/lib/query-keys';
 import type { TStoryFormValues } from '@/schema/story.schema';
 import type {
   ICreateInvitation,
   IGetAllUserStoryCollaboratorResponse,
   IGetAllUserStoryResponse,
   IStory,
+  IStoryTreeResponse,
   TStoryCollaboratorRole,
 } from '@/type/story.type';
 import { useAuth } from '@clerk/clerk-react';
@@ -97,10 +99,26 @@ function useCreateInvitation() {
 
 function useUpdateStorySetting() {}
 
+function useGetStoryTree(storyId: string) {
+  const api = useApi();
+  const { isSignedIn } = useAuth();
+
+  return useQuery({
+    queryKey: QueryKey.story.chapters(storyId),
+    queryFn: async () => {
+      const res = await api.get<IStoryTreeResponse>(`/stories/${storyId}/tree`);
+      return res.data.data;
+    },
+    enabled: isSignedIn && !!storyId,
+    staleTime: Infinity,
+  });
+}
+
 export {
   useGetUserStories,
   useGetStoryOverviewBySlug,
   useCreateStory,
   useGetStoryCollaboratos,
   useCreateInvitation,
+  useGetStoryTree,
 };

@@ -1,113 +1,111 @@
-import type { CustomNodeProps } from "@/type/flow.type";
-import { Handle, Position } from "@xyflow/react";
-import {
-  Star,
-  Users,
-  Clock,
-  MessageCircle,
-  Heart,
-  ThumbsUp,
-  ThumbsDown,
-  Plus,
-} from "lucide-react";
+import type { IChapterNodeProps } from '@/type/story-canvas.type';
+import { Handle, Position } from '@xyflow/react';
+import { Clock, Heart, MessageCircle, Plus, Star, ThumbsDown, ThumbsUp, Users } from 'lucide-react';
 
-const CustomCardNode = ({ id, data, selected }: CustomNodeProps) => {
+const CustomCardNode = ({ id, data, selected }: IChapterNodeProps) => {
+  const chapterLabel = `Ch. ${data.depth + 1}`;
+  const timeAgo = new Date(data.createdAt).toLocaleDateString();
+
   return (
     <div
-      className={`w-72 border-2 border-border p-3 rounded-xl flex flex-col items-start bg-background backdrop-blur-xs transition-all duration-200 relative group ${
-        selected
-          ? "border-2 !border-primary shadow-lg"
-          : "border border-border hover:shadow-sm"
+      className={`border-border bg-background group relative flex w-72 flex-col rounded-xl border-2 p-3 backdrop-blur-xs transition-all duration-200 ${
+        selected ? '!border-primary shadow-lg' : 'hover:shadow-sm'
       }`}
     >
       {/* Top Handle */}
       <Handle
         type="target"
         position={Position.Top}
-        className="!w-3 !h-0.5 !bg-primary !rounded-[3px] hover:!bg-primary/80 border-0!"
+        className="!bg-primary !h-0.5 !w-3 !rounded-[3px] !border-none"
       />
 
-      {/* Bottom Handle with hover + icon */}
+      {/* Bottom Handle */}
       <Handle
         type="source"
         position={Position.Bottom}
-        id="left-handle"
-        className="!w-3 !h-0.5 !bg-primary !border-none !rounded-[3px] relative"
+        className="!bg-primary relative !h-0.5 !w-3 !rounded-[3px] !border-none"
       >
-        <span
-          className={`absolute -top-1 left-1/2 -translate-x-1/2 transition hover:scale-x-125 ${
-            data.hovered ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <Plus size={16} className="text-white bg-primary rounded-full p-1" />
+        <span className="absolute -top-1 left-1/2 -translate-x-1/2 opacity-0 transition group-hover:opacity-100">
+          <Plus size={16} className="bg-primary rounded-full p-1 text-white" />
         </span>
       </Handle>
 
-      {/* Favorite button */}
-      <button className="absolute top-3 right-3 flex items-center justify-center w-8 h-8 rounded-lg hover:bg-accent transition-colors text-muted-foreground hover:text-yellow-500">
+      {/* Favorite */}
+      <button className="hover:bg-accent text-muted-foreground absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-lg transition hover:text-yellow-500">
         <Star size={16} />
       </button>
 
-      {/* User Info */}
-      <div className="flex items-center gap-3 mt-2">
-        <div className="w-10 h-10 border bg-muted flex items-center justify-center rounded-md">
-          <p className="text-foreground font-semibold text-base">
-            {data.userInitial}
-          </p>
+      {/* Author */}
+      <div className="mt-2 flex items-center gap-3">
+        <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-md border">
+          {data.author.avatarUrl ? (
+            <img
+              src={data.author.avatarUrl}
+              alt={data.author.username}
+              className="h-full w-full rounded-md object-cover"
+            />
+          ) : (
+            <span className="text-sm font-semibold">
+              {data.author.username.charAt(0).toUpperCase()}
+            </span>
+          )}
         </div>
-        <div className="flex flex-col items-start">
-          <p className="text-sm font-medium text-foreground">{data.username}</p>
-          <p className="text-muted-foreground text-xs">{data.timeAgo}</p>
+
+        <div>
+          <p className="text-sm font-medium">{data.author.username}</p>
+          <p className="text-muted-foreground text-xs">{timeAgo}</p>
         </div>
       </div>
 
-      {/* Chapter Info */}
-      <div className="w-full mt-3">
+      {/* Chapter */}
+      <div className="mt-3">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
-            {data.chapter}
+          <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-[10px] font-medium">
+            {chapterLabel}
           </span>
-          <h3 className="text-sm font-semibold text-foreground truncate">
-            {data.title}
-          </h3>
+          <h3 className="truncate text-sm font-semibold">{data.title}</h3>
         </div>
 
-        <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center gap-3">
+        <div className="text-muted-foreground mt-2 flex items-center justify-between text-xs">
+          <div className="flex gap-3">
             <span className="flex items-center gap-1">
               <Users size={14} className="text-primary" />
-              <span>{data.readers} readers</span>
+              {data.stats.reads}
             </span>
             <span className="flex items-center gap-1">
               <Clock size={14} className="text-secondary" />
-              <span>{data.readTime} min read</span>
+              {Math.max(1, Math.round(data.title.split(' ').length / 200))} min
             </span>
           </div>
 
-          <button className="px-3 py-1 text-xs font-medium rounded-md bg-primary/10 text-primary hover:bg-primary/20 transition">
+          <button className="bg-primary/10 text-primary hover:bg-primary/20 rounded-md px-3 py-1 text-xs font-medium">
             Read
           </button>
         </div>
       </div>
 
-      {/* Bottom Actions */}
-      <div className="mt-3 flex items-center justify-between w-full">
+      {/* Actions */}
+      <div className="mt-3 flex justify-between">
         <div className="flex gap-1">
-          <button className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-accent transition-colors text-muted-foreground hover:text-primary">
+          <button
+            onClick={() => data.onCommentClick(id)}
+            className="hover:bg-accent flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs transition"
+          >
             <MessageCircle size={14} />
-            <span className="text-xs font-medium">Comment</span>
+            {data.stats.comments}
           </button>
-          <button className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-accent transition-colors text-muted-foreground hover:text-destructive">
+
+          <button className="hover:bg-accent flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs transition">
             <Heart size={14} />
-            <span className="text-xs font-medium">{data.likes}</span>
+            {data.votes.upvotes}
           </button>
         </div>
 
         <div className="flex gap-1">
-          <button className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-accent transition-colors text-muted-foreground hover:text-green-600">
+          <button className="hover:bg-accent flex h-8 w-8 items-center justify-center rounded-lg text-green-600">
             <ThumbsUp size={14} />
           </button>
-          <button className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-accent transition-colors text-muted-foreground hover:text-destructive">
+          <button className="hover:bg-accent text-destructive flex h-8 w-8 items-center justify-center rounded-lg">
             <ThumbsDown size={14} />
           </button>
         </div>
