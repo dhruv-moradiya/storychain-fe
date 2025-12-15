@@ -14,8 +14,8 @@ import {
   CollaboratorTable,
   InviteDialog,
 } from './collaborators-section/index';
-import { useGetStoryCollaboratos, useGetStoryOverviewBySlug } from '@/api/story.api';
 import type { IStory } from '@/type/story.type';
+import { useGetStoryBySlug, useGetStoryCollaborators } from '@/hooks/story/story.queries';
 
 export default function CollaboratorSection() {
   const { slug } = useParams();
@@ -37,7 +37,7 @@ export default function CollaboratorSection() {
     isLoading: isStoryLoading,
     isError: isStoryError,
     refetch: refetchStory,
-  } = useGetStoryOverviewBySlug(slug ?? '', {
+  } = useGetStoryBySlug(slug ?? '', {
     enabled: !cachedStory,
   });
 
@@ -52,7 +52,7 @@ export default function CollaboratorSection() {
     isLoading: isCollabLoading,
     isError: isCollabError,
     refetch: refetchCollaborators,
-  } = useGetStoryCollaboratos(storyId ?? '');
+  } = useGetStoryCollaborators(storyId ?? '');
 
   /* ------------------------------------------------------
      4️⃣ Memoized filtered list

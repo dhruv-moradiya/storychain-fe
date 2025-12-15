@@ -8,8 +8,8 @@ import type { IStory } from '@/type/story.type';
 import StoryNotFound from '@/components/common/story/story-not-found';
 
 // AUTO-FETCH fallback hook (same query key)
-import { useGetStoryOverviewBySlug } from '@/api/story.api';
 import SettingSectionLoading from '@/components/common/story/setting-section-loading';
+import { useGetStoryBySlug } from '@/hooks/story/story.queries';
 
 const SettingSection = () => {
   const { slug } = useParams();
@@ -19,7 +19,7 @@ const SettingSection = () => {
   const cachedStory = queryClient.getQueryData<IStory>(['story_by_slug', slug]);
 
   // 2️⃣ If not cached, run API
-  const { data: fetchedStory, isLoading } = useGetStoryOverviewBySlug(slug ?? '', {
+  const { data: fetchedStory, isLoading } = useGetStoryBySlug(slug ?? '', {
     enabled: !cachedStory, // only fetch if no cache
   });
 

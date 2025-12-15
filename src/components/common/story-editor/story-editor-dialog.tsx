@@ -18,11 +18,11 @@ import { StoryFormSchema, type TStoryFormValues } from '@/schema/story.schema';
 import { motion } from 'framer-motion';
 import { BookOpen } from 'lucide-react';
 import { StoryFormFields } from './story-form-fields';
-import { useCreateStory } from '@/api/story.api';
 import { toast } from 'sonner';
 import { handleApiError } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
+import { useCreateStory } from '@/hooks/story/story.mutations';
 
 type StoryEditorDialogProps = {
   open: boolean;

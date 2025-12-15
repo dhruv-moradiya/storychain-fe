@@ -1,5 +1,5 @@
-import { useGetStoryOverviewBySlug } from '@/api/story.api';
 import { Button } from '@/components/ui/button';
+import { useGetStoryBySlug } from '@/hooks/story/story.queries';
 import { fadeIn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Eye, FileEdit, Globe, Lock, Star, Users } from 'lucide-react';
@@ -7,7 +7,7 @@ import { useParams } from 'react-router';
 
 const OverviewSection = () => {
   const { slug } = useParams();
-  const { data } = useGetStoryOverviewBySlug(slug ?? '');
+  const { data } = useGetStoryBySlug(slug ?? '');
   // console.log('data :>> ', data);
 
   const story = {

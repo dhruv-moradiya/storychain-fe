@@ -1,6 +1,5 @@
 import { useSearchUserByUsername } from '@/api/user.api';
 import { useDebounce } from '@/hooks/useDebounce';
-import { useCreateInvitation } from '@/api/story.api';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,6 +29,7 @@ import {
 import { StoryCollaboratorRole, type TStoryCollaboratorRole } from '@/type/story.type';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useCreateInvitation } from '@/hooks/story/story.mutations';
 
 interface InviteDialogProps {
   open: boolean;

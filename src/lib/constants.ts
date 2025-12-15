@@ -178,3 +178,26 @@ export const LEVEL_THRESHOLDS = [
   { level: 9, minXP: 8500, maxXP: 12499, title: 'Mythweaver' },
   { level: 10, minXP: 12500, maxXP: Infinity, title: 'Grandmaster' },
 ] as const;
+
+export const STALE_TIME = {
+  /** Always fresh – manual invalidation required */
+  INFINITE: Infinity,
+
+  /** Very frequent updates (real-time, chat, live data) */
+  REALTIME: 0,
+
+  /** Extremely short-lived data */
+  VERY_SHORT: 5 * 1000, // 5 sec
+
+  /** Short-lived, user-interactive data */
+  SHORT: 30 * 1000, // 30 sec
+
+  /** Moderate caching (default dashboard data) */
+  MEDIUM: 2 * 60 * 1000, // 2 min
+
+  /** Safe caching for lists & summaries */
+  LONG: 5 * 60 * 1000, // 5 min
+
+  /** Rarely changing data */
+  VERY_LONG: 15 * 60 * 1000, // 15 min
+} as const;

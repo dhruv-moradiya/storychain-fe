@@ -10,7 +10,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -24,13 +24,14 @@ import CommentsPanel from '../panels/comments/CommentsPanel';
 import StorySettingsPanel from '../panels/setting/StorySettingsPanel';
 import MergeRequestPanel from '../panels/MergeRequest/MergeRequestPanel';
 
-import { useGetStoryOverviewBySlug, useGetStoryTree } from '@/api/story.api';
 import type { IStory } from '@/type/story.type';
 
 import useChapterNode from '@/hook/useChapterNode';
 import useChapterEdge from '@/hook/useChapterEdge';
 import { useChapterFlowLayout } from '@/hook/useChapterFlowLayout';
 import type { IChapterEdge, IChapterNodeType } from '@/type/story-canvas.type';
+import { useGetStoryBySlug, useGetStoryTree } from '@/hooks/story/story.queries';
+import StoryTreeLoading from './story-tree/components/story-tree-loading';
 
 const EMPTY_ARRAY: [] = [];
 
@@ -51,7 +52,7 @@ const StoryTree = () => {
     data: fetchedStory,
     isLoading: isStoryLoading,
     error: storyError,
-  } = useGetStoryOverviewBySlug(slug ?? '', {
+  } = useGetStoryBySlug(slug ?? '', {
     enabled: !cachedStory,
   });
 
@@ -105,8 +106,17 @@ const StoryTree = () => {
    * React Flow state
    * ---------------------------------- */
   const [nodes, setNodes, onNodesChange] = useNodesState(nodesWithHandlers);
-
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+
+  // Sync nodes and edges when chapter data changes (fixes tab switching issue)
+  const chaptersKey = chapters.map((c) => c._id).join(',');
+  useEffect(() => {
+    if (nodesWithHandlers.length > 0) {
+      setNodes(nodesWithHandlers as IChapterNodeType[]);
+      setEdges(layoutedEdges);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chaptersKey]);
 
   /* ----------------------------------
    * Edge connect
@@ -145,11 +155,7 @@ const StoryTree = () => {
    * Render guards (SAFE now)
    * ---------------------------------- */
   if (isStoryLoading || isTreeLoading) {
-    return (
-      <div className="text-muted-foreground flex h-full items-center justify-center">
-        Loading story…
-      </div>
-    );
+    return <StoryTreeLoading />;
   }
 
   if (storyError || treeError) {

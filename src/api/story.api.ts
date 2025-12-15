@@ -1,6 +1,3 @@
-import { useApi } from '@/hook/useApi';
-import { QueryKey } from '@/lib/query-keys';
-import type { TStoryFormValues } from '@/schema/story.schema';
 import type {
   ICreateInvitation,
   IGetAllUserStoryCollaboratorResponse,
@@ -9,116 +6,47 @@ import type {
   IStoryTreeResponse,
   TStoryCollaboratorRole,
 } from '@/type/story.type';
-import { useAuth } from '@clerk/clerk-react';
-import { useMutation, useQuery, type UseQueryOptions } from '@tanstack/react-query';
+import type { TStoryFormValues } from '@/schema/story.schema';
+import type { AxiosInstance } from 'axios';
 
-function useGetUserStories() {
-  const api = useApi();
-  const { isSignedIn } = useAuth();
+const storyApi = (api: AxiosInstance) => ({
+  getMyStories: async () => {
+    const res = await api.get<IGetAllUserStoryResponse>('/stories/my');
+    return res.data.data;
+  },
 
-  return useQuery({
-    queryKey: ['current_user_stories'],
-    queryFn: async () => {
-      const res = await api.get<IGetAllUserStoryResponse>('/stories/my');
-      return res.data.data;
-    },
-    enabled: isSignedIn,
-    staleTime: Infinity,
-  });
-}
+  getBySlug: async (slug: string) => {
+    const res = await api.get<{ data: IStory }>(`/stories/${slug}`);
+    return res.data.data;
+  },
 
-function useGetStoryOverviewBySlug(
-  slug: string,
-  options: Omit<
-    UseQueryOptions<IStory, unknown, IStory, (string | undefined)[]>,
-    'queryKey' | 'queryFn'
-  > = {}
-) {
-  const api = useApi();
-  const { isSignedIn } = useAuth();
+  getCollaborators: async (storyId: string) => {
+    const res = await api.get<IGetAllUserStoryCollaboratorResponse>(
+      `/stories/${storyId}/collaborators`
+    );
+    return res.data.data;
+  },
 
-  return useQuery({
-    queryKey: ['story_by_slug', slug],
-    queryFn: async () => {
-      const res = await api.get(`/stories/${slug}`);
-      return res.data.data;
-    },
-    enabled: isSignedIn && !!slug, // user must be signed in + slug must exist
-    staleTime: Infinity,
-    ...options, // ⭐ allow override (e.g., enabled: !cached)
-  });
-}
+  createStory: async (payload: TStoryFormValues) => {
+    const res = await api.post('/stories', payload);
+    return res.data;
+  },
 
-function useGetStoryCollaboratos(storyId: string) {
-  const api = useApi();
-  const { isSignedIn } = useAuth();
+  createInvitation: async (payload: {
+    storyId: string;
+    role: TStoryCollaboratorRole;
+    invitedUserId: string;
+    invitedUserName: string;
+  }) => {
+    const { storyId, ...body } = payload;
+    const res = await api.post<ICreateInvitation>(`/stories/${storyId}/collaborators`, body);
+    return res.data.data;
+  },
 
-  return useQuery({
-    queryKey: ['story_collaborators', storyId],
-    queryFn: async () => {
-      const res = await api.get<IGetAllUserStoryCollaboratorResponse>(
-        `/stories/${storyId}/collaborators`
-      );
-      return res.data.data;
-    },
-    enabled: isSignedIn && !!storyId,
-    staleTime: Infinity,
-  });
-}
+  getTree: async (storyId: string) => {
+    const res = await api.get<IStoryTreeResponse>(`/stories/${storyId}/tree`);
+    return res.data.data;
+  },
+});
 
-function useCreateStory() {
-  const api = useApi();
-
-  return useMutation({
-    mutationFn: async (payload: TStoryFormValues) => {
-      const res = await api.post('/stories', payload);
-      return res.data;
-    },
-    meta: { requiresAuth: true },
-  });
-}
-
-function useCreateInvitation() {
-  const api = useApi();
-
-  return useMutation({
-    mutationFn: async (payload: {
-      storyId: string;
-      role: TStoryCollaboratorRole;
-      invitedUserId: string;
-      invitedUserName: string;
-    }) => {
-      const { storyId, ...body } = payload;
-
-      const res = await api.post<ICreateInvitation>(`/stories/${storyId}/collaborators`, body);
-
-      return res.data.data;
-    },
-  });
-}
-
-function useUpdateStorySetting() {}
-
-function useGetStoryTree(storyId: string) {
-  const api = useApi();
-  const { isSignedIn } = useAuth();
-
-  return useQuery({
-    queryKey: QueryKey.story.chapters(storyId),
-    queryFn: async () => {
-      const res = await api.get<IStoryTreeResponse>(`/stories/${storyId}/tree`);
-      return res.data.data;
-    },
-    enabled: isSignedIn && !!storyId,
-    staleTime: Infinity,
-  });
-}
-
-export {
-  useGetUserStories,
-  useGetStoryOverviewBySlug,
-  useCreateStory,
-  useGetStoryCollaboratos,
-  useCreateInvitation,
-  useGetStoryTree,
-};
+export { storyApi };

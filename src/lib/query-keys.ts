@@ -18,9 +18,7 @@ export const QueryKey = {
     my: ['story', 'my'] as const, // GET /my
 
     bySlug: (slug: string) => ['story', 'slug', slug] as const, // GET /:slug
-
     byId: (storyId: string) => ['story', 'detail', storyId] as const,
-
     collaborators: (storyId: string) => ['story', storyId, 'collaborators'] as const, // GET /:storyId/collaborators
 
     // ----------------

@@ -2,7 +2,6 @@ import StoryEditorDialog from '@/components/common/story-editor/story-editor-dia
 import { Plus } from 'lucide-react';
 import { useSearchParams } from 'react-router';
 // import { stories } from '../../../mock-data/stories';
-import { useGetUserStories } from '@/api/story.api';
 import { useState } from 'react';
 import {
   StoriesEmpty,
@@ -11,6 +10,7 @@ import {
   StoryCard,
   StoryStatusTabs,
 } from './stories-section/index';
+import { useGetUserStories } from '@/hooks/story/story.queries';
 
 const StoriesSection = () => {
   const [searchParams] = useSearchParams();

@@ -442,6 +442,12 @@ const StoryBuilder = () => {
 
   const handlePublish = useCallback(() => {
     // TODO: Implement publish logic
+
+    const input = {
+      chapterTitle,
+      content: editor.getHTML(),
+    };
+    console.log('input :>> ', input);
     toast.info('Publishing coming soon');
   }, []);
 
