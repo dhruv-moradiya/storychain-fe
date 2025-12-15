@@ -19,15 +19,15 @@ import {
   Redo2,
   Rows,
   Ruler,
+  Save,
   Strikethrough,
   Table,
   Trash2,
   Type,
   Undo2,
-  Power,
-  PowerOff,
+  Eye,
 } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,10 +36,24 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Separator } from '@/components/ui/separator';
 import { EmojiPicker } from '@/components/editors/emoji-picker';
-import { Spinner } from '@/components/ui/spinner';
 import { BubbleMenu } from '@tiptap/react/menus';
 import { cn } from '@/lib/utils';
-import { formatDistanceToNow } from 'date-fns';
+import { toast } from 'sonner';
+import { useUser } from '@clerk/clerk-react';
+
+import {
+  DraftRecoveryBanner,
+  PublishDropdown,
+  SubmitRequestDialog,
+  EditorStatusBar,
+  AutoSaveIndicator,
+  useAutoSave,
+  useDraftRecovery,
+  type SubmitRequestData,
+  type DraftData,
+} from '@/components/story-builder';
+
+import { ChapterPreviewDialog } from '@/components/common/chapter-reader';
 
 const extensions = [
   TextStyleKit,
@@ -53,22 +67,27 @@ const extensions = [
   TableKit.configure({ table: { resizable: true } }),
 ];
 
-// Dummy save function that simulates an API call
-const saveContent = async (content: string): Promise<void> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('Content saved:', content);
-      resolve();
-    }, 500);
-  });
-};
+const DEFAULT_CONTENT = `
+  <h2>Welcome to StoryChain</h2>
+  <p>Start writing your chapter here. Your work will be automatically saved as you type.</p>
+  <p>When you're ready, you can publish directly or create a submit request for review.</p>
+`;
 
-function MenuBar({ editor }: { editor: Editor }) {
-  const [autoSaveEnabled, setAutoSaveEnabled] = useState(false);
-  const [lastSaved, setLastSaved] = useState<Date | null>(null);
-  const [isSaving, setIsSaving] = useState(false);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
+function MenuBar({
+  editor,
+  autoSaveState,
+  onSaveDraft,
+  onPreview,
+  onPublish,
+  onCreatePR,
+}: {
+  editor: Editor;
+  autoSaveState: ReturnType<typeof useAutoSave>;
+  onSaveDraft: () => void;
+  onPreview: () => void;
+  onPublish: () => void;
+  onCreatePR: () => void;
+}) {
   const editorState = useEditorState({
     editor,
     selector: (ctx) => ({
@@ -82,41 +101,12 @@ function MenuBar({ editor }: { editor: Editor }) {
     }),
   });
 
-  const performSave = async () => {
-    if (isSaving) return;
-    setIsSaving(true);
-
-    try {
-      const content = editor.getHTML();
-      await saveContent(content);
-      setLastSaved(new Date());
-    } finally {
-      setIsSaving(false);
-    }
-  };
-
-  const toggleAutoSave = () => {
-    const newState = !autoSaveEnabled;
-    setAutoSaveEnabled(newState);
-
-    if (newState) {
-      performSave();
-      intervalRef.current = setInterval(() => performSave(), 60000);
-    } else {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    }
-  };
-
-  useEffect(() => {
-    return () => intervalRef.current && clearInterval(intervalRef.current);
-  }, []);
-
   if (!editor) return null;
 
   return (
     <div className="bg-background/70 sticky top-0 z-20 w-full border-b backdrop-blur-md">
       <div className="mx-auto flex max-w-[1100px] flex-wrap items-center justify-between gap-3 px-3 py-2">
-        {/* LEFT GROUP */}
+        {/* LEFT GROUP - Formatting Tools */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Bold / Italic / Strike */}
           <ButtonGroup className="toolbar-group">
@@ -231,7 +221,7 @@ function MenuBar({ editor }: { editor: Editor }) {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* 🔥 FULL TABLE MENU RESTORED */}
+            {/* Table Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="toolbar-btn">
@@ -251,7 +241,7 @@ function MenuBar({ editor }: { editor: Editor }) {
                   }
                 >
                   <Table className="mr-2 h-4 w-4" />
-                  Insert 3×3
+                  Insert 3x3
                 </DropdownMenuItem>
 
                 <Separator />
@@ -318,7 +308,7 @@ function MenuBar({ editor }: { editor: Editor }) {
         </div>
 
         {/* RIGHT SIDE CONTROLS */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Undo / Redo */}
           <ButtonGroup className="toolbar-group">
             <Button
@@ -340,37 +330,44 @@ function MenuBar({ editor }: { editor: Editor }) {
             </Button>
           </ButtonGroup>
 
-          {/* Auto Save */}
-          <Button
-            size="sm"
-            variant={autoSaveEnabled ? 'default' : 'outline'}
-            onClick={toggleAutoSave}
-            className="toolbar-btn flex items-center gap-2"
-          >
-            {isSaving ? (
-              <Spinner className="h-4 w-4" />
-            ) : autoSaveEnabled ? (
-              <Power className="h-4 w-4" />
-            ) : (
-              <PowerOff className="h-4 w-4" />
-            )}
+          <Separator orientation="vertical" className="h-6" />
 
-            <span className="hidden sm:inline">
-              {autoSaveEnabled ? 'Auto-save ON' : 'Auto-save OFF'}
-            </span>
+          {/* Auto Save Indicator */}
+          <AutoSaveIndicator
+            status={autoSaveState.status}
+            lastSavedAt={autoSaveState.lastSavedAt}
+            error={autoSaveState.error}
+            autoSaveEnabled={autoSaveState.autoSaveEnabled}
+            onToggle={autoSaveState.toggleAutoSave}
+            onForceSave={autoSaveState.forceSave}
+          />
+
+          <Separator orientation="vertical" className="hidden h-6 sm:block" />
+
+          {/* Save Draft Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onSaveDraft}
+            className="hidden gap-1.5 sm:flex"
+          >
+            <Save className="h-4 w-4" />
+            Save Draft
           </Button>
 
-          {/* Last Saved */}
-          {lastSaved && (
-            <span className="text-muted-foreground hidden text-xs md:inline">
-              Saved {formatDistanceToNow(lastSaved, { addSuffix: true })}
-            </span>
-          )}
+          {/* Preview Button */}
+          <Button variant="ghost" size="sm" onClick={onPreview} className="hidden gap-1.5 lg:flex">
+            <Eye className="h-4 w-4" />
+            Preview
+          </Button>
 
-          {/* Char Count */}
-          <span className="text-muted-foreground hidden text-xs lg:inline">
-            {editor.getText().length} chars
-          </span>
+          {/* Publish Dropdown */}
+          <PublishDropdown
+            onPublish={onPublish}
+            onCreatePR={onCreatePR}
+            onPreview={onPreview}
+            isOwner={true}
+          />
         </div>
       </div>
     </div>
@@ -378,30 +375,141 @@ function MenuBar({ editor }: { editor: Editor }) {
 }
 
 const StoryBuilder = () => {
+  const [chapterTitle, setChapterTitle] = useState('Untitled Chapter');
+  const [isPRDialogOpen, setIsPRDialogOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const initialContentRef = useRef<string>(DEFAULT_CONTENT);
+  const { user } = useUser();
+
   const editor = useEditor({
     extensions,
-    content: `
-      <h2>Welcome 👋</h2>
-      <p>This is a Google Docs–style TipTap editor built with shadcn + Tailwind.</p>
-      <p>Try bold, italic, headings, lists, tables, emojis, and more!</p>
-      <p>Enable auto-save to automatically save your work every minute.</p>
-    `,
+    content: DEFAULT_CONTENT,
   });
+
+  // Auto-save hook
+  const autoSaveState = useAutoSave({
+    editor,
+    chapterId: 'new',
+    storyId: '',
+    title: chapterTitle,
+    enabled: true,
+    onSave: async (data) => {
+      // TODO: Implement actual API call
+      console.log('Saving to backend:', data);
+    },
+  });
+
+  // Draft recovery hook
+  const draftRecovery = useDraftRecovery({
+    onRecover: (draft: DraftData) => {
+      if (editor) {
+        editor.commands.setContent(draft.content);
+        setChapterTitle(draft.title);
+        toast.success('Draft recovered successfully');
+      }
+    },
+    onDiscard: () => {
+      toast.info('Draft discarded');
+    },
+  });
+
+  // Calculate word and char counts
+  const wordCount = editor?.getText().trim() ? editor.getText().trim().split(/\s+/).length : 0;
+  const charCount = editor?.getText().length || 0;
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
+        e.preventDefault();
+        autoSaveState.forceSave();
+        toast.success('Draft saved');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [autoSaveState]);
+
+  const handleSaveDraft = useCallback(() => {
+    autoSaveState.forceSave();
+    toast.success('Draft saved');
+  }, [autoSaveState]);
+
+  const handlePreview = useCallback(() => {
+    setIsPreviewOpen(true);
+  }, []);
+
+  const handlePublish = useCallback(() => {
+    // TODO: Implement publish logic
+    toast.info('Publishing coming soon');
+  }, []);
+
+  const handleCreatePR = useCallback(() => {
+    setIsPRDialogOpen(true);
+  }, []);
+
+  const handleSubmitPR = useCallback((data: SubmitRequestData) => {
+    // TODO: Implement actual PR creation
+    console.log('Creating PR:', data);
+    toast.success('Submit request created successfully');
+    setIsPRDialogOpen(false);
+  }, []);
+
+  const handleHistoryClick = useCallback(() => {
+    // TODO: Implement version history panel
+    toast.info('Version history coming soon');
+  }, []);
 
   if (!editor) return null;
 
   return (
-    <div className="w-full">
-      <MenuBar editor={editor} />
-      <div className="flex justify-center px-2 py-4 sm:px-4 sm:py-6">
-        <EditorContent
-          editor={editor}
-          className={cn(
-            'editor-content bg-background w-full max-w-[816px] rounded-md border shadow-sm',
-            'prose prose-gray dark:prose-invert text-foreground min-h-[60vh] p-4 font-sans text-[14px] leading-[1.6] focus:outline-none sm:min-h-[70vh] sm:p-8 lg:min-h-[11in] lg:p-12'
-          )}
+    <div className="flex min-h-screen w-full flex-col">
+      {/* Draft Recovery Banner */}
+      {draftRecovery.showBanner && draftRecovery.draft && (
+        <DraftRecoveryBanner
+          draft={draftRecovery.draft}
+          onContinue={draftRecovery.recoverDraft}
+          onDiscard={draftRecovery.discardDraft}
+          onPreview={handlePreview}
+          onDismiss={draftRecovery.dismissBanner}
         />
+      )}
+
+      {/* Menu Bar */}
+      <MenuBar
+        editor={editor}
+        autoSaveState={autoSaveState}
+        onSaveDraft={handleSaveDraft}
+        onPreview={handlePreview}
+        onPublish={handlePublish}
+        onCreatePR={handleCreatePR}
+      />
+
+      {/* Editor Content */}
+      <div className="flex flex-1 justify-center px-2 py-4 sm:px-4 sm:py-6">
+        <div className="w-full max-w-[816px]">
+          {/* Chapter Title Input */}
+          <input
+            type="text"
+            value={chapterTitle}
+            onChange={(e) => setChapterTitle(e.target.value)}
+            placeholder="Chapter Title"
+            className="placeholder:text-muted-foreground mb-4 w-full border-none bg-transparent text-2xl font-bold outline-none focus:ring-0 sm:text-3xl"
+          />
+
+          {/* Editor */}
+          <EditorContent
+            editor={editor}
+            className={cn(
+              'editor-content bg-background w-full rounded-md border shadow-sm',
+              'prose prose-gray dark:prose-invert text-foreground min-h-[60vh] p-4 font-sans text-[14px] leading-[1.6] focus:outline-none sm:min-h-[70vh] sm:p-8 lg:min-h-[11in] lg:p-12'
+            )}
+          />
+        </div>
       </div>
+
+      {/* Bubble Menu */}
       <BubbleMenu editor={editor} options={{ placement: 'top', offset: 8, flip: true }}>
         <ButtonGroup className="bg-background border shadow-lg">
           <Button
@@ -433,6 +541,47 @@ const StoryBuilder = () => {
           </Button>
         </ButtonGroup>
       </BubbleMenu>
+
+      {/* Status Bar */}
+      <EditorStatusBar
+        status="draft"
+        wordCount={wordCount}
+        charCount={charCount}
+        chapterTitle={chapterTitle}
+        onHistoryClick={handleHistoryClick}
+      />
+
+      {/* Submit Request Dialog */}
+      <SubmitRequestDialog
+        open={isPRDialogOpen}
+        onOpenChange={setIsPRDialogOpen}
+        onSubmit={handleSubmitPR}
+        wordCount={wordCount}
+        charCount={charCount}
+        originalContent={initialContentRef.current}
+        modifiedContent={editor?.getHTML() || ''}
+      />
+
+      {/* Preview Dialog */}
+      <ChapterPreviewDialog
+        open={isPreviewOpen}
+        onOpenChange={setIsPreviewOpen}
+        chapter={{
+          id: 'preview',
+          title: chapterTitle,
+          content: editor?.getHTML() || '',
+          author: {
+            id: user?.id || 'anonymous',
+            name: user?.fullName || 'Anonymous',
+            avatar: user?.imageUrl,
+            username: user?.username || undefined,
+          },
+          status: 'draft',
+          createdAt: new Date(),
+        }}
+        originalContent={initialContentRef.current}
+        showDiff={true}
+      />
     </div>
   );
 };

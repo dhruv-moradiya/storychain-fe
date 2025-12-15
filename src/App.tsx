@@ -5,6 +5,8 @@ const Home = lazy(() => import('./pages/home'));
 const StoryBuilder = lazy(() => import('./pages/story-builder'));
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const Story = lazy(() => import('./pages/stories'));
+const Reports = lazy(() => import('./pages/reports'));
+const Appeals = lazy(() => import('./pages/appeals'));
 const SignUp = lazy(() => import('./pages/sign-up'));
 const SignIn = lazy(() => import('./pages/sign-in'));
 const Layout = lazy(() => import('./layout/layout'));
@@ -59,6 +61,23 @@ export const router = createBrowserRouter([
         element: (
           <Suspense fallback={<div>Loading dashboard...</div>}>
             <Dashboard />
+          </Suspense>
+        ),
+      },
+      // Admin - Reports & Appeals
+      {
+        path: 'reports',
+        element: (
+          <Suspense fallback={<div>Loading reports...</div>}>
+            <Reports />
+          </Suspense>
+        ),
+      },
+      {
+        path: 'appeals',
+        element: (
+          <Suspense fallback={<div>Loading appeals...</div>}>
+            <Appeals />
           </Suspense>
         ),
       },
