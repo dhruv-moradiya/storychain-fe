@@ -14,12 +14,15 @@ const useChapterEdge = (chapters: IChapterNode[]): Edge[] => {
   const traverse = (node: IChapterNode, parentId?: string) => {
     if (parentId) {
       edges.push({
-        id: `e${parentId}-${node._id}`,
+        id: `${parentId}-${node._id}`,
         source: parentId,
         target: node._id,
         animated: true,
         style: EDGE_STYLE,
         type: EDGE_TYPE,
+        data: {
+          storyId: node.storyId,
+        },
       });
     }
 

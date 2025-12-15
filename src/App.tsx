@@ -37,7 +37,7 @@ export const router = createBrowserRouter([
 
       // Stories
       {
-        path: 'stories/new',
+        path: 'stories/:storyId/chapter/:chapterId/new',
         element: (
           <Suspense fallback={<div>Loading story builder...</div>}>
             <StoryBuilder />

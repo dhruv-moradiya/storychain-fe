@@ -1,13 +1,9 @@
-import type { CustomEdge } from "@/type/flow.type";
-import {
-  BaseEdge,
-  EdgeLabelRenderer,
-  getSmoothStepPath,
-  type EdgeProps,
-} from "@xyflow/react";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { Button } from '@/components/ui/button';
+import type { IChapterEdgeProps } from '@/type/story-canvas.type';
+import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath } from '@xyflow/react';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 
 export function CustomEdge({
   id,
@@ -18,7 +14,9 @@ export function CustomEdge({
   sourcePosition,
   targetPosition,
   markerEnd,
-}: EdgeProps<CustomEdge>) {
+  data,
+}: IChapterEdgeProps) {
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
   const [path, labelX, labelY] = getSmoothStepPath({
@@ -40,16 +38,16 @@ export function CustomEdge({
         strokeWidth={20}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        style={{ cursor: "pointer" }}
+        style={{ cursor: 'pointer' }}
       />
       <EdgeLabelRenderer>
         <div
           style={{
-            position: "absolute",
+            position: 'absolute',
             left: 0,
             top: 0,
             transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-            pointerEvents: "none",
+            pointerEvents: 'none',
           }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -57,9 +55,11 @@ export function CustomEdge({
           <Button
             size="icon"
             variant="default"
-            className="size-6 rounded-full shadow-md pointer-events-auto"
+            className="pointer-events-auto size-6 rounded-full shadow-md"
             onClick={() => {
-              console.log("Add node between edge:", id);
+              const parentId = id.split('-')[0];
+              navigate(`/stories/${data?.storyId ?? 'root'}/chapter/${parentId}/new`);
+              console.log('Add node between edge:', id);
             }}
           >
             <Plus size={10} />

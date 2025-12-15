@@ -1,5 +1,5 @@
 import { memo, useEffect } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { Controller, useFormContext, useWatch } from 'react-hook-form';
 
 import { Input } from '../../ui/input';
 import { Label } from '../../ui/label';
@@ -10,11 +10,13 @@ import { Textarea } from '../../ui/textarea';
 import { type TStoryFormValues } from '@/schema/story.schema';
 import { SectionDivider } from './section-divider';
 import { GlowCard } from './glow-card';
+import MiniTextEditor from '../mini-text-editor/mini-text-editor';
 
 export const StoryFormFields = memo(() => {
   const {
     register,
     setValue,
+    control,
     formState: { errors },
   } = useFormContext<TStoryFormValues>();
 
@@ -109,6 +111,40 @@ export const StoryFormFields = memo(() => {
           )}
           <p className="text-muted-foreground text-right text-xs">
             {description.length}/2000 characters
+          </p>
+        </div>
+      </GlowCard>
+
+      <GlowCard>
+        <div className="space-y-2">
+          <Label>Description</Label>
+
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <MiniTextEditor
+                value={field.value}
+                placeholder="Write description..."
+                minHeight="120px"
+                onChange={(html) => {
+                  // Optional: strip HTML tags for character count logic
+                  const textLength = html.replace(/<[^>]+>/g, '').length;
+
+                  if (textLength <= 2000) {
+                    field.onChange(html);
+                  }
+                }}
+              />
+            )}
+          />
+
+          {errors.description && (
+            <p className="text-xs text-red-500">{errors.description.message}</p>
+          )}
+
+          <p className="text-muted-foreground text-right text-xs">
+            {description?.replace(/<[^>]+>/g, '').length || 0}/2000 characters
           </p>
         </div>
       </GlowCard>

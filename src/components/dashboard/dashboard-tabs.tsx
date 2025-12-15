@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 const tabs = [
   { key: 'account', label: 'Account', path: '/dashboard/account' },
   { key: 'stories', label: 'Stories', path: '/dashboard/stories' },
+  { key: 'my-chapters', label: 'My Chapters', path: '/dashboard/my-chapters' },
   { key: 'notification', label: 'Notification', path: '/dashboard/notification' },
 ];
 

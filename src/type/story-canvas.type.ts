@@ -1,6 +1,6 @@
 import CustomCardNode from '@/components/nodes/custom-card-node';
 import { CustomEdge } from '@/components/nodes/custom-edge';
-import type { Edge, Node, NodeProps } from '@xyflow/react';
+import type { Edge, EdgeProps, Node, NodeProps } from '@xyflow/react';
 
 export interface IChapterNode {
   _id: string;
@@ -54,10 +54,13 @@ export type IChapterNodeType = Node<IChapterNodeData, 'chapterNode'>;
 export type IChapterNodeProps = NodeProps<Node<IChapterNodeData>>;
 
 export type IChapterEdgeData = {
+  storyId: string;
   onButtonClick: (id: string) => void;
 };
 
 export type IChapterEdge = Edge<IChapterEdgeData, 'chapterEdge'>;
+
+export type IChapterEdgeProps = EdgeProps<IChapterEdge>;
 
 export const nodeWidth = 288;
 export const nodeHeight = 175;
