@@ -47,6 +47,17 @@ const storyApi = (api: AxiosInstance) => ({
     const res = await api.get<IStoryTreeResponse>(`/stories/${storyId}/tree`);
     return res.data.data;
   },
+
+  createChapter: async (payload: {
+    parentChapterId: string | null;
+    title: string;
+    content: string;
+    storyId: string;
+  }) => {
+    const { storyId, ...body } = payload;
+    const res = await api.post(`/stories/${storyId}/chapters`, body);
+    return res.data;
+  },
 });
 
 export { storyApi };

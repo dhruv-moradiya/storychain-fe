@@ -1,8 +1,11 @@
 import type { IChapterNodeProps } from '@/type/story-canvas.type';
 import { Handle, Position } from '@xyflow/react';
 import { Clock, Heart, MessageCircle, Plus, Star, ThumbsDown, ThumbsUp, Users } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
 const CustomCardNode = ({ id, data, selected }: IChapterNodeProps) => {
+  console.log('data :>> ', data);
+  const navigate = useNavigate();
   const chapterLabel = `Ch. ${data.depth + 1}`;
   const timeAgo = new Date(data.createdAt).toLocaleDateString();
 
@@ -24,6 +27,10 @@ const CustomCardNode = ({ id, data, selected }: IChapterNodeProps) => {
         type="source"
         position={Position.Bottom}
         className="!bg-primary relative !h-0.5 !w-3 !rounded-[3px] !border-none"
+        onClick={() => {
+          navigate(`/stories/${data.storyId ?? 'root'}/chapter/${data._id}/new`);
+          console.log('Add node between edge:', id);
+        }}
       >
         <span className="absolute -top-1 left-1/2 -translate-x-1/2 opacity-0 transition group-hover:opacity-100">
           <Plus size={16} className="bg-primary rounded-full p-1 text-white" />

@@ -25,3 +25,16 @@ export function useCreateInvitation() {
     }) => storyApi(api).createInvitation(payload),
   });
 }
+
+export function useCreateChapter() {
+  const api = useApi();
+
+  return useMutation({
+    mutationFn: (payload: {
+      parentChapterId: string | null;
+      title: string;
+      content: string;
+      storyId: string;
+    }) => storyApi(api).createChapter(payload),
+  });
+}

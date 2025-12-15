@@ -54,6 +54,8 @@ import {
 } from '@/components/story-builder';
 
 import { ChapterPreviewDialog } from '@/components/common/chapter-reader';
+import { useParams } from 'react-router';
+import { useCreateChapter } from '@/hooks/story/story.mutations';
 
 const extensions = [
   TextStyleKit,
@@ -375,6 +377,7 @@ function MenuBar({
 }
 
 const StoryBuilder = () => {
+  const { chapterId: parentChapterId, storyId } = useParams();
   const [chapterTitle, setChapterTitle] = useState('Untitled Chapter');
   const [isPRDialogOpen, setIsPRDialogOpen] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -440,14 +443,21 @@ const StoryBuilder = () => {
     setIsPreviewOpen(true);
   }, []);
 
+  const { mutate, isPending } = useCreateChapter();
+
   const handlePublish = useCallback(() => {
     // TODO: Implement publish logic
 
-    const input = {
-      chapterTitle,
+    const payload = {
+      title: chapterTitle,
       content: editor.getHTML(),
+      storyId: storyId ?? '',
+      parentChapterId: parentChapterId ? parentChapterId : null,
     };
-    console.log('input :>> ', input);
+    console.log('input :>> ', payload);
+
+    mutate(payload);
+
     toast.info('Publishing coming soon');
   }, []);
 
