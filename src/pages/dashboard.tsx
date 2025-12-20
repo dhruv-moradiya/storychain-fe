@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router';
 import { DashboardTabs } from '@/components/dashboard/dashboard-tabs';
 
-import AccountSection from '@/components/dashboard/sections/account-section';
 import NotificationSection from '@/components/dashboard/sections/notification-section';
 import StoriesSection from '@/components/dashboard/sections/stories-section';
 import { MyChaptersSection } from '@/components/dashboard/sections/my-chapters-section';
@@ -18,7 +17,6 @@ const Dashboard = () => {
           <Route path="stories" element={<StoriesSection />} />
           <Route path="my-chapters" element={<MyChaptersSection />} />
           <Route path="notification" element={<NotificationSection />} />
-          <Route path="account" element={<AccountSection />} />
         </Routes>
       </div>
     </div>

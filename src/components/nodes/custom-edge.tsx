@@ -19,6 +19,9 @@ export function CustomEdge({
   const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
+  console.log('data :>> ', data);
+  console.log('id :>> ', id);
+
   const [path, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,

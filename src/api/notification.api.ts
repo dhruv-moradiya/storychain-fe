@@ -1,4 +1,4 @@
-import { useApi } from '@/hook/useApi';
+import { useApi } from '@/hooks/useApi';
 import { QueryKey } from '@/lib/query-keys';
 import type { INotificationListResponse } from '@/type/notification.type';
 import { useAuth } from '@clerk/clerk-react';

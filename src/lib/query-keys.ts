@@ -12,19 +12,36 @@ export const QueryKey = {
     // ----------------
     // STORY ROUTES
     // ----------------
+    list: ['story', 'list'] as const,
+    new: ['story', 'new'] as const,
+    my: ['story', 'my'] as const,
 
-    list: ['story', 'list'] as const, // GET /
-    new: ['story', 'new'] as const, // GET /new
-    my: ['story', 'my'] as const, // GET /my
-
-    bySlug: (slug: string) => ['story', 'slug', slug] as const, // GET /:slug
+    bySlug: (slug: string) => ['story', 'slug', slug] as const,
     byId: (storyId: string) => ['story', 'detail', storyId] as const,
-    collaborators: (storyId: string) => ['story', storyId, 'collaborators'] as const, // GET /:storyId/collaborators
+    collaborators: (storyId: string) => ['story', storyId, 'collaborators'] as const,
 
     // ----------------
     // CHAPTER ROUTES
     // ----------------
-
     chapters: (storyId: string) => ['story', storyId, 'chapters'] as const,
+
+    // ----------------
+    // CHAPTER AUTO SAVE ROUTES
+    // ----------------
+    autoSave: {
+      base: ['chapter', 'autosave'] as const,
+
+      enable: (chapterId?: string, draftId?: string) =>
+        ['chapter', 'autosave', 'enable', chapterId ?? null, draftId ?? null] as const,
+
+      save: (chapterId?: string, draftId?: string) =>
+        ['chapter', 'autosave', 'save', chapterId ?? null, draftId ?? null] as const,
+
+      disable: (chapterId?: string, draftId?: string) =>
+        ['chapter', 'autosave', 'disable', chapterId ?? null, draftId ?? null] as const,
+
+      draft: (chapterId?: string, draftId?: string) =>
+        ['chapter', 'autosave', 'draft', chapterId ?? null, draftId ?? null] as const,
+    },
   },
 };

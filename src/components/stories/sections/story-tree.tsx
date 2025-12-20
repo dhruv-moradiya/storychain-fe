@@ -26,12 +26,13 @@ import MergeRequestPanel from '../panels/MergeRequest/MergeRequestPanel';
 
 import type { IStory } from '@/type/story.type';
 
-import useChapterNode from '@/hook/useChapterNode';
-import useChapterEdge from '@/hook/useChapterEdge';
-import { useChapterFlowLayout } from '@/hook/useChapterFlowLayout';
+import useChapterNode from '@/hooks/useChapterNode';
+import useChapterEdge from '@/hooks/useChapterEdge';
+import { useChapterFlowLayout } from '@/hooks/useChapterFlowLayout';
 import type { IChapterEdge, IChapterNodeType } from '@/type/story-canvas.type';
 import { useGetStoryBySlug, useGetStoryTree } from '@/hooks/story/story.queries';
 import StoryTreeLoading from './story-tree/components/story-tree-loading';
+import StoryTreeEmpty from './story-tree/components/story-tree-empty';
 
 const EMPTY_ARRAY: [] = [];
 
@@ -40,7 +41,7 @@ const StoryTree = () => {
   const queryClient = useQueryClient();
 
   const [openPanel, setOpenPanel] = useState<string | null>(null);
-  const [, setSelectedNodeId] = useState<string | null>(null);
+  const [_, setSelectedNodeId] = useState<string | null>(null);
   const [openStoryEditor, setOpenStoryEditor] = useState(false);
 
   /* ----------------------------------
@@ -71,6 +72,7 @@ const StoryTree = () => {
 
   const rawNodes = useChapterNode(chapters);
   const rawEdges = useChapterEdge(chapters);
+  console.log('rawEdges :>> ', rawEdges);
 
   const { layout } = useChapterFlowLayout();
 
@@ -175,11 +177,7 @@ const StoryTree = () => {
   }
 
   if (!chapters.length) {
-    return (
-      <div className="text-muted-foreground flex h-full items-center justify-center">
-        No chapters yet
-      </div>
-    );
+    return <StoryTreeEmpty onCreateChapter={() => {}} />;
   }
 
   /* ----------------------------------

@@ -1,4 +1,4 @@
-import { useApi } from '@/hook/useApi';
+import { useApi } from '@/hooks/useApi';
 import type { IAuthUser, ISearchUserByUsername } from '@/type/user';
 import { useAuth } from '@clerk/clerk-react';
 import { useQuery } from '@tanstack/react-query';

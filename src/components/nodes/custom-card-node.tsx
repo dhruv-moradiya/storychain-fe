@@ -4,7 +4,6 @@ import { Clock, Heart, MessageCircle, Plus, Star, ThumbsDown, ThumbsUp, Users } 
 import { useNavigate } from 'react-router';
 
 const CustomCardNode = ({ id, data, selected }: IChapterNodeProps) => {
-  console.log('data :>> ', data);
   const navigate = useNavigate();
   const chapterLabel = `Ch. ${data.depth + 1}`;
   const timeAgo = new Date(data.createdAt).toLocaleDateString();

@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
-import { AxiosError } from 'axios';
 
 import {
   Dialog,
@@ -23,6 +22,7 @@ import { handleApiError } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
 import { useCreateStory } from '@/hooks/story/story.mutations';
+import { QueryKey } from '@/lib/query-keys';
 
 type StoryEditorDialogProps = {
   open: boolean;
@@ -33,11 +33,10 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useCreateStory();
-  console.log('isPending :>> ', isPending);
 
   const methods = useForm<TStoryFormValues>({
     resolver: zodResolver(StoryFormSchema),
-    mode: 'onBlur',
+    mode: 'onSubmit',
     defaultValues: {
       title: '',
       slug: '',
@@ -67,7 +66,7 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
           toast.error(message, { position: 'top-right' });
         },
         onSettled: () => {
-          queryClient.invalidateQueries({ queryKey: ['current_user_stories'] });
+          queryClient.invalidateQueries({ queryKey: QueryKey.story.my });
         },
       }
     );
@@ -92,7 +91,7 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
               <DialogTitle className="text-lg font-semibold tracking-tight">
                 Start New Story
               </DialogTitle>
-              <DialogDescription className="text-sm opacity-80">
+              <DialogDescription className="text-sm">
                 Enter all the details for your new story.
               </DialogDescription>
             </div>

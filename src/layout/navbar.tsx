@@ -3,17 +3,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useClerk, useUser } from "@clerk/clerk-react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router";
-import { motion } from "framer-motion";
-import UserProfile from "@/components/layout/profile/user-profile";
-import { exploreItems } from "@/mock-data/navbar";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/dropdown-menu';
+import { useClerk, useUser } from '@clerk/clerk-react';
+import { Link, useNavigate } from 'react-router';
+import { motion } from 'framer-motion';
+import { exploreItems } from '@/mock-data/navbar';
+import { cn } from '@/lib/utils';
 
 export default function Navbar() {
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const { signOut } = useClerk();
   const { isSignedIn, user } = useUser();
   const navigate = useNavigate();
@@ -21,8 +18,8 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        "w-full border-b bg-muted/40 backdrop-blur-md z-40",
-        !isSignedIn && "sticky top-0"
+        'bg-muted/40 z-40 w-full border-b backdrop-blur-md',
+        !isSignedIn && 'sticky top-0'
       )}
     >
       <div className="mx-auto flex h-14 items-center justify-between px-4">
@@ -33,10 +30,10 @@ export default function Navbar() {
           </Link>
 
           {isSignedIn && (
-            <ul className="hidden md:flex items-center gap-5 text-sm text-muted-foreground">
+            <ul className="text-muted-foreground hidden items-center gap-5 text-sm md:flex">
               <li
-                onClick={() => navigate("/dashboard")}
-                className="cursor-pointer hover:text-foreground transition"
+                onClick={() => navigate('/dashboard')}
+                className="hover:text-foreground cursor-pointer transition"
               >
                 Dashboard
               </li>
@@ -47,18 +44,18 @@ export default function Navbar() {
                   Explore
                 </DropdownMenuTrigger>
 
-                <DropdownMenuContent className="w-72 p-2 rounded-md">
+                <DropdownMenuContent className="w-72 rounded-md p-2">
                   {exploreItems.map((item) => (
                     <DropdownMenuItem
                       key={item.to}
                       onClick={() => navigate(item.to)}
-                      className="cursor-pointer px-3 py-2 rounded-md hover:bg-muted"
+                      className="hover:bg-muted cursor-pointer rounded-md px-3 py-2"
                     >
                       <div className="flex items-start gap-3">
-                        <item.icon className="h-4 w-4 text-muted-foreground" />
+                        <item.icon className="text-muted-foreground h-4 w-4" />
                         <div>
                           <p className="text-sm font-medium">{item.title}</p>
-                          <p className="text-xs text-muted-foreground line-clamp-2">
+                          <p className="text-muted-foreground line-clamp-2 text-xs">
                             {item.description}
                           </p>
                         </div>
@@ -78,46 +75,37 @@ export default function Navbar() {
               <DropdownMenuTrigger asChild>
                 <motion.div
                   whileTap={{ scale: 0.96 }}
-                  className="h-8 w-8 mr-1 rounded-full bg-muted cursor-pointer border"
+                  className="bg-muted mr-1 h-8 w-8 cursor-pointer rounded-full border"
                 />
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent
-                align="end"
-                className="w-56 p-1 rounded-lg border bg-background"
-              >
+              <DropdownMenuContent align="end" className="bg-background w-56 rounded-lg border p-1">
                 <DropdownMenuItem className="cursor-default select-none">
                   <div className="flex flex-col">
-                    <span className="font-medium">
-                      {user.fullName || "Your Profile"}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="font-medium">{user.fullName || 'Your Profile'}</span>
+                    <span className="text-muted-foreground text-xs">
                       {user.primaryEmailAddress?.emailAddress}
                     </span>
                   </div>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => setIsProfileOpen(true)}>
-                  Profile
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
 
                 <DropdownMenuItem>Settings</DropdownMenuItem>
 
                 <DropdownMenuItem
-                  onClick={() => signOut({ redirectUrl: "/sign-in" })}
+                  onClick={() => signOut({ redirectUrl: '/sign-in' })}
                   className="text-red-500"
                 >
                   Sign Out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            <UserProfile open={isProfileOpen} onOpenChange={setIsProfileOpen} />
           </>
         ) : (
           <Link
             to="/sign-in"
-            className="text-sm text-muted-foreground hover:text-foreground transition"
+            className="text-muted-foreground hover:text-foreground text-sm transition"
           >
             Sign In
           </Link>

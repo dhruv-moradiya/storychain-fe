@@ -8,7 +8,6 @@ import { useParams } from 'react-router';
 const OverviewSection = () => {
   const { slug } = useParams();
   const { data } = useGetStoryBySlug(slug ?? '');
-  // console.log('data :>> ', data);
 
   const story = {
     title: 'Rise of the Forgotten Realm',

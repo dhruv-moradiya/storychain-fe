@@ -55,7 +55,7 @@ export type IChapterNodeProps = NodeProps<Node<IChapterNodeData>>;
 
 export type IChapterEdgeData = {
   storyId: string;
-  onButtonClick: (id: string) => void;
+  // onButtonClick: (id: string) => void;
 };
 
 export type IChapterEdge = Edge<IChapterEdgeData, 'chapterEdge'>;
@@ -70,5 +70,5 @@ export const nodeTypes = {
 };
 
 export const edgeTypes = {
-  smoothstep: CustomEdge,
+  chapterEdge: CustomEdge,
 };

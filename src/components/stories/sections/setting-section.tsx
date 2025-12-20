@@ -1,151 +1,294 @@
 import { motion } from 'framer-motion';
 import { fadeIn } from '@/lib/utils';
-import { Globe, GitBranch, MessageSquare, Star, ShieldCheck, Lock } from 'lucide-react';
+import {
+  Globe,
+  GitBranch,
+  MessageSquare,
+  Star,
+  ShieldCheck,
+  Lock,
+  Image,
+  Loader2,
+  Trash2,
+} from 'lucide-react';
 import { useParams } from 'react-router';
 import { Switch } from '@/components/ui/switch';
 import { useQueryClient } from '@tanstack/react-query';
 import type { IStory } from '@/type/story.type';
 import StoryNotFound from '@/components/common/story/story-not-found';
-
-// AUTO-FETCH fallback hook (same query key)
 import SettingSectionLoading from '@/components/common/story/setting-section-loading';
 import { useGetStoryBySlug } from '@/hooks/story/story.queries';
+import { useState } from 'react';
+import { SectionDivider } from '@/components/common/story-editor/section-divider';
+
+/* ---------------------------------------------
+ * Main Section
+ * --------------------------------------------*/
 
 const SettingSection = () => {
   const { slug } = useParams();
   const queryClient = useQueryClient();
 
-  // 1️⃣ Try get cached data
+  const [cardUploading, setCardUploading] = useState(false);
+  const [coverUploading, setCoverUploading] = useState(false);
+  const [cardPreview, setCardPreview] = useState<string | null>(null);
+  const [coverPreview, setCoverPreview] = useState<string | null>(null);
+
   const cachedStory = queryClient.getQueryData<IStory>(['story_by_slug', slug]);
 
-  // 2️⃣ If not cached, run API
-  const { data: fetchedStory, isLoading } = useGetStoryBySlug(slug ?? '', {
-    enabled: !cachedStory, // only fetch if no cache
+  const { data, isLoading } = useGetStoryBySlug(slug ?? '', {
+    enabled: !cachedStory,
   });
 
-  // 3️⃣ Final story value → cached OR fetched
-  const story = cachedStory ?? fetchedStory;
+  const story = cachedStory ?? data;
 
-  // ⚠️ KEEP YOUR ORIGINAL COMMENTED CODE (NOT REMOVED)
-  //   const { data: story, isLoading } = useGetStoryOverviewBySlug(slug ?? '');
-  //   const updateSettings = useUpdateStorySettings();
-
-  // 4️⃣ While fetching (cold load via new tab)
-  if (!cachedStory && isLoading) {
-    return <SettingSectionLoading />;
-  }
-
-  // 5️⃣ If still no story → real Not Found
-  if (!story) {
-    return <StoryNotFound onCreate={() => {}} />;
-  }
+  if (!cachedStory && isLoading) return <SettingSectionLoading />;
+  if (!story) return <StoryNotFound onCreate={() => {}} />;
 
   const settings = story.settings;
 
   const handleUpdate = (key: keyof typeof settings, value: boolean | string) => {
-    // ⚠️ KEEP COMMENTED CODE
-    // updateSettings.mutate({
-    //   slug,
-    //   data: { [key]: value },
-    // });
+    // updateSettings.mutate({ slug, data: { [key]: value } });
+  };
+
+  const handleImageUpload = async (file: File, type: 'card' | 'cover') => {
+    const preview = URL.createObjectURL(file);
+
+    if (type === 'card') {
+      setCardUploading(true);
+      setCardPreview(preview);
+      setTimeout(() => setCardUploading(false), 1200);
+    } else {
+      setCoverUploading(true);
+      setCoverPreview(preview);
+      setTimeout(() => setCoverUploading(false), 1200);
+    }
   };
 
   return (
-    <motion.section {...fadeIn(0)} className="mx-auto max-w-xl space-y-8 pb-14">
-      <h2 className="text-xl font-semibold">Story Settings</h2>
+    <motion.section {...fadeIn(0)} className="mx-auto max-w-xl pb-14">
+      <h2 className="mb-6 text-xl font-semibold">Story Settings</h2>
 
-      <motion.div {...fadeIn(0.1)} className="space-y-4">
-        <SettingRow
+      <SettingCard>
+        <SectionDivider label="Access" />
+
+        <ToggleRow
           icon={settings.isPublic ? <Globe size={18} /> : <Lock size={18} />}
           label="Visibility"
-          value={settings.isPublic ? 'Public' : 'Private'}
-        >
-          <Switch
-            checked={settings.isPublic}
-            onCheckedChange={(v) => handleUpdate('isPublic', v)}
-          />
-        </SettingRow>
+          description={settings.isPublic ? 'Public' : 'Private'}
+          checked={settings.isPublic}
+          onChange={(v) => handleUpdate('isPublic', v)}
+        />
 
-        <SettingRow
+        <ToggleRow
           icon={<GitBranch size={18} />}
           label="Branching"
-          value={settings.allowBranching ? 'Allowed' : 'Disabled'}
-        >
-          <Switch
-            checked={settings.allowBranching}
-            onCheckedChange={(v) => handleUpdate('allowBranching', v)}
-          />
-        </SettingRow>
+          description={settings.allowBranching ? 'Allowed' : 'Disabled'}
+          checked={settings.allowBranching}
+          onChange={(v) => handleUpdate('allowBranching', v)}
+        />
 
-        <SettingRow
+        <SectionDivider label="Moderation" />
+
+        <ToggleRow
           icon={<ShieldCheck size={18} />}
-          label="Require Contributor Approval"
-          value={settings.requireApproval ? 'Enabled' : 'Disabled'}
-        >
-          <Switch
-            checked={settings.requireApproval}
-            onCheckedChange={(v) => handleUpdate('requireApproval', v)}
-          />
-        </SettingRow>
+          label="Contributor Approval"
+          description={settings.requireApproval ? 'Enabled' : 'Disabled'}
+          checked={settings.requireApproval}
+          onChange={(v) => handleUpdate('requireApproval', v)}
+        />
 
-        <SettingRow
+        <ToggleRow
           icon={<MessageSquare size={18} />}
           label="Comments"
-          value={settings.allowComments ? 'Allowed' : 'Disabled'}
-        >
-          <Switch
-            checked={settings.allowComments}
-            onCheckedChange={(v) => handleUpdate('allowComments', v)}
-          />
-        </SettingRow>
+          description={settings.allowComments ? 'Allowed' : 'Disabled'}
+          checked={settings.allowComments}
+          onChange={(v) => handleUpdate('allowComments', v)}
+        />
 
-        <SettingRow
+        <ToggleRow
           icon={<Star size={18} />}
           label="Voting"
-          value={settings.allowVoting ? 'Enabled' : 'Disabled'}
-        >
-          <Switch
-            checked={settings.allowVoting}
-            onCheckedChange={(v) => handleUpdate('allowVoting', v)}
-          />
-        </SettingRow>
+          description={settings.allowVoting ? 'Enabled' : 'Disabled'}
+          checked={settings.allowVoting}
+          onChange={(v) => handleUpdate('allowVoting', v)}
+        />
 
-        {/* INFO ONLY */}
-        <SettingRow
+        <SectionDivider label="Metadata" />
+
+        <ReadonlyRow
           icon={<Star size={18} />}
           label="Content Rating"
           value={settings.contentRating}
         />
 
-        <SettingRow icon={<GitBranch size={18} />} label="Genre" value={settings.genre} />
-      </motion.div>
+        <ReadonlyRow icon={<GitBranch size={18} />} label="Genre" value={settings.genre} />
+
+        <SectionDivider label="Images" />
+
+        <ImageRow
+          label="Card image"
+          hint="192 × 249 portrait"
+          aspectClass="aspect-[192/249] w-[192px]"
+          preview={cardPreview}
+          uploading={cardUploading}
+          onSelect={(f) => handleImageUpload(f, 'card')}
+          onRemove={() => setCardPreview(null)}
+        />
+
+        <ImageRow
+          label="Cover image"
+          hint="3:1 wide banner"
+          aspectClass="aspect-[3/1]"
+          preview={coverPreview}
+          uploading={coverUploading}
+          onSelect={(f) => handleImageUpload(f, 'cover')}
+          onRemove={() => setCoverPreview(null)}
+        />
+      </SettingCard>
     </motion.section>
   );
 };
 
-const SettingRow = ({
-  icon,
-  label,
-  value,
-  children,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  children?: React.ReactNode;
-}) => (
-  <motion.div
-    {...fadeIn(0.05)}
-    className="bg-muted/40 hover:bg-muted hover:border-foreground/20 flex items-center justify-between rounded-md border px-3 py-2.5 transition-colors"
-  >
-    <div className="flex items-center gap-3">
-      <div className="text-muted-foreground flex items-center gap-2 text-sm">
-        {icon} {label}
-      </div>
-      <span className="text-muted-foreground text-xs">({value})</span>
-    </div>
+export default SettingSection;
+
+/* ---------------------------------------------
+ * UI Building Blocks
+ * --------------------------------------------*/
+
+const SettingCard = ({ children }: { children: React.ReactNode }) => (
+  <motion.div {...fadeIn(0.08)} className="bord shadow-sm backdrop-blur">
     {children}
   </motion.div>
 );
 
-export default SettingSection;
+const Divider = () => <div className="bg-border mx-4 h-px" />;
+
+const BaseRow = ({
+  icon,
+  label,
+  description,
+  action,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  description?: string;
+  action?: React.ReactNode;
+}) => (
+  <div className="hover:bg-muted/60 flex items-center justify-between gap-4 px-4 py-3 transition">
+    <div className="flex items-start gap-3">
+      <div className="text-muted-foreground mt-0.5">{icon}</div>
+      <div className="flex flex-col gap-0.5">
+        <span className="text-sm font-medium">{label}</span>
+        {description && <span className="text-muted-foreground text-xs">{description}</span>}
+      </div>
+    </div>
+    {action}
+  </div>
+);
+
+const ToggleRow = ({
+  icon,
+  label,
+  description,
+  checked,
+  onChange,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  description: string;
+  checked: boolean;
+  onChange: (v: boolean) => void;
+}) => (
+  <BaseRow
+    icon={icon}
+    label={label}
+    description={description}
+    action={<Switch checked={checked} onCheckedChange={onChange} />}
+  />
+);
+
+const ReadonlyRow = ({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) => <BaseRow icon={icon} label={label} description={value} />;
+
+/* ---------------------------------------------
+ * Image Upload Row
+ * --------------------------------------------*/
+
+const ImageRow = ({
+  label,
+  hint,
+  aspectClass,
+  preview,
+  uploading,
+  onSelect,
+  onRemove,
+}: {
+  label: string;
+  hint: string;
+  aspectClass: string;
+  preview: string | null;
+  uploading: boolean;
+  onSelect: (file: File) => void;
+  onRemove?: () => void;
+}) => (
+  <div className="px-4 py-4">
+    <div className="mb-2 text-sm font-medium">{label}</div>
+
+    <label className="group block cursor-pointer">
+      <input
+        type="file"
+        hidden
+        accept="image/*"
+        disabled={uploading}
+        onChange={(e) => e.target.files && onSelect(e.target.files[0])}
+      />
+
+      <div
+        className={`relative overflow-hidden rounded-lg border ${aspectClass} ${
+          uploading ? 'opacity-60' : 'hover:border-primary/60'
+        }`}
+      >
+        {preview ? (
+          <img src={preview} className="h-full w-full object-cover" />
+        ) : (
+          <div className="bg-muted/60 flex h-full w-full flex-col items-center justify-center gap-2">
+            <Image size={18} className="text-muted-foreground" />
+            <span className="text-muted-foreground text-xs">{hint}</span>
+          </div>
+        )}
+
+        {!uploading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition group-hover:opacity-100">
+            <span className="bg-background rounded-md px-3 py-1 text-xs shadow">
+              {preview ? 'Change image' : 'Upload image'}
+            </span>
+          </div>
+        )}
+      </div>
+    </label>
+
+    <div className="mt-2 flex items-center justify-between">
+      {uploading && (
+        <span className="text-muted-foreground flex items-center gap-1 text-xs">
+          <Loader2 size={12} className="animate-spin" />
+          Uploading…
+        </span>
+      )}
+
+      {preview && onRemove && !uploading && (
+        <button onClick={onRemove} className="text-destructive flex items-center gap-1 text-xs">
+          <Trash2 size={12} />
+          Remove
+        </button>
+      )}
+    </div>
+  </div>
+);

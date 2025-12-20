@@ -1,8 +1,9 @@
-import { useApi } from '@/hook/useApi';
+import { useApi } from '@/hooks/useApi';
 import { storyApi } from '@/api/story.api';
 import { useMutation } from '@tanstack/react-query';
 import type { TStoryFormValues } from '@/schema/story.schema';
 import type { TStoryCollaboratorRole } from '@/type/story.type';
+import type { IStorySettingUpdateRequest } from '@/type/story/story-request.type';
 
 export function useCreateStory() {
   const api = useApi();
@@ -36,5 +37,13 @@ export function useCreateChapter() {
       content: string;
       storyId: string;
     }) => storyApi(api).createChapter(payload),
+  });
+}
+
+export function useUpdateStorySettings() {
+  const api = useApi();
+
+  return useMutation({
+    mutationFn: (payload: IStorySettingUpdateRequest) => storyApi(api).updateSetting(payload),
   });
 }

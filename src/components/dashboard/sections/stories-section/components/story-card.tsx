@@ -14,7 +14,7 @@ const StoryCard = ({ story }: StoryCardProps) => {
   return (
     <div
       onClick={() => navigate(`/stories/${story.slug}`)}
-      className="group/story-card bg-card/50 hover:bg-card/50 relative cursor-pointer overflow-hidden rounded-[14px] p-1.5 transition-all duration-300"
+      className="group/story-card bg-card/50 relative cursor-pointer overflow-hidden rounded-[14px] p-1.5 transition-all duration-300"
     >
       {/* ✨ HOVER GRADIENT OVERLAY */}
       <div className="from-primary/5 via-secondary/10 to-primary/10 pointer-events-none absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity duration-500 group-hover/story-card:opacity-100" />

@@ -1,4 +1,4 @@
-import { useApi } from '@/hook/useApi';
+import { useApi } from '@/hooks/useApi';
 import { QueryKey } from '@/lib/query-keys';
 import { storyApi } from '@/api/story.api';
 import { useAuth } from '@clerk/clerk-react';

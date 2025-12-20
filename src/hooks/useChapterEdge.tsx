@@ -1,15 +1,14 @@
-import type { Edge } from '@xyflow/react';
-import type { IChapterNode } from '@/type/story-canvas.type';
+import type { IChapterEdge, IChapterNode } from '@/type/story-canvas.type';
 
 const EDGE_STYLE = {
   stroke: 'lightgray',
   strokeWidth: 2,
 } as const;
 
-const EDGE_TYPE = 'smoothstep' as const;
+const EDGE_TYPE = 'chapterEdge' as const;
 
-const useChapterEdge = (chapters: IChapterNode[]): Edge[] => {
-  const edges: Edge[] = [];
+const useChapterEdge = (chapters: IChapterNode[]): IChapterEdge[] => {
+  const edges: IChapterEdge[] = [];
 
   const traverse = (node: IChapterNode, parentId?: string) => {
     if (parentId) {

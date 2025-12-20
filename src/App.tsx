@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // Lazy pages
 const Home = lazy(() => import('./pages/home'));
 const StoryBuilder = lazy(() => import('./pages/story-builder'));
+const ChapterRead = lazy(() => import('./pages/chapter-read'));
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const Story = lazy(() => import('./pages/stories'));
 const Reports = lazy(() => import('./pages/reports'));
@@ -16,6 +17,8 @@ import { ProtectedRoute } from './components/protected-route';
 
 import { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router';
+import Profile from './pages/profile';
+import { PageLoader } from './components/common/page-loader';
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +50,14 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: 'stories/:storyId/chapter/:chapterId',
+        element: (
+          <Suspense fallback={<PageLoader text="Loading chapter..." />}>
+            <ChapterRead />
+          </Suspense>
+        ),
+      },
+      {
         path: 'stories/:slug/*',
         element: (
           <Suspense fallback={<div>Loading story...</div>}>
@@ -54,7 +65,14 @@ export const router = createBrowserRouter([
           </Suspense>
         ),
       },
-
+      {
+        path: 'profile',
+        element: (
+          <Suspense fallback={<div>Loading story...</div>}>
+            <Profile />
+          </Suspense>
+        ),
+      },
       // Dashboard
       {
         path: 'dashboard/*',

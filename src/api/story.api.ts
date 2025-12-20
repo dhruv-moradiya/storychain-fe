@@ -8,6 +8,7 @@ import type {
 } from '@/type/story.type';
 import type { TStoryFormValues } from '@/schema/story.schema';
 import type { AxiosInstance } from 'axios';
+import type { IStorySettingUpdateRequest } from '@/type/story/story-request.type';
 
 const storyApi = (api: AxiosInstance) => ({
   getMyStories: async () => {
@@ -56,6 +57,12 @@ const storyApi = (api: AxiosInstance) => ({
   }) => {
     const { storyId, ...body } = payload;
     const res = await api.post(`/stories/${storyId}/chapters`, body);
+    return res.data;
+  },
+
+  updateSetting: async (payload: IStorySettingUpdateRequest) => {
+    const { storyId, ...body } = payload;
+    const res = await api.post(`/stories/${storyId}/settings`, body);
     return res.data;
   },
 });
