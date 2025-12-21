@@ -70,8 +70,6 @@ const SettingSection = () => {
       <h2 className="mb-6 text-xl font-semibold">Story Settings</h2>
 
       <SettingCard>
-        <SectionDivider label="Access" />
-
         <ToggleRow
           icon={settings.isPublic ? <Globe size={18} /> : <Lock size={18} />}
           label="Visibility"
@@ -87,8 +85,6 @@ const SettingSection = () => {
           checked={settings.allowBranching}
           onChange={(v) => handleUpdate('allowBranching', v)}
         />
-
-        <SectionDivider label="Moderation" />
 
         <ToggleRow
           icon={<ShieldCheck size={18} />}
@@ -114,8 +110,6 @@ const SettingSection = () => {
           onChange={(v) => handleUpdate('allowVoting', v)}
         />
 
-        <SectionDivider label="Metadata" />
-
         <ReadonlyRow
           icon={<Star size={18} />}
           label="Content Rating"
@@ -123,8 +117,6 @@ const SettingSection = () => {
         />
 
         <ReadonlyRow icon={<GitBranch size={18} />} label="Genre" value={settings.genre} />
-
-        <SectionDivider label="Images" />
 
         <ImageRow
           label="Card image"
@@ -157,12 +149,13 @@ export default SettingSection;
  * --------------------------------------------*/
 
 const SettingCard = ({ children }: { children: React.ReactNode }) => (
-  <motion.div {...fadeIn(0.08)} className="bord shadow-sm backdrop-blur">
-    {children}
+  <motion.div
+    {...fadeIn(0.08)}
+    className="bg-background/60 overflow-hidden rounded-xl shadow-sm backdrop-blur"
+  >
+    <div className="flex flex-col divide-y">{children}</div>
   </motion.div>
 );
-
-const Divider = () => <div className="bg-border mx-4 h-px" />;
 
 const BaseRow = ({
   icon,
@@ -175,12 +168,14 @@ const BaseRow = ({
   description?: string;
   action?: React.ReactNode;
 }) => (
-  <div className="hover:bg-muted/60 flex items-center justify-between gap-4 px-4 py-3 transition">
+  <div className="hover:bg-muted/60 flex items-center justify-between gap-4 px-5 py-3 transition">
     <div className="flex items-start gap-3">
       <div className="text-muted-foreground mt-0.5">{icon}</div>
       <div className="flex flex-col gap-0.5">
         <span className="text-sm font-medium">{label}</span>
-        {description && <span className="text-muted-foreground text-xs">{description}</span>}
+        {description && (
+          <span className="text-muted-foreground text-xs leading-tight">{description}</span>
+        )}
       </div>
     </div>
     {action}
@@ -252,7 +247,7 @@ const ImageRow = ({
       />
 
       <div
-        className={`relative overflow-hidden rounded-lg border ${aspectClass} ${
+        className={`relative overflow-hidden rounded-lg ${aspectClass} ${
           uploading ? 'opacity-60' : 'hover:border-primary/60'
         }`}
       >
