@@ -2,120 +2,119 @@ import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { cn } from '@/lib/utils';
 import { useUser } from '@clerk/clerk-react';
-import Emoji, { gitHubEmojis } from '@tiptap/extension-emoji';
-import { TableKit } from '@tiptap/extension-table';
-import { FontSize, TextStyle, TextStyleKit } from '@tiptap/extension-text-style';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
-import StarterKit from '@tiptap/starter-kit';
 import { Bold, Italic, Strikethrough } from 'lucide-react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 
 import {
   DraftRecoveryBanner,
+  DraftSelectionDialog,
   EditorStatusBar,
   SubmitRequestDialog,
   useAutoSave,
   useDraftRecovery,
+  useKeyboardShortcuts,
+  useStoryEditor,
   type DraftData,
   type SubmitRequestData,
 } from '@/components/story-builder';
 
 import { ChapterPreviewDialog } from '@/components/common/chapter-reader';
 import { MenuBar } from '@/components/story-builder/menu-bar';
+import { useAutoSaveContent } from '@/hooks/chapterAutoSave/chapterAutoSave.mutations';
 import { useCreateChapter } from '@/hooks/story/story.mutations';
 import { useParams } from 'react-router';
 
-const extensions = [
-  TextStyleKit,
-  StarterKit,
-  FontSize,
-  TextStyle,
-  Emoji.configure({
-    emojis: gitHubEmojis,
-    enableEmoticons: true,
-  }),
-  TableKit.configure({ table: { resizable: true } }),
-];
-
-const DEFAULT_CONTENT = `
-  <h2>Welcome to StoryChain</h2>
-  <p>Start writing your chapter here. Your work will be automatically saved as you type.</p>
-  <p>When you're ready, you can publish directly or create a submit request for review.</p>
-`;
-
 const StoryBuilder = () => {
   const { chapterId: parentChapterId, storyId } = useParams();
-  const [chapterTitle, setChapterTitle] = useState('Untitled Chapter');
-  const [isPRDialogOpen, setIsPRDialogOpen] = useState(false);
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const initialContentRef = useRef<string>(DEFAULT_CONTENT);
   const { user } = useUser();
 
-  const editor = useEditor({
-    extensions,
-    content: DEFAULT_CONTENT,
-  });
+  // Dialog states
+  const [isPRDialogOpen, setIsPRDialogOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isDraftSelectionOpen, setIsDraftSelectionOpen] = useState(false);
+
+  // Story editor hook
+  const {
+    editor,
+    chapterTitle,
+    setChapterTitle,
+    wordCount,
+    charCount,
+    initialContentRef,
+    loadDraft,
+  } = useStoryEditor();
 
   // Auto-save hook
   const autoSaveState = useAutoSave({
     editor,
-    chapterId: 'new',
-    storyId: '',
+    chapterId: parentChapterId,
     title: chapterTitle,
-    enabled: true,
-    onSave: async (data) => {
-      // TODO: Implement actual API call
-      console.log('Saving to backend:', data);
-    },
+    enabled: false,
   });
 
   // Draft recovery hook
   const draftRecovery = useDraftRecovery({
     onRecover: (draft: DraftData) => {
-      if (editor) {
-        editor.commands.setContent(draft.content);
-        setChapterTitle(draft.title);
-        toast.success('Draft recovered successfully');
-      }
+      loadDraft(draft);
+      toast.success('Draft recovered successfully');
     },
     onDiscard: () => {
       toast.info('Draft discarded');
     },
   });
 
-  // Calculate word and char counts
-  const wordCount = editor?.getText().trim() ? editor.getText().trim().split(/\s+/).length : 0;
-  const charCount = editor?.getText().length || 0;
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 's') {
-        e.preventDefault();
-        autoSaveState.forceSave();
-        toast.success('Draft saved');
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [autoSaveState]);
+  // Save draft mutation
+  const { mutate: saveDraft, isPending: isSavingDraft } = useAutoSaveContent();
 
   const handleSaveDraft = useCallback(() => {
-    autoSaveState.forceSave();
-    toast.success('Draft saved');
-  }, [autoSaveState]);
+    if (!editor || !user?.id) return;
 
+    saveDraft(
+      {
+        userId: user.id,
+        title: chapterTitle,
+        content: editor.getHTML(),
+        chapterId: parentChapterId,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Draft saved');
+        },
+        onError: () => {
+          toast.error('Failed to save draft');
+        },
+      }
+    );
+  }, [editor, user?.id, chapterTitle, parentChapterId, saveDraft]);
+
+  // Keyboard shortcuts
+  const shortcuts = useMemo(
+    () => [
+      {
+        key: 's',
+        ctrlKey: true,
+        handler: () => {
+          handleSaveDraft();
+        },
+      },
+    ],
+    [handleSaveDraft]
+  );
+
+  useKeyboardShortcuts({ shortcuts, enabled: !!editor });
+
+  // Handlers
   const handlePreview = useCallback(() => {
     setIsPreviewOpen(true);
   }, []);
 
-  const { mutate, isPending } = useCreateChapter();
+  const { mutate: createChapter } = useCreateChapter();
 
   const handlePublish = useCallback(() => {
-    // TODO: Implement publish logic
+    if (!editor) return;
 
     const payload = {
       title: chapterTitle,
@@ -123,49 +122,76 @@ const StoryBuilder = () => {
       storyId: storyId ?? '',
       parentChapterId: parentChapterId ? parentChapterId : null,
     };
-    console.log('input :>> ', payload);
 
-    mutate(payload);
-
+    createChapter(payload);
     toast.info('Publishing coming soon');
-  }, []);
+  }, [editor, chapterTitle, storyId, parentChapterId, createChapter]);
 
   const handleCreatePR = useCallback(() => {
     setIsPRDialogOpen(true);
   }, []);
 
   const handleSubmitPR = useCallback((data: SubmitRequestData) => {
-    // TODO: Implement actual PR creation
     console.log('Creating PR:', data);
     toast.success('Submit request created successfully');
     setIsPRDialogOpen(false);
   }, []);
 
   const handleHistoryClick = useCallback(() => {
-    // TODO: Implement version history panel
     toast.info('Version history coming soon');
   }, []);
+
+  const handleViewAllDrafts = useCallback(() => {
+    setIsDraftSelectionOpen(true);
+  }, []);
+
+  const handleSelectDraft = useCallback(
+    (draft: DraftData) => {
+      loadDraft(draft);
+      setIsDraftSelectionOpen(false);
+      draftRecovery.dismissBanner();
+      toast.success('Draft loaded successfully');
+    },
+    [loadDraft, draftRecovery]
+  );
+
+  const handleDiscardDraft = useCallback(
+    (draft: DraftData) => {
+      draftRecovery.discardDraft(draft);
+    },
+    [draftRecovery]
+  );
 
   if (!editor) return null;
 
   return (
     <div className="flex min-h-screen w-full flex-col">
       {/* Draft Recovery Banner */}
-      {draftRecovery.showBanner && draftRecovery.draft && (
+      {draftRecovery.showBanner && draftRecovery.drafts.length > 0 && (
         <DraftRecoveryBanner
-          draft={draftRecovery.draft}
-          onContinue={draftRecovery.recoverDraft}
-          onDiscard={draftRecovery.discardDraft}
-          onPreview={handlePreview}
+          drafts={draftRecovery.drafts}
+          onContinue={handleSelectDraft}
+          onDiscard={handleDiscardDraft}
+          onViewAll={draftRecovery.hasMultipleDrafts ? handleViewAllDrafts : undefined}
           onDismiss={draftRecovery.dismissBanner}
         />
       )}
+
+      {/* Draft Selection Dialog */}
+      <DraftSelectionDialog
+        open={isDraftSelectionOpen}
+        onOpenChange={setIsDraftSelectionOpen}
+        drafts={draftRecovery.drafts}
+        onSelect={handleSelectDraft}
+        onDiscard={handleDiscardDraft}
+      />
 
       {/* Menu Bar */}
       <MenuBar
         editor={editor}
         autoSaveState={autoSaveState}
         onSaveDraft={handleSaveDraft}
+        isSavingDraft={isSavingDraft}
         onPreview={handlePreview}
         onPublish={handlePublish}
         onCreatePR={handleCreatePR}

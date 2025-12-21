@@ -42,6 +42,8 @@ export const QueryKey = {
 
       draft: (chapterId?: string, draftId?: string) =>
         ['chapter', 'autosave', 'draft', chapterId ?? null, draftId ?? null] as const,
+
+      interval: (draftId: string) => ['chapter', 'autosave', 'interval', draftId] as const,
     },
   },
 };

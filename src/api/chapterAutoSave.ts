@@ -25,7 +25,7 @@ const chapterAutoSaveApi = (api: AxiosInstance) => ({
     return res.data;
   },
   getAutoSaveDraft: async () => {
-    const res = await api.post<IGetAutoSaveDraftResponse>(`/auto-save/draft`);
+    const res = await api.get<IGetAutoSaveDraftResponse>(`/auto-save/draft`);
     return res.data;
   },
 });

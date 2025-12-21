@@ -19,7 +19,7 @@ interface IDisableAutoSaveResponse extends IBaseType {
 }
 
 interface IGetAutoSaveDraftResponse extends IBaseType {
-  data: IChapterAutoSave;
+  data: IChapterAutoSave[];
 }
 
 export type {

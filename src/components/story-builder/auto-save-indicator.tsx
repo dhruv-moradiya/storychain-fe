@@ -1,12 +1,7 @@
 import { formatDistanceToNow } from 'date-fns';
 import { Check, AlertCircle, Cloud, CloudOff, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import type { AutoSaveState } from './hooks/use-auto-save';
 
@@ -48,12 +43,6 @@ export function AutoSaveIndicator({
             : 'Saved',
           color: 'text-green-600 dark:text-green-400',
         };
-      case 'unsaved':
-        return {
-          icon: <Cloud className="h-4 w-4" />,
-          text: 'Unsaved changes',
-          color: 'text-amber-600 dark:text-amber-400',
-        };
       case 'error':
         return {
           icon: <AlertCircle className="h-4 w-4" />,
@@ -87,13 +76,9 @@ export function AutoSaveIndicator({
             </Button>
           </TooltipTrigger>
           <TooltipContent side="bottom">
-            <p>
-              {autoSaveEnabled
-                ? 'Click to disable auto-save'
-                : 'Click to enable auto-save'}
-            </p>
+            <p>{autoSaveEnabled ? 'Click to disable auto-save' : 'Click to enable auto-save'}</p>
             {lastSavedAt && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 Last saved: {lastSavedAt.toLocaleTimeString()}
               </p>
             )}
@@ -101,7 +86,7 @@ export function AutoSaveIndicator({
         </Tooltip>
 
         {/* Manual save button when auto-save is off or there's an error */}
-        {(!autoSaveEnabled || status === 'error' || status === 'unsaved') && (
+        {(!autoSaveEnabled || status === 'error') && (
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="ghost" size="sm" onClick={onForceSave} className="px-2">

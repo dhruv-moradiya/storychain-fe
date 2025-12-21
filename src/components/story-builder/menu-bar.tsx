@@ -37,6 +37,7 @@ function MenuBar({
   editor,
   autoSaveState,
   onSaveDraft,
+  isSavingDraft,
   onPreview,
   onPublish,
   onCreatePR,
@@ -44,6 +45,7 @@ function MenuBar({
   editor: Editor;
   autoSaveState: ReturnType<typeof useAutoSave>;
   onSaveDraft: () => void;
+  isSavingDraft?: boolean;
   onPreview: () => void;
   onPublish: () => void;
   onCreatePR: () => void;
@@ -309,10 +311,11 @@ function MenuBar({
             variant="outline"
             size="sm"
             onClick={onSaveDraft}
+            disabled={isSavingDraft}
             className="hidden gap-1.5 sm:flex"
           >
             <Save className="h-4 w-4" />
-            Save Draft
+            {isSavingDraft ? 'Saving...' : 'Save Draft'}
           </Button>
 
           {/* Preview Button */}
