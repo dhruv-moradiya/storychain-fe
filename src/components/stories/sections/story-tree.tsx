@@ -10,29 +10,29 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
-import { useQueryClient } from '@tanstack/react-query';
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
-import { nodeTypes, edgeTypes } from '@/type/story-canvas.type';
+import { edgeTypes, nodeTypes } from '@/type/story-canvas.type';
 import LeftActionButtons from '../action-buttons/left-action-buttons';
 import TopActionButtons from '../action-buttons/top-action-buttons';
 
 import CommentsPanel from '../panels/comments/CommentsPanel';
-import StorySettingsPanel from '../panels/setting/StorySettingsPanel';
 import MergeRequestPanel from '../panels/MergeRequest/MergeRequestPanel';
+import StorySettingsPanel from '../panels/setting/StorySettingsPanel';
 
 import type { IStory } from '@/type/story.type';
 
-import useChapterNode from '@/hooks/useChapterNode';
+import { useGetStoryBySlug, useGetStoryTree } from '@/hooks/story/story.queries';
 import useChapterEdge from '@/hooks/useChapterEdge';
 import { useChapterFlowLayout } from '@/hooks/useChapterFlowLayout';
-import type { IChapterEdge, IChapterNodeType } from '@/type/story-canvas.type';
-import { useGetStoryBySlug, useGetStoryTree } from '@/hooks/story/story.queries';
-import StoryTreeLoading from './story-tree/components/story-tree-loading';
+import useChapterNode from '@/hooks/useChapterNode';
+import type { IChapterEdge } from '@/type/story-canvas.type';
 import StoryTreeEmpty from './story-tree/components/story-tree-empty';
+import StoryTreeLoading from './story-tree/components/story-tree-loading';
 
 const EMPTY_ARRAY: [] = [];
 
