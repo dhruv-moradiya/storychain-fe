@@ -1,6 +1,8 @@
 import axios, { AxiosHeaders } from 'axios';
 import type { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import type { GetToken, SignOut } from '@clerk/types';
+
+type GetToken = () => Promise<string | null>;
+type SignOut = () => Promise<void>;
 
 export function createAxiosInspector(
   getToken: GetToken,
