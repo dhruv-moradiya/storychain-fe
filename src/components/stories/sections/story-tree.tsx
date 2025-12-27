@@ -42,7 +42,7 @@ const StoryTree = () => {
 
   const [openPanel, setOpenPanel] = useState<string | null>(null);
   const [_, setSelectedNodeId] = useState<string | null>(null);
-  const [openStoryEditor, setOpenStoryEditor] = useState(false);
+  const [_openStoryEditor, setOpenStoryEditor] = useState(false);
 
   /* ----------------------------------
    * Story data

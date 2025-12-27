@@ -3,16 +3,46 @@ import { useGetStoryOverviewBySlug } from '@/hooks/story/story.queries';
 import { fadeIn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Eye, FileEdit, Globe, Lock, Star, Users } from 'lucide-react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { OverviewSectionLoading, OverviewSectionError } from './overview-section/index';
 import { format } from 'date-fns';
+import { useState } from 'react';
+
+const staticCreator = {
+  id: 99,
+  name: 'Dhruv',
+  avatar: 'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg',
+  role: 'Author • Creator • Universe Architect',
+  bio: 'Dreams stories into existence.',
+};
+
+const staticCollaborators = [
+  {
+    id: 1,
+    name: 'Aarav',
+    avatar: 'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg',
+    role: 'Co-Writer',
+  },
+  {
+    id: 2,
+    name: 'Meera',
+    avatar: 'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg',
+    role: 'Editor',
+  },
+  {
+    id: 3,
+    name: 'Ishaan',
+    avatar: 'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg',
+    role: 'Reviewer',
+  },
+];
 
 const OverviewSection = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
+
   const { data, error, isLoading } = useGetStoryOverviewBySlug(slug ?? '');
   const story = data?.data;
-
-  console.log('story :>> ', story);
 
   if (isLoading) {
     return <OverviewSectionLoading />;
@@ -63,6 +93,66 @@ const OverviewSection = () => {
           className="text-muted-foreground text-sm"
           dangerouslySetInnerHTML={{ __html: story.description }}
         ></p>
+      </motion.div>
+
+      {/* ===== PEOPLE ===== */}
+      <motion.div {...fadeIn(0.35)} className="space-y-4">
+        <h2 className="text-base font-semibold">People</h2>
+
+        {/* Creator */}
+        <div
+          onClick={() => navigate(`/profile/${staticCreator.id}`)}
+          className="flex cursor-pointer items-center gap-3 transition hover:opacity-70"
+        >
+          <img
+            src={staticCreator.avatar}
+            alt={staticCreator.name}
+            className="h-8 w-8 rounded-full object-cover"
+          />
+          <div className="flex flex-col">
+            <span className="text-sm font-medium">{staticCreator.name}</span>
+            <span className="text-muted-foreground text-xs">{staticCreator.role}</span>
+          </div>
+        </div>
+
+        {/* Contributors */}
+        <div className="space-y-2">
+          {staticCollaborators.map((c) => (
+            <div
+              key={c.id}
+              onClick={() => navigate(`/profile/${c.id}`)}
+              className="flex cursor-pointer items-center gap-3 transition hover:opacity-70"
+            >
+              <img src={c.avatar} alt={c.name} className="h-7 w-7 rounded-full object-cover" />
+              <div className="flex flex-col">
+                <span className="text-sm">{c.name}</span>
+                <span className="text-muted-foreground text-xs">{c.role}</span>
+              </div>
+
+              {/* Follow (static) */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="ml-auto text-xs"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log('Follow clicked for', c.name);
+                }}
+              >
+                Follow
+              </Button>
+            </div>
+          ))}
+        </div>
+
+        {/* View all contributors link */}
+        <Button
+          variant="link"
+          className="h-auto p-0 text-xs"
+          onClick={() => navigate(`/story/${slug}/contributors`)}
+        >
+          Show all contributors →
+        </Button>
       </motion.div>
 
       {/* ===== STATS ===== */}

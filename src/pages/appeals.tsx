@@ -41,7 +41,6 @@ import {
   type AppealStatus,
   type AppealPriority,
   type ReviewDecision,
-  APPEAL_STATUS_CONFIG,
 } from '@/type/appeal.type';
 
 // Mock data - replace with actual API

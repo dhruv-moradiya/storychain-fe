@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +13,6 @@ import { ListFilter, Tag } from 'lucide-react';
 import { useState } from 'react';
 import StoryRequestDetail from './submit-request-details';
 import StoryRequestList from './submit-request-list';
-import { ButtonGroup } from '@/components/ui/button-group';
 
 interface SubmitRequestProps {
   onClose: () => void;
@@ -77,7 +77,9 @@ export default function SubmitRequest({ onClose }: SubmitRequestProps) {
               <Tag size={14} />
               Labels
             </Button>
-            <Button className="text-xs font-medium">New Submit Request</Button>
+            <Button className="text-xs font-medium" onClick={onClose}>
+              New Submit Request
+            </Button>
           </ButtonGroup>
         </div>
       </div>

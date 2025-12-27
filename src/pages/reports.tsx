@@ -1,26 +1,11 @@
-import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
-  Flag,
-  Search,
-  Filter,
-  SlidersHorizontal,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Eye,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+  ReportCard,
+  ReportsEmpty,
+  ReportsError,
+  ReportsLoading,
+} from '@/components/report-appeal/index';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -29,22 +14,23 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from 'sonner';
 import { cn, fadeIn } from '@/lib/utils';
-import {
-  ReportCard,
-  ReportsLoading,
-  ReportsError,
-  ReportsEmpty,
-} from '@/components/report-appeal/index';
-import {
-  type IReport,
-  type ReportStatus,
-  type ReportType,
-  REPORT_STATUS_CONFIG,
-} from '@/type/report.type';
+import { type IReport, type ReportStatus, type ReportType } from '@/type/report.type';
+import { CheckCircle, Clock, Eye, Filter, Flag, Search, XCircle } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
+import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 // Mock data - replace with actual API
 const MOCK_REPORTS: IReport[] = [

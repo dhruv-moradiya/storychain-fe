@@ -88,29 +88,17 @@ export function AppealDialog({ banId, banReason, bannedAt, trigger, onAppeal }: 
 
   const handleSubmit = async () => {
     if (!reason) {
-      addNotification({
-        type: 'warning',
-        title: 'Selection Required',
-        message: 'Please select a reason for your appeal',
-      });
+      toast.warning('Please select a reason for your appeal');
       return;
     }
 
     if (explanation.length < 50) {
-      toast.warning({
-        type: 'warning',
-
-        message: 'Please provide a more detailed explanation (at least 50 characters)',
-      });
+      toast.warning('Please provide a more detailed explanation (at least 50 characters)');
       return;
     }
 
     if (explanation.length > 2000) {
-      addNotification({
-        type: 'warning',
-        title: 'Explanation Too Long',
-        message: 'Explanation is too long (max 2000 characters)',
-      });
+      toast.warning('Explanation exceeds the maximum length of 2000 characters');
       return;
     }
 

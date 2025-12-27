@@ -1,19 +1,10 @@
-import { forwardRef } from 'react';
-import { formatDistanceToNow } from 'date-fns';
-import {
-  Clock,
-  User,
-  Calendar,
-  BookOpen,
-  GitBranch,
-  Eye,
-  ThumbsUp,
-  MessageSquare,
-} from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
+import { formatDistanceToNow } from 'date-fns';
+import { BookOpen, Calendar, Clock, Eye, GitBranch, MessageSquare, ThumbsUp } from 'lucide-react';
+import { forwardRef } from 'react';
 
 export interface ChapterAuthor {
   id: string;
@@ -88,7 +79,7 @@ const ChapterReader = forwardRef<HTMLDivElement, ChapterReaderProps>(
       <div ref={ref} className={cn('chapter-reader', className)}>
         {/* Breadcrumb */}
         {showBreadcrumb && chapter.storyTitle && !isCompact && (
-          <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
             <BookOpen className="h-4 w-4" />
             <span>{chapter.storyTitle}</span>
             {chapter.chapterNumber && (
@@ -116,7 +107,7 @@ const ChapterReader = forwardRef<HTMLDivElement, ChapterReaderProps>(
             {/* Meta Row */}
             <div
               className={cn(
-                'mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground',
+                'text-muted-foreground mt-3 flex flex-wrap items-center gap-3 text-sm',
                 isCompact && 'mt-2'
               )}
             >
@@ -154,12 +145,10 @@ const ChapterReader = forwardRef<HTMLDivElement, ChapterReaderProps>(
 
             {/* Parent Chapter (Branch) */}
             {chapter.parentChapter && !isCompact && (
-              <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+              <div className="text-muted-foreground mt-2 flex items-center gap-2 text-sm">
                 <GitBranch className="h-4 w-4" />
                 <span>Branched from:</span>
-                <span className="font-medium text-foreground">
-                  {chapter.parentChapter.title}
-                </span>
+                <span className="text-foreground font-medium">{chapter.parentChapter.title}</span>
               </div>
             )}
 
@@ -193,7 +182,7 @@ const ChapterReader = forwardRef<HTMLDivElement, ChapterReaderProps>(
               <div>
                 <p className="font-medium">{chapter.author.name}</p>
                 {chapter.author.username && (
-                  <p className="text-sm text-muted-foreground">@{chapter.author.username}</p>
+                  <p className="text-muted-foreground text-sm">@{chapter.author.username}</p>
                 )}
               </div>
             </div>
@@ -202,70 +191,69 @@ const ChapterReader = forwardRef<HTMLDivElement, ChapterReaderProps>(
         )}
 
         {/* Content */}
-       <article
-  className={cn(
-    // Base typography
-    'prose prose-gray dark:prose-invert',
-    'max-w-3xl mx-auto',
+        <article
+          className={cn(
+            // Base typography
+            'prose prose-gray dark:prose-invert',
+            'mx-auto max-w-3xl',
 
-    // Headings
-    'prose-headings:font-semibold prose-headings:tracking-tight',
-    'prose-h2:mt-10 prose-h2:mb-4',
-    'prose-h3:mt-8 prose-h3:mb-3',
+            // Headings
+            'prose-headings:font-semibold prose-headings:tracking-tight',
+            'prose-h2:mt-10 prose-h2:mb-4',
+            'prose-h3:mt-8 prose-h3:mb-3',
 
-    // Paragraphs
-    'prose-p:leading-[1.75]',
-    'prose-p:my-5',
+            // Paragraphs
+            'prose-p:leading-[1.75]',
+            'prose-p:my-5',
 
-    // Links
-    'prose-a:text-primary prose-a:font-medium',
-    'hover:prose-a:underline',
+            // Links
+            'prose-a:text-primary prose-a:font-medium',
+            'hover:prose-a:underline',
 
-    // Lists
-    'prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-2',
-    'prose-ol:list-decimal prose-ol:pl-6 prose-ol:space-y-2',
+            // Lists
+            'prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-2',
+            'prose-ol:list-decimal prose-ol:pl-6 prose-ol:space-y-2',
 
-    // Blockquotes
-    'prose-blockquote:border-l-4',
-    'prose-blockquote:border-l-primary/60',
-    'prose-blockquote:bg-muted/40',
-    'prose-blockquote:px-4 prose-blockquote:py-3',
-    'prose-blockquote:rounded-r-md',
-    'prose-blockquote:not-italic',
+            // Blockquotes
+            'prose-blockquote:border-l-4',
+            'prose-blockquote:border-l-primary/60',
+            'prose-blockquote:bg-muted/40',
+            'prose-blockquote:px-4 prose-blockquote:py-3',
+            'prose-blockquote:rounded-r-md',
+            'prose-blockquote:not-italic',
 
-    // Inline code
-    'prose-code:rounded-md',
-    'prose-code:bg-muted',
-    'prose-code:px-1.5 prose-code:py-0.5',
-    'prose-code:font-normal',
-    'prose-code:text-[0.9em]',
-    'prose-code:before:content-none prose-code:after:content-none',
+            // Inline code
+            'prose-code:rounded-md',
+            'prose-code:bg-muted',
+            'prose-code:px-1.5 prose-code:py-0.5',
+            'prose-code:font-normal',
+            'prose-code:text-[0.9em]',
+            'prose-code:before:content-none prose-code:after:content-none',
 
-    // Code blocks
-    'prose-pre:bg-muted/60',
-    'prose-pre:border',
-    'prose-pre:rounded-lg',
-    'prose-pre:p-4',
-    'prose-pre:overflow-x-auto',
+            // Code blocks
+            'prose-pre:bg-muted/60',
+            'prose-pre:border',
+            'prose-pre:rounded-lg',
+            'prose-pre:p-4',
+            'prose-pre:overflow-x-auto',
 
-    // Tables (optional but useful)
-    'prose-table:border prose-table:border-collapse',
-    'prose-th:border prose-td:border',
-    'prose-th:bg-muted',
+            // Tables (optional but useful)
+            'prose-table:border prose-table:border-collapse',
+            'prose-th:border prose-td:border',
+            'prose-th:bg-muted',
 
-    // Compact / preview
-    isCompact && 'prose-sm',
-    isPreview && 'max-h-[65vh] overflow-y-auto pr-2'
-  )}
-  dangerouslySetInnerHTML={{ __html: chapter.content }}
-/>
-
+            // Compact / preview
+            isCompact && 'prose-sm',
+            isPreview && 'max-h-[65vh] overflow-y-auto pr-2'
+          )}
+          dangerouslySetInnerHTML={{ __html: chapter.content }}
+        />
 
         {/* Stats Footer */}
         {showStats && chapter.stats && !isCompact && (
           <>
             <Separator className="my-6" />
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            <div className="text-muted-foreground flex items-center gap-6 text-sm">
               {chapter.stats.views !== undefined && (
                 <div className="flex items-center gap-1.5">
                   <Eye className="h-4 w-4" />

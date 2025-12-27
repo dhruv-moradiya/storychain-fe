@@ -218,4 +218,11 @@ export type {
   IStoryTreeResponse,
   IChapterTree,
 };
-export { StoryStatus, StoryCollaboratorRole, StoryCollaboratorStatus, ROLE_HIERARCHY };
+export {
+  StoryStatus,
+  StoryCollaboratorRole,
+  StoryCollaboratorStatus,
+  ROLE_HIERARCHY,
+  StoryGenre,
+  StoryContentRating,
+};
