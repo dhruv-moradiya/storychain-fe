@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { motion } from 'motion/react';
-import { AlertTriangle, Scale, X, Clock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AppealDialog } from './appeal-dialog';
-import { type CreateAppealData } from '@/type/appeal.type';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { type CreateAppealData } from '@/type/appeal.type';
+import { AlertTriangle, Scale, X } from 'lucide-react';
+import { motion } from 'motion/react';
+import { useState } from 'react';
 import { toast } from 'sonner';
+import { AppealDialog } from './appeal-dialog';
 
 interface AppealBannerProps {
   banHistoryId: string;
   banReason?: string;
-  banType?: 'TEMPORARY' | 'PERMANENT' | 'CONTENT_REMOVAL' | 'FEATURE_RESTRICTION';
+  banType: 'TEMPORARY' | 'PERMANENT' | 'CONTENT_REMOVAL' | 'FEATURE_RESTRICTION' | 'OTHER_TYPE';
   banExpiresAt?: string;
   canAppeal?: boolean;
   hasExistingAppeal?: boolean;
@@ -73,21 +73,6 @@ export function AppealBanner({
       default:
         return 'Temporarily Banned';
     }
-  };
-
-  const getTimeRemaining = () => {
-    if (!banExpiresAt) return null;
-    const now = new Date();
-    const expires = new Date(banExpiresAt);
-    const diff = expires.getTime() - now.getTime();
-
-    if (diff <= 0) return 'Expired';
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-    if (days > 0) return `${days} day${days > 1 ? 's' : ''} remaining`;
-    return `${hours} hour${hours > 1 ? 's' : ''} remaining`;
   };
 
   return (
@@ -167,7 +152,7 @@ export function AppealBanner({
                 </p>
               )}
 
-              {banExpiresAt && banType !== 'PERMANENT' && (
+              {/* {banExpiresAt && banType !== 'PERMANENT' && (
                 <div className="mt-2 flex items-center gap-2">
                   <Clock
                     className={cn(
@@ -186,7 +171,7 @@ export function AppealBanner({
                     {getTimeRemaining()}
                   </span>
                 </div>
-              )}
+              )} */}
 
               {/* Appeal status or button */}
               <div className="mt-4 flex flex-wrap items-center gap-3">

@@ -87,8 +87,8 @@ const StoryTree = () => {
   /* ----------------------------------
    * Node interaction
    * ---------------------------------- */
-  const handleNodeButtonClick = () => {
-    // setSelectedNodeId(nodeId);
+  const handleNodeButtonClick = (nodeId: string) => {
+    console.log('Node ID', nodeId);
     setOpenPanel('comments');
   };
 
@@ -98,7 +98,7 @@ const StoryTree = () => {
         ...node,
         data: {
           ...node.data,
-          onCommentClick: handleNodeButtonClick,
+          onCommentClick: (nodeId: string) => handleNodeButtonClick(nodeId), // Ensure it matches the expected type
         },
       })),
     [layoutedNodes]
@@ -114,7 +114,7 @@ const StoryTree = () => {
   const chaptersKey = chapters.map((c) => c._id).join(',');
   useEffect(() => {
     if (nodesWithHandlers.length > 0) {
-      setNodes(nodesWithHandlers as IChapterNodeType[]);
+      setNodes(nodesWithHandlers);
       setEdges(layoutedEdges);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -147,7 +147,7 @@ const StoryTree = () => {
     (direction: 'TB' | 'LR') => {
       const { nodes: nextNodes, edges: nextEdges } = layout(nodes, edges, direction);
 
-      setNodes(nextNodes as IChapterNodeType[]);
+      setNodes(nextNodes);
       setEdges(nextEdges);
     },
     [nodes, edges, layout, setNodes, setEdges]

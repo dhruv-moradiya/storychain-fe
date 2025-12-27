@@ -1,12 +1,7 @@
 import { useState } from 'react';
 import { X, Maximize2, Minimize2, ExternalLink, BookOpen, GitCompare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
@@ -73,11 +68,7 @@ export function ChapterPreviewDialog({
               className="h-8 w-8"
               title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
             >
-              {isFullscreen ? (
-                <Minimize2 className="h-4 w-4" />
-              ) : (
-                <Maximize2 className="h-4 w-4" />
-              )}
+              {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
             </Button>
             <Button
               variant="ghost"
@@ -101,14 +92,14 @@ export function ChapterPreviewDialog({
               <TabsList className="h-10 w-full justify-start rounded-none border-0 bg-transparent p-0">
                 <TabsTrigger
                   value="preview"
-                  className="relative rounded-none border-0 bg-transparent px-4 py-2.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-primary"
+                  className="data-[state=active]:after:bg-primary relative rounded-none border-0 bg-transparent px-4 py-2.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:absolute data-[state=active]:after:right-0 data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:h-0.5"
                 >
                   <BookOpen className="mr-2 h-4 w-4" />
                   Preview
                 </TabsTrigger>
                 <TabsTrigger
                   value="changes"
-                  className="relative rounded-none border-0 bg-transparent px-4 py-2.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:absolute data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:right-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-primary"
+                  className="data-[state=active]:after:bg-primary relative rounded-none border-0 bg-transparent px-4 py-2.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:absolute data-[state=active]:after:right-0 data-[state=active]:after:bottom-0 data-[state=active]:after:left-0 data-[state=active]:after:h-0.5"
                 >
                   <GitCompare className="mr-2 h-4 w-4" />
                   Changes
@@ -130,14 +121,7 @@ export function ChapterPreviewDialog({
             </TabsContent>
 
             <TabsContent value="changes" className="mt-0 flex-1 overflow-hidden p-4">
-              <DiffViewer
-                original={originalContent}
-                modified={chapter.content}
-                originalTitle="Original Version"
-                modifiedTitle="Your Changes"
-                showStats
-                maxHeight={isFullscreen ? 'calc(100vh - 180px)' : '60vh'}
-              />
+              <DiffViewer />
             </TabsContent>
           </Tabs>
         ) : (
