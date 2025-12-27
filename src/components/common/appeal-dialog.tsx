@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -9,12 +8,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Scale, Loader2, AlertCircle } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
+import { AlertCircle, Loader2, Scale } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 export type AppealReason =
@@ -103,11 +103,7 @@ export function AppealDialog({ banId, banReason, bannedAt, trigger, onAppeal }: 
     }
 
     if (!contactEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
-      addNotification({
-        type: 'warning',
-        title: 'Invalid Email',
-        message: 'Please provide a valid email address',
-      });
+      toast.warning('Please provide a valid contact email address');
       return;
     }
 
@@ -127,19 +123,11 @@ export function AppealDialog({ banId, banReason, bannedAt, trigger, onAppeal }: 
         await new Promise((resolve) => setTimeout(resolve, 1500));
       }
 
-      addNotification({
-        type: 'success',
-        title: 'Appeal Submitted',
-        message: 'Our moderation team will review your appeal within 48-72 hours.',
-      });
+      toast.success('Our moderation team will review your appeal within 48-72 hours.');
       setOpen(false);
       resetForm();
     } catch {
-      addNotification({
-        type: 'warning',
-        title: 'Submission Failed',
-        message: 'Failed to submit appeal. Please try again later.',
-      });
+      toast.error('There was an error submitting your appeal. Please try again later.');
     } finally {
       setIsSubmitting(false);
     }

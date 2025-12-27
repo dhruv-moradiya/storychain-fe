@@ -1,13 +1,6 @@
-import type { GroupButton, LayoutDirection } from "@/type";
-import {
-  FoldVertical,
-  Plus,
-  SquareMousePointer,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
-import { useState } from "react";
-import { ButtonGroupWithTooltip } from "../button-group-with-tooltip";
+import type { GroupButton, LayoutDirection } from '@/type';
+import { FoldVertical, Plus, SquareMousePointer, ZoomIn, ZoomOut } from 'lucide-react';
+import { ButtonGroupWithTooltip } from '../button-group-with-tooltip';
 
 const LeftActionButtons = ({
   onLayout,
@@ -16,39 +9,33 @@ const LeftActionButtons = ({
   onLayout: (dir: LayoutDirection) => void;
   setOpenStoryEditor: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [zoom, setZoom] = useState(1);
-  const [selectedMode, setSelectedMode] = useState<"select" | "move">("select");
-
   const verticalButtons: GroupButton[] = [
     {
-      id: "add-node",
+      id: 'add-node',
       icon: <Plus />,
-      tooltip: "Add Node",
+      tooltip: 'Add Node',
       onClick: () => setOpenStoryEditor(true),
     },
     {
-      id: "zoom-in",
+      id: 'zoom-in',
       icon: <ZoomIn />,
-      tooltip: "Zoom In",
-      onClick: () => setZoom((prev) => prev + 0.1),
+      tooltip: 'Zoom In',
     },
     {
-      id: "zoom-out",
+      id: 'zoom-out',
       icon: <ZoomOut />,
-      tooltip: "Zoom Out",
-      onClick: () => setZoom((prev) => prev - 0.1),
+      tooltip: 'Zoom Out',
     },
     {
-      id: "select-mode",
+      id: 'select-mode',
       icon: <SquareMousePointer />,
-      tooltip: "Select Mode",
-      onClick: () => setSelectedMode("select"),
+      tooltip: 'Select Mode',
     },
     {
-      id: "move-mode",
+      id: 'move-mode',
       icon: <FoldVertical />,
-      tooltip: "Auto Layout",
-      onClick: () => onLayout("TB"),
+      tooltip: 'Auto Layout',
+      onClick: () => onLayout('TB'),
     },
   ];
 
@@ -56,7 +43,7 @@ const LeftActionButtons = ({
     <ButtonGroupWithTooltip
       buttons={verticalButtons}
       orientation="vertical"
-      className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
+      className="absolute top-1/2 left-2 z-10 -translate-y-1/2"
       tooltipPosition="right"
     />
   );

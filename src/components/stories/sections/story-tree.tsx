@@ -41,8 +41,8 @@ const StoryTree = () => {
   const queryClient = useQueryClient();
 
   const [openPanel, setOpenPanel] = useState<string | null>(null);
-  const [_, setSelectedNodeId] = useState<string | null>(null);
-  const [_openStoryEditor, setOpenStoryEditor] = useState(false);
+  // const [_, setSelectedNodeId] = useState<string | null>(null);
+  // const [_openStoryEditor, setOpenStoryEditor] = useState(false);
 
   /* ----------------------------------
    * Story data
@@ -87,8 +87,8 @@ const StoryTree = () => {
   /* ----------------------------------
    * Node interaction
    * ---------------------------------- */
-  const handleNodeButtonClick = (nodeId: string) => {
-    setSelectedNodeId(nodeId);
+  const handleNodeButtonClick = () => {
+    // setSelectedNodeId(nodeId);
     setOpenPanel('comments');
   };
 
@@ -225,7 +225,7 @@ const StoryTree = () => {
         </ResizablePanelGroup>
       </ReactFlowProvider>
 
-      <LeftActionButtons onLayout={onLayout} setOpenStoryEditor={setOpenStoryEditor} />
+      <LeftActionButtons onLayout={onLayout} setOpenStoryEditor={() => {}} />
       <TopActionButtons setOpenPanel={setOpenPanel} />
     </section>
   );

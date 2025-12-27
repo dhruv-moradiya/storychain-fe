@@ -13,6 +13,7 @@ import {
   AlertTriangle,
   ArrowLeft,
   BookOpen,
+  Clock,
   FileText,
   Flag,
   ListFilter,
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { ReportTable } from './reports-section';
+import { Badge } from '@/components/ui/badge';
 
 export default function ReportSection() {
   const [typeFilter, setTypeFilter] = useState<'ALL' | Report['targetType']>('ALL');
@@ -117,7 +119,7 @@ export default function ReportSection() {
 
       {/* ================= REPORT LIST ================= */}
       <motion.div {...fadeIn(0.2)} className="divide-border bg-card divide-y rounded-md">
-        {/* {filtered.map((rep) => (
+        {filtered.map((rep) => (
           <div key={rep.id} className="hover:bg-muted/30 cursor-pointer px-5 py-4 transition">
             <div className="flex items-start justify-between gap-4">
               <div className="flex min-w-0 flex-col gap-1">
@@ -143,7 +145,7 @@ export default function ReportSection() {
               </div>
             </div>
           </div>
-        ))} */}
+        ))}
         <ReportTable data={filtered} />
       </motion.div>
     </motion.section>

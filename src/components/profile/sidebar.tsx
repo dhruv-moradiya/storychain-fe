@@ -121,7 +121,7 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
 
       {/* Navigation Menu */}
       <nav className="flex-1 space-y-1 pt-1.5">
-        {menuItems.map(({ id, label, icon: Icon, description }) => {
+        {menuItems.map(({ id, label, icon: Icon }) => {
           const isActive = activeSection === id;
           return (
             <button

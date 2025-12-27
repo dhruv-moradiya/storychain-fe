@@ -1,47 +1,44 @@
 import { Button } from '@/components/ui/button';
 import {
-  ArrowDown,
-  ArrowLeft,
-  ArrowRight,
-  ChevronRight,
-  ChevronDown,
-  ArrowUpCircle,
-  Clock,
-  XCircle,
-  ArrowUp,
-  BarChart2,
-  Eye,
-  MessageSquare,
-  GitBranch,
-  CheckCircle,
-  GitMerge,
-  AlertTriangle,
-  Flag,
-  Minus,
-  Trash,
-} from 'lucide-react';
-import {
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getExpandedRowModel,
-  type ExpandedState,
-  useReactTable,
-} from '@tanstack/react-table';
-import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  useReactTable,
+  type ExpandedState,
+} from '@tanstack/react-table';
+import {
+  AlertTriangle,
+  ArrowDown,
+  ArrowLeft,
+  ArrowUp,
+  BarChart2,
+  CheckCircle,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  Eye,
+  Flag,
+  GitBranch,
+  GitMerge,
+  MessageSquare,
+  Minus,
+  Trash,
+  XCircle,
+} from 'lucide-react';
 
+import { fadeIn } from '@/lib/utils';
 import { chaptersData, type IChapter } from '@/mock-data/chapters';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
-import { fadeIn } from '@/lib/utils';
 const columnHelper = createColumnHelper<IChapter>();
 
 function expandAllRows(rows: IChapter[], path: string[] = [], acc: ExpandedState = {}) {

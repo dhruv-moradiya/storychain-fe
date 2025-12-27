@@ -146,9 +146,7 @@ export function AppealDialog({
                 <div
                   className={cn(
                     'h-0.5 w-8 rounded-full transition-colors',
-                    ['info', 'details', 'evidence'].indexOf(step) > i
-                      ? 'bg-primary/50'
-                      : 'bg-muted'
+                    ['info', 'details', 'evidence'].indexOf(step) > i ? 'bg-primary/50' : 'bg-muted'
                   )}
                 />
               )}
@@ -166,7 +164,7 @@ export function AppealDialog({
               transition={{ duration: 0.2 }}
               className="space-y-4"
             >
-              <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
+              <div className="bg-muted/30 space-y-3 rounded-lg border p-4">
                 <h4 className="text-sm font-medium">Ban Information</h4>
                 <div className="space-y-2 text-sm">
                   {banType && (
@@ -228,7 +226,7 @@ export function AppealDialog({
                   }}
                   maxLength={200}
                 />
-                <p className="text-xs text-muted-foreground">{appealReason.length}/200</p>
+                <p className="text-muted-foreground text-xs">{appealReason.length}/200</p>
               </div>
 
               <div className="space-y-2">
@@ -245,7 +243,7 @@ export function AppealDialog({
                   className="resize-none"
                   maxLength={2000}
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {explanation.length}/2000 (minimum 50 characters)
                 </p>
               </div>
@@ -274,13 +272,13 @@ export function AppealDialog({
             >
               <div className="space-y-2">
                 <Label>Supporting evidence (optional)</Label>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Add links to screenshots, documents, or other evidence that supports your appeal
                 </p>
 
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <LinkIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <LinkIcon className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                     <Input
                       placeholder="https://example.com/evidence"
                       value={newUrl}
@@ -316,17 +314,17 @@ export function AppealDialog({
 
               {evidenceUrls.length > 0 && (
                 <div className="space-y-2">
-                  <Label className="text-xs text-muted-foreground">Added evidence:</Label>
+                  <Label className="text-muted-foreground text-xs">Added evidence:</Label>
                   <div className="space-y-2">
-                    {evidenceUrls.map((url, index) => (
+                    {evidenceUrls.map((url) => (
                       <motion.div
                         key={url}
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="flex items-center gap-2 rounded-md border bg-muted/30 p-2"
+                        className="bg-muted/30 flex items-center gap-2 rounded-md border p-2"
                       >
-                        <LinkIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        <LinkIcon className="text-muted-foreground h-3.5 w-3.5 shrink-0" />
                         <span className="flex-1 truncate text-sm">{url}</span>
                         <Button
                           type="button"
@@ -343,9 +341,9 @@ export function AppealDialog({
                 </div>
               )}
 
-              <div className="rounded-lg border bg-muted/30 p-4">
-                <h4 className="text-sm font-medium mb-2">Review your appeal</h4>
-                <div className="space-y-1 text-sm text-muted-foreground">
+              <div className="bg-muted/30 rounded-lg border p-4">
+                <h4 className="mb-2 text-sm font-medium">Review your appeal</h4>
+                <div className="text-muted-foreground space-y-1 text-sm">
                   <p>
                     <strong>Reason:</strong> {appealReason}
                   </p>

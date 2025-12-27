@@ -1,10 +1,6 @@
-import { useState } from 'react';
-import { GitPullRequest, Plus, X, Eye, EyeOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { DiffViewer } from '@/components/common/diff-viewer';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
@@ -14,6 +10,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
   SelectContent,
@@ -21,9 +20,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { DiffViewer } from '@/components/common/diff-viewer';
+import { Eye, EyeOff, GitPullRequest, Plus, X } from 'lucide-react';
+import { useState } from 'react';
 
 export interface SubmitRequestData {
   title: string;
@@ -53,18 +53,46 @@ interface SubmitRequestDialogProps {
 }
 
 const AVAILABLE_LABELS = [
-  { value: 'plot-twist', label: 'Plot Twist', color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300' },
-  { value: 'character-development', label: 'Character Development', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300' },
-  { value: 'world-building', label: 'World Building', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' },
-  { value: 'needs-review', label: 'Needs Review', color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300' },
-  { value: 'grammar-fix', label: 'Grammar Fix', color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' },
-  { value: 'good-first-pr', label: 'Good First PR', color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300' },
+  {
+    value: 'plot-twist',
+    label: 'Plot Twist',
+    color: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+  },
+  {
+    value: 'character-development',
+    label: 'Character Development',
+    color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  },
+  {
+    value: 'world-building',
+    label: 'World Building',
+    color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  },
+  {
+    value: 'needs-review',
+    label: 'Needs Review',
+    color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
+  },
+  {
+    value: 'grammar-fix',
+    label: 'Grammar Fix',
+    color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300',
+  },
+  {
+    value: 'good-first-pr',
+    label: 'Good First PR',
+    color: 'bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-300',
+  },
 ];
 
 const PR_TYPES = [
   { value: 'NEW_CHAPTER', label: 'New Chapter', description: 'Add a new chapter to the story' },
   { value: 'EDIT_CHAPTER', label: 'Edit Chapter', description: 'Modify an existing chapter' },
-  { value: 'DELETE_CHAPTER', label: 'Delete Chapter', description: 'Remove a chapter from the story' },
+  {
+    value: 'DELETE_CHAPTER',
+    label: 'Delete Chapter',
+    description: 'Remove a chapter from the story',
+  },
 ];
 
 export function SubmitRequestDialog({
@@ -203,9 +231,7 @@ export function SubmitRequestDialog({
                   {parentChapters.length > 0 ? (
                     parentChapters.map((chapter) => (
                       <SelectItem key={chapter.id} value={chapter.id}>
-                        <span style={{ paddingLeft: chapter.depth * 12 }}>
-                          {chapter.title}
-                        </span>
+                        <span style={{ paddingLeft: chapter.depth * 12 }}>{chapter.title}</span>
                       </SelectItem>
                     ))
                   ) : (
@@ -246,11 +272,7 @@ export function SubmitRequestDialog({
               {formData.labels.map((labelValue) => {
                 const label = AVAILABLE_LABELS.find((l) => l.value === labelValue);
                 return (
-                  <Badge
-                    key={labelValue}
-                    variant="secondary"
-                    className={cn('gap-1', label?.color)}
-                  >
+                  <Badge key={labelValue} variant="secondary" className={cn('gap-1', label?.color)}>
                     {label?.label || labelValue}
                     <button
                       type="button"
@@ -267,7 +289,7 @@ export function SubmitRequestDialog({
 
           {/* Changes Preview */}
           <div className="space-y-3">
-            <div className="rounded-md border bg-muted/30 p-4">
+            <div className="bg-muted/30 rounded-md border p-4">
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium">Changes Summary</p>
                 {hasDiff && (
@@ -278,7 +300,11 @@ export function SubmitRequestDialog({
                     onClick={() => setShowDiff(!showDiff)}
                     className="h-7 gap-1.5 text-xs"
                   >
-                    {showDiff ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                    {showDiff ? (
+                      <EyeOff className="h-3.5 w-3.5" />
+                    ) : (
+                      <Eye className="h-3.5 w-3.5" />
+                    )}
                     {showDiff ? 'Hide Changes' : 'View Changes'}
                   </Button>
                 )}
@@ -291,13 +317,13 @@ export function SubmitRequestDialog({
                   {charCount.toLocaleString()} characters
                 </span>
               </div>
-              <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
+              <div className="bg-muted mt-2 h-2 overflow-hidden rounded-full">
                 <div
                   className="h-full bg-green-500 transition-all"
                   style={{ width: `${Math.min(100, (wordCount / 2000) * 100)}%` }}
                 />
               </div>
-              <p className="mt-1 text-xs text-muted-foreground">
+              <p className="text-muted-foreground mt-1 text-xs">
                 {Math.round((wordCount / 2000) * 100)}% of typical chapter length
               </p>
             </div>
@@ -305,14 +331,7 @@ export function SubmitRequestDialog({
             {/* Diff Viewer */}
             {hasDiff && showDiff && (
               <ScrollArea className="max-h-[300px]">
-                <DiffViewer
-                  original={originalContent}
-                  modified={modifiedContent}
-                  originalTitle="Original"
-                  modifiedTitle="Your Changes"
-                  showStats={false}
-                  maxHeight="280px"
-                />
+                <DiffViewer />
               </ScrollArea>
             )}
           </div>

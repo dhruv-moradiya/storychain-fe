@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import type { IChapterEdgeProps } from '@/type/story-canvas.type';
 import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath } from '@xyflow/react';
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export function CustomEdge({
@@ -17,7 +16,6 @@ export function CustomEdge({
   data,
 }: IChapterEdgeProps) {
   const navigate = useNavigate();
-  const [isHovered, setIsHovered] = useState(false);
 
   console.log('data :>> ', data);
   console.log('id :>> ', id);
@@ -39,8 +37,6 @@ export function CustomEdge({
         fill="none"
         stroke="transparent"
         strokeWidth={20}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         style={{ cursor: 'pointer' }}
       />
       <EdgeLabelRenderer>
@@ -52,8 +48,6 @@ export function CustomEdge({
             transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
             pointerEvents: 'none',
           }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
         >
           <Button
             size="icon"

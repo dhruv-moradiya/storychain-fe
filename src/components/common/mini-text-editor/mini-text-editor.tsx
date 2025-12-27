@@ -57,7 +57,11 @@ const MiniTextEditor = ({
     >
       <MiniTextEditorMenuBar editor={editor} />
 
-      <EditorContent editor={editor} className={cn('px-3 py-2 text-sm', `min-h-[${minHeight}]`)} />
+      <EditorContent
+        editor={editor}
+        placeholder={placeholder}
+        className={cn('px-3 py-2 text-sm', `min-h-[${minHeight}]`)}
+      />
     </div>
   );
 };

@@ -1,16 +1,7 @@
-import { useState } from 'react';
+import AppealDialog from '@/components/common/appeal-dialog';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -19,24 +10,32 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-  Flag,
-  Scale,
-  Clock,
-  CheckCircle,
-  XCircle,
-  Eye,
-  AlertTriangle,
-  FileText,
-  MessageSquare,
-  Users,
-  BookOpen,
-  ExternalLink,
-  Info,
-} from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
-import AppealDialog from '@/components/common/appeal-dialog';
+import { formatDistanceToNow } from 'date-fns';
+import {
+  BookOpen,
+  CheckCircle,
+  Clock,
+  ExternalLink,
+  Eye,
+  FileText,
+  Flag,
+  Info,
+  MessageSquare,
+  Scale,
+  Users,
+  XCircle,
+} from 'lucide-react';
+import { useState } from 'react';
 
 // Types
 type ReportStatus = 'PENDING' | 'REVIEWED' | 'RESOLVED' | 'DISMISSED';

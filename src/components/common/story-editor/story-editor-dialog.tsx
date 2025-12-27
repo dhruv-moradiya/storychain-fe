@@ -57,8 +57,7 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
     mutate(
       { ...data },
       {
-        onSuccess: (data) => {
-          toast.success(data.message);
+        onSuccess: () => {
           onOpenChange(false);
         },
         onError: (error) => {

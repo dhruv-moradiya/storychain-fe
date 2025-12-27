@@ -1,18 +1,13 @@
-import { motion } from 'motion/react';
-import { Flag, AlertCircle, FileQuestion, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
+import { AlertCircle, FileQuestion, Flag, RefreshCw } from 'lucide-react';
+import { motion } from 'motion/react';
 
 // ============ LOADING STATE ============
 
 export function ReportsLoading({ count = 5 }: { count?: number }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="space-y-3"
-    >
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
       {Array.from({ length: count }).map((_, i) => (
         <motion.div
           key={i}
@@ -29,7 +24,7 @@ export function ReportsLoading({ count = 5 }: { count?: number }) {
 
 function ReportCardSkeleton() {
   return (
-    <div className="rounded-xl border bg-card p-4 space-y-3">
+    <div className="bg-card space-y-3 rounded-xl border p-4">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <Skeleton className="h-10 w-10 rounded-full" />
@@ -62,11 +57,11 @@ export function ReportsError({ message = 'Failed to load reports', onRetry }: Re
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative flex min-h-[400px] flex-col items-center justify-center rounded-xl border bg-gradient-to-br from-background via-red-50/10 to-red-100/20 p-8 dark:from-background dark:via-red-950/10 dark:to-red-900/10"
+      className="from-background dark:from-background relative flex min-h-[400px] flex-col items-center justify-center rounded-xl border bg-gradient-to-br via-red-50/10 to-red-100/20 p-8 dark:via-red-950/10 dark:to-red-900/10"
     >
       {/* Animated glow */}
       <motion.div
-        className="absolute inset-0 rounded-xl bg-gradient-radial from-red-500/10 via-transparent to-transparent"
+        className="bg-gradient-radial absolute inset-0 rounded-xl from-red-500/10 via-transparent to-transparent"
         animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1] }}
         transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
       />
@@ -86,7 +81,7 @@ export function ReportsError({ message = 'Failed to load reports', onRetry }: Re
 
         <div className="text-center">
           <h3 className="text-lg font-semibold">Something went wrong</h3>
-          <p className="mt-1 text-sm text-muted-foreground">{message}</p>
+          <p className="text-muted-foreground mt-1 text-sm">{message}</p>
         </div>
 
         {onRetry && (
@@ -121,11 +116,11 @@ export function ReportsEmpty({
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative flex min-h-[400px] flex-col items-center justify-center rounded-xl border bg-gradient-to-br from-background/80 via-muted/25 to-muted/60 p-8"
+      className="from-background/80 via-muted/25 to-muted/60 relative flex min-h-[400px] flex-col items-center justify-center rounded-xl border bg-gradient-to-br p-8"
     >
       {/* Animated glow */}
       <motion.div
-        className="absolute inset-0 rounded-xl bg-gradient-radial from-primary/5 via-transparent to-transparent"
+        className="bg-gradient-radial from-primary/5 absolute inset-0 rounded-xl via-transparent to-transparent"
         animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.1, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       />
@@ -136,16 +131,16 @@ export function ReportsEmpty({
         animate={{ y: 0 }}
       >
         <motion.div
-          className="flex h-16 w-16 items-center justify-center rounded-full bg-muted"
+          className="bg-muted flex h-16 w-16 items-center justify-center rounded-full"
           animate={{ y: [-4, 4, -4] }}
           transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <FileQuestion className="h-8 w-8 text-muted-foreground" />
+          <FileQuestion className="text-muted-foreground h-8 w-8" />
         </motion.div>
 
         <div className="text-center">
           <h3 className="text-lg font-semibold">{title}</h3>
-          <p className="mt-1 max-w-sm text-sm text-muted-foreground">{description}</p>
+          <p className="text-muted-foreground mt-1 max-w-sm text-sm">{description}</p>
         </div>
 
         {onAction && actionLabel && (

@@ -385,7 +385,7 @@ function SecurityRow({
   verified,
   action,
 }: {
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   label: string;
   description: string;
   verified?: boolean;

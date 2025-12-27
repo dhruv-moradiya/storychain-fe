@@ -1,4 +1,4 @@
-import type { IStoryCollaborator, IStoryCollaboratorWithUser } from '@/type/story.type';
+import type { IStoryCollaboratorWithUser } from '@/type/story.type';
 import {
   createColumnHelper,
   flexRender,

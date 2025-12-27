@@ -1,14 +1,14 @@
-import { motion } from 'framer-motion';
-import { UserPlus, ArrowUpRightIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Empty,
+  EmptyContent,
+  EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-  EmptyDescription,
-  EmptyContent,
 } from '@/components/ui/empty';
+import { motion } from 'framer-motion';
+import { UserPlus } from 'lucide-react';
 
 interface CollaboratorsEmptyProps {
   onInvite: () => void;

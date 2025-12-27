@@ -1,12 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { useGetStoryOverviewBySlug } from '@/hooks/story/story.queries';
 import { fadeIn } from '@/lib/utils';
-import { motion } from 'framer-motion';
-import { ArrowLeft, BookOpen, Eye, FileEdit, Globe, Lock, Star, Users } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router';
-import { OverviewSectionLoading, OverviewSectionError } from './overview-section/index';
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, BookOpen, Eye, FileEdit, Star, Users } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router';
+import { OverviewSectionError, OverviewSectionLoading } from './overview-section/index';
 
 const staticCreator = {
   id: 99,

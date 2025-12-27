@@ -1,36 +1,36 @@
-import { Button } from "@/components/ui/button";
-import { GitPullRequest, X, Sliders, ListFilter } from "lucide-react";
-import { useState } from "react";
-import { mockRequests } from "./data";
-import StoryRequestDetail from "./StoryRequestDetail";
-import StoryRequestList from "./StoryRequestList";
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from "@/components/ui/dropdown-menu";
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { GitPullRequest, ListFilter, X } from 'lucide-react';
+import { useState } from 'react';
+import { mockRequests } from './data';
+import StoryRequestDetail from './StoryRequestDetail';
+import StoryRequestList from './StoryRequestList';
 
 interface MergeRequestPanelProps {
   onClose: () => void;
 }
 
 export default function MergeRequestPanel({ onClose }: MergeRequestPanelProps) {
-  const [selectedRequest, setSelectedRequest] = useState<string | null>("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [selectedRequest, setSelectedRequest] = useState<string | null>('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
 
   const onSelect = (id: string) => {
     setSelectedRequest(id);
   };
 
   const filteredRequests = mockRequests.filter((req) =>
-    statusFilter === "all" ? true : req.status === statusFilter
+    statusFilter === 'all' ? true : req.status === statusFilter
   );
 
   return (
-    <div className="scrollbar overflow-auto flex flex-col h-full w-full shadow-xl bg-background rounded-l-lg relative">
-      <div className="w-full border-b bg-background/80 backdrop-blur-sm sticky top-0 z-40 flex items-center justify-between p-3">
-        <h3 className="font-medium text-base flex items-center gap-2">
+    <div className="scrollbar bg-background relative flex h-full w-full flex-col overflow-auto rounded-l-lg shadow-xl">
+      <div className="bg-background/80 sticky top-0 z-40 flex w-full items-center justify-between border-b p-3 backdrop-blur-sm">
+        <h3 className="flex items-center gap-2 text-base font-medium">
           <GitPullRequest size={18} className="text-primary" />
           Story Merge Requests
         </h3>
@@ -44,23 +44,17 @@ export default function MergeRequestPanel({ onClose }: MergeRequestPanelProps) {
                 className="flex items-center gap-1 px-2 py-1 text-xs"
               >
                 <ListFilter size={14} />
-                <span>{statusFilter === "all" ? "Filter" : statusFilter}</span>
+                <span>{statusFilter === 'all' ? 'Filter' : statusFilter}</span>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="min-w-[100px]">
-              <DropdownMenuItem onClick={() => setStatusFilter("all")}>
-                All
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter("open")}>
-                Open
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter("approved")}>
+              <DropdownMenuItem onClick={() => setStatusFilter('all')}>All</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter('open')}>Open</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter('approved')}>
                 Approved
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter("merged")}>
-                Merged
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter("rejected")}>
+              <DropdownMenuItem onClick={() => setStatusFilter('merged')}>Merged</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setStatusFilter('rejected')}>
                 Rejected
               </DropdownMenuItem>
             </DropdownMenuContent>

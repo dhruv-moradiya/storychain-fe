@@ -1,17 +1,3 @@
-import { motion } from 'motion/react';
-import { formatDistanceToNow } from 'date-fns';
-import {
-  Scale,
-  Clock,
-  User,
-  MoreHorizontal,
-  Eye,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-  ExternalLink,
-  MessageSquare,
-} from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -22,18 +8,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { type IAppeal, APPEAL_PRIORITY_CONFIG, APPEAL_STATUS_CONFIG } from '@/type/appeal.type';
+import { formatDistanceToNow } from 'date-fns';
 import {
-  type IAppeal,
-  APPEAL_STATUS_CONFIG,
-  APPEAL_PRIORITY_CONFIG,
-} from '@/type/appeal.type';
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  ExternalLink,
+  Eye,
+  MessageSquare,
+  MoreHorizontal,
+  User,
+  XCircle,
+} from 'lucide-react';
+import { motion } from 'motion/react';
 
 interface AppealCardProps {
   appeal: IAppeal;
@@ -66,12 +56,12 @@ export function AppealCard({
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -2 }}
         transition={{ duration: 0.2 }}
-        className="group relative rounded-xl border bg-card p-4 transition-shadow hover:shadow-md"
+        className="group bg-card relative rounded-xl border p-4 transition-shadow hover:shadow-md"
       >
         {/* Priority indicator */}
         {appeal.priority === 'URGENT' && (
           <motion.div
-            className="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500"
+            className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-500"
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
@@ -82,7 +72,7 @@ export function AppealCard({
         {/* Status indicator bar */}
         <div
           className={cn(
-            'absolute left-0 top-0 h-full w-1 rounded-l-xl transition-all group-hover:w-1.5',
+            'absolute top-0 left-0 h-full w-1 rounded-l-xl transition-all group-hover:w-1.5',
             statusConfig.dotColor
           )}
         />
@@ -98,10 +88,10 @@ export function AppealCard({
             </Avatar>
 
             <div className="min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex flex-wrap items-center gap-2">
                 <span className="font-medium">{appeal.userName || 'User'}</span>
                 {appeal.userEmail && (
-                  <span className="text-xs text-muted-foreground">{appeal.userEmail}</span>
+                  <span className="text-muted-foreground text-xs">{appeal.userEmail}</span>
                 )}
               </div>
 
@@ -110,7 +100,7 @@ export function AppealCard({
           </div>
 
           {/* Right side - Status & Priority */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex shrink-0 items-center gap-2">
             <Badge className={cn(priorityConfig.color)}>{priorityConfig.label}</Badge>
             <Badge className={cn('gap-1', statusConfig.color)}>
               <span className={cn('h-1.5 w-1.5 rounded-full', statusConfig.dotColor)} />
@@ -130,15 +120,24 @@ export function AppealCard({
                     View Details
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => onApprove?.(appeal)} className="gap-2 text-green-600">
+                  <DropdownMenuItem
+                    onClick={() => onApprove?.(appeal)}
+                    className="gap-2 text-green-600"
+                  >
                     <CheckCircle className="h-4 w-4" />
                     Approve Appeal
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onReject?.(appeal)} className="gap-2 text-red-600">
+                  <DropdownMenuItem
+                    onClick={() => onReject?.(appeal)}
+                    className="gap-2 text-red-600"
+                  >
                     <XCircle className="h-4 w-4" />
                     Reject Appeal
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => onEscalate?.(appeal)} className="gap-2 text-purple-600">
+                  <DropdownMenuItem
+                    onClick={() => onEscalate?.(appeal)}
+                    className="gap-2 text-purple-600"
+                  >
                     <AlertTriangle className="h-4 w-4" />
                     Escalate
                   </DropdownMenuItem>
@@ -150,13 +149,13 @@ export function AppealCard({
 
         {/* Explanation preview */}
         <div className="mt-3">
-          <p className="text-sm text-muted-foreground line-clamp-3">{appeal.explanation}</p>
+          <p className="text-muted-foreground line-clamp-3 text-sm">{appeal.explanation}</p>
         </div>
 
         {/* Evidence links */}
         {appeal.evidenceUrls && appeal.evidenceUrls.length > 0 && (
           <div className="mt-3 flex items-center gap-2">
-            <span className="text-xs text-muted-foreground">Evidence:</span>
+            <span className="text-muted-foreground text-xs">Evidence:</span>
             <div className="flex items-center gap-1">
               {appeal.evidenceUrls.slice(0, 3).map((url, i) => (
                 <Tooltip key={i}>
@@ -165,7 +164,7 @@ export function AppealCard({
                       href={url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex h-6 w-6 items-center justify-center rounded bg-muted hover:bg-muted/80"
+                      className="bg-muted hover:bg-muted/80 flex h-6 w-6 items-center justify-center rounded"
                     >
                       <ExternalLink className="h-3 w-3" />
                     </a>
@@ -176,7 +175,7 @@ export function AppealCard({
                 </Tooltip>
               ))}
               {appeal.evidenceUrls.length > 3 && (
-                <span className="text-xs text-muted-foreground">
+                <span className="text-muted-foreground text-xs">
                   +{appeal.evidenceUrls.length - 3} more
                 </span>
               )}
@@ -186,7 +185,7 @@ export function AppealCard({
 
         {/* Ban context */}
         {(appeal.banReason || appeal.banType) && (
-          <div className="mt-3 rounded-lg bg-muted/50 p-2 text-xs">
+          <div className="bg-muted/50 mt-3 rounded-lg p-2 text-xs">
             <span className="text-muted-foreground">Ban: </span>
             <span>{appeal.banType}</span>
             {appeal.banReason && <span> - {appeal.banReason}</span>}
@@ -194,7 +193,7 @@ export function AppealCard({
         )}
 
         {/* Footer */}
-        <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+        <div className="text-muted-foreground mt-3 flex items-center justify-between text-xs">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
               <Clock className="h-3 w-3" />
@@ -209,9 +208,7 @@ export function AppealCard({
             )}
           </div>
 
-          {appeal.assignedToName && (
-            <span>Assigned to {appeal.assignedToName}</span>
-          )}
+          {appeal.assignedToName && <span>Assigned to {appeal.assignedToName}</span>}
         </div>
 
         {/* Response message */}
@@ -228,7 +225,7 @@ export function AppealCard({
                   : 'bg-muted/50'
             )}
           >
-            <p className="font-medium text-xs text-muted-foreground mb-1">Response:</p>
+            <p className="text-muted-foreground mb-1 text-xs font-medium">Response:</p>
             <p>{appeal.responseMessage}</p>
           </motion.div>
         )}

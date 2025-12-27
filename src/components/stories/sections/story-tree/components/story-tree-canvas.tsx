@@ -1,11 +1,22 @@
-import { ReactFlow, Background, ConnectionLineType } from '@xyflow/react';
+import {
+  ReactFlow,
+  Background,
+  ConnectionLineType,
+  type OnConnect,
+  type OnEdgesChange,
+  type OnNodesChange,
+} from '@xyflow/react';
 import { ResizablePanel } from '@/components/ui/resizable';
-import type { StoryNode, StoryEdge, OnNodesChange, OnEdgesChange, OnConnect } from './types';
-import { nodeTypes, edgeTypes } from './flowConfig';
+import {
+  edgeTypes,
+  nodeTypes,
+  type IChapterEdge,
+  type IChapterNodeType,
+} from '@/type/story-canvas.type';
 
 interface Props {
-  nodes: StoryNode[];
-  edges: StoryEdge[];
+  nodes: IChapterNodeType[];
+  edges: IChapterEdge[];
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
