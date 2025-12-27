@@ -1,5 +1,4 @@
-interface IStorySettingUpdateRequest {
-  storyId: string;
+interface IStorySettingUpdateRequestBase {
   isPublic: boolean;
   allowBranching: boolean;
   requireApproval: boolean;
@@ -17,14 +16,28 @@ interface IStorySettingUpdateRequest {
     | 'COMEDY'
     | 'OTHER';
   contentRating: 'GENERAL' | 'TEEN' | 'MATURE';
-  converImage: {
-    coverImage: string;
-    publicId: string;
-  };
-  cardImage: {
-    coverImage: string;
-    publicId: string;
-  };
 }
 
-export type { IStorySettingUpdateRequest };
+type IStorySettingUpdateRequest = { slug: string } & Partial<IStorySettingUpdateRequestBase>;
+
+interface IStoryImagePayload {
+  url: string;
+  publicId: string;
+}
+
+interface IUpdateStoryCoverImageRequest {
+  slug: string;
+  coverImage: IStoryImagePayload;
+}
+
+interface IUpdateStoryCardImageRequest {
+  slug: string;
+  cardImage: IStoryImagePayload;
+}
+
+export type {
+  IStorySettingUpdateRequest,
+  IStoryImagePayload,
+  IUpdateStoryCoverImageRequest,
+  IUpdateStoryCardImageRequest,
+};

@@ -1,10 +1,15 @@
 import { Button } from '@/components/ui/button';
 import { storyChainLandingContent } from '@/constants/content/lading-page-content';
-import { fadeIn, scrollReveal } from '@/lib/utils';
+import { cn, fadeIn, scrollReveal } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router';
+import { useAuth } from '@clerk/clerk-react';
+import { LayoutDashboard, Compass } from 'lucide-react';
+import { Activity } from 'react';
 
 const Home = () => {
+  const { isSignedIn } = useAuth();
+
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* ========== HERO BACKGROUND GRADIENT ========== */}
@@ -25,12 +30,43 @@ const Home = () => {
         </div>
 
         <nav className="flex items-center gap-2 text-sm text-white/80">
-          <Button variant="link" className="font-mono font-semibold text-white/80 hover:text-white">
-            <Link to="/sign-in">Login</Link>
-          </Button>
-          <Button variant="link" className="font-mono font-semibold text-white/80 hover:text-white">
-            <Link to="/sign-up">Sign up</Link>
-          </Button>
+          <Activity mode={isSignedIn ? 'visible' : 'hidden'}>
+            <Button
+              variant="ghost"
+              className="font-mono font-semibold text-white/80 hover:bg-white/10 hover:text-white"
+              asChild
+            >
+              <Link to="/dashboard" className="flex items-center gap-2">
+                <LayoutDashboard size={16} />
+                Dashboard
+              </Link>
+            </Button>
+            <Button
+              variant="ghost"
+              className="font-mono font-semibold text-white/80 hover:bg-white/10 hover:text-white"
+              asChild
+            >
+              <Link to="/explore" className="flex items-center gap-2">
+                <Compass size={16} />
+                Explore
+              </Link>
+            </Button>
+          </Activity>
+
+          <Activity mode={isSignedIn ? 'hidden' : 'visible'}>
+            <Button
+              variant="link"
+              className="font-mono font-semibold text-white/80 hover:text-white"
+            >
+              <Link to="/sign-in">Login</Link>
+            </Button>
+            <Button
+              variant="link"
+              className="font-mono font-semibold text-white/80 hover:text-white"
+            >
+              <Link to="/sign-up">Sign up</Link>
+            </Button>
+          </Activity>
         </nav>
       </motion.header>
 
@@ -62,18 +98,42 @@ const Home = () => {
           {storyChainLandingContent.hero.description}
         </motion.p>
 
-        {/* CTAs */}
+        {/* CTAs - Different for authenticated vs non-authenticated */}
         <motion.div
           {...fadeIn(0.4)}
           className="mb-8 flex flex-wrap items-center justify-center gap-4"
         >
-          <button className="rounded-[6px] bg-pink-500 px-7 py-2.5 text-sm font-medium text-white shadow-lg ring-2 shadow-pink-500/25 ring-pink-500/30 transition-all hover:bg-pink-600 hover:shadow-pink-500/35">
-            {storyChainLandingContent.hero.primaryCta}
-          </button>
+          {isSignedIn ? (
+            <>
+              <Link to="/dashboard">
+                <button className="flex items-center gap-2 rounded-[6px] bg-pink-500 px-7 py-2.5 text-sm font-medium text-white shadow-lg ring-2 shadow-pink-500/25 ring-pink-500/30 transition-all hover:bg-pink-600 hover:shadow-pink-500/35">
+                  <LayoutDashboard size={16} />
+                  Go to Dashboard
+                </button>
+              </Link>
 
-          <button className="rounded-[6px] border border-white/35 px-6 py-2.5 text-sm font-medium text-white/90 backdrop-blur transition hover:border-white/50 hover:bg-white/10">
-            {storyChainLandingContent.hero.secondaryCta}
-          </button>
+              <Link to="/explore">
+                <button className="flex items-center gap-2 rounded-[6px] border border-white/35 px-6 py-2.5 text-sm font-medium text-white/90 backdrop-blur transition hover:border-white/50 hover:bg-white/10">
+                  <Compass size={16} />
+                  Explore Stories
+                </button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/sign-up">
+                <button className="rounded-[6px] bg-pink-500 px-7 py-2.5 text-sm font-medium text-white shadow-lg ring-2 shadow-pink-500/25 ring-pink-500/30 transition-all hover:bg-pink-600 hover:shadow-pink-500/35">
+                  {storyChainLandingContent.hero.primaryCta}
+                </button>
+              </Link>
+
+              <Link to="/sign-in">
+                <button className="rounded-[6px] border border-white/35 px-6 py-2.5 text-sm font-medium text-white/90 backdrop-blur transition hover:border-white/50 hover:bg-white/10">
+                  {storyChainLandingContent.hero.secondaryCta}
+                </button>
+              </Link>
+            </>
+          )}
         </motion.div>
 
         {/* Helper text */}
@@ -91,12 +151,17 @@ const Home = () => {
       </section>
 
       {/* ================= NOT JUST AN APP ================= */}
-      <section className="relative z-10 bg-[#fff6ea] px-6 pt-20 pb-28">
+      <section
+        className={cn(
+          'relative z-10 bg-[#fff6ea] px-6 pt-20 pb-28'
+          // 'bg-[radial-gradient(circle,_rgba(0,0,0,0.12)_1px,_transparent_1px)] bg-[length:20px_20px]'
+        )}
+      >
         <div className="mx-auto max-w-6xl">
           {/* Canvas with dot pattern - ONLY this section has dots */}
           <div className="relative rounded-[28px] bg-[#fff7eb] px-6 py-32 shadow-sm">
             {/* Subtle dot texture - low opacity, non-distracting */}
-            <div className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(circle,_rgba(0,0,0,0.03)_1px,_transparent_1px)] [background-size:24px_24px] opacity-60" />
+            <div className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(circle,_rgba(160,160,160,0.7)_1px,_transparent_1px)] [background-size:24px_24px] opacity-80" />
 
             {/* Content */}
             <div className="relative z-10 mx-auto max-w-3xl text-center">
@@ -151,7 +216,10 @@ const Home = () => {
         {/* ---------- CONTENT ---------- */}
         <div className="relative mx-auto max-w-3xl px-6 pt-20 pb-36 text-center">
           {/* Accent */}
-          <motion.span {...scrollReveal.paragraph} className="font-yellowtail mb-5 block text-lg text-[#6b7cff]">
+          <motion.span
+            {...scrollReveal.paragraph}
+            className="font-yellowtail mb-5 block text-lg text-[#6b7cff]"
+          >
             Ownership
           </motion.span>
 
@@ -176,11 +244,7 @@ const Home = () => {
           {/* Points */}
           <ul className="mx-auto mb-14 max-w-md space-y-4 text-left font-mono text-sm text-[#2a2d66]/75">
             {storyChainLandingContent.ownership.points.map((point, i) => (
-              <motion.li
-                key={point}
-                {...scrollReveal.list(i)}
-                className="flex items-start gap-3"
-              >
+              <motion.li key={point} {...scrollReveal.list(i)} className="flex items-start gap-3">
                 <span className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#6b7cff]" />
                 {point}
               </motion.li>
@@ -251,7 +315,9 @@ const Home = () => {
 
                 <div className="text-center">
                   <div className="font-mono text-xs font-semibold text-[#1b1d4e]">{app.name}</div>
-                  <div className="mt-1.5 text-[11px] leading-relaxed text-[#2a2d66]/65">{app.description}</div>
+                  <div className="mt-1.5 text-[11px] leading-relaxed text-[#2a2d66]/65">
+                    {app.description}
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -287,7 +353,10 @@ const Home = () => {
         {/* ---------- CONTENT ---------- */}
         <div className="mx-auto max-w-4xl px-6 pt-16 pb-36 text-center">
           {/* Accent */}
-          <motion.span {...scrollReveal.paragraph} className="font-yellowtail mb-4 block text-lg text-pink-500">
+          <motion.span
+            {...scrollReveal.paragraph}
+            className="font-yellowtail mb-4 block text-lg text-pink-500"
+          >
             {storyChainLandingContent.collaboration.eyebrow}
           </motion.span>
 
@@ -434,7 +503,10 @@ const Home = () => {
         </motion.div>
 
         {/* Accent */}
-        <motion.span {...scrollReveal.paragraph} className="font-yellowtail mb-4 block text-base text-[#6b7cff]">
+        <motion.span
+          {...scrollReveal.paragraph}
+          className="font-yellowtail mb-4 block text-base text-[#6b7cff]"
+        >
           {storyChainLandingContent.vision.eyebrow}
         </motion.span>
 

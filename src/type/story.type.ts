@@ -83,6 +83,13 @@ interface IStoryStats {
   averageRating: number;
 }
 
+interface IStoryCreator {
+  clerkId: string;
+  email: string;
+  username: string;
+  avatar: string;
+}
+
 interface IStory {
   _id: string;
   title: string;
@@ -90,8 +97,13 @@ interface IStory {
   description: string;
 
   coverImage?: {
-    url?: string;
-    publicId?: string;
+    url: string;
+    publicId: string;
+  };
+
+  cardImage?: {
+    url: string;
+    publicId: string;
   };
 
   creatorId: string;
@@ -189,6 +201,7 @@ interface IStoryTreeResponse extends IBaseType {
 // ---------------------------------
 
 export type {
+  IStoryCreator,
   TStoryStatus,
   IStory,
   IStoryCollaborator,

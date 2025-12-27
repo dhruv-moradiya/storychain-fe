@@ -1,14 +1,18 @@
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
 import Navbar from './navbar';
-import { useUserProfile } from '@/api/user.api';
 
 const Layout = () => {
-  const { data: user } = useUserProfile();
+  const location = useLocation();
+
+  // Don't show navbar on home page - it has its own header
+  const isHomePage = location.pathname === '/';
 
   return (
     <div className="flex min-h-screen flex-col">
-      {/* <Navbar /> */}
-      <Outlet />
+      {!isHomePage && <Navbar />}
+      <main className="flex-1">
+        <Outlet />
+      </main>
     </div>
   );
 };

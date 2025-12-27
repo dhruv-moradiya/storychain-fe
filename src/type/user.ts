@@ -83,4 +83,12 @@ interface ISearchUserByUsername extends IBaseType {
 }
 
 export { Badge, PlatformRole };
-export type { IAuthUser, TPlatformRole, UserPreferences, UserStats, IUser, ISearchUserByUsername };
+export type {
+  IAuthUser,
+  TPlatformRole,
+  UserPreferences,
+  UserStats,
+  IUser,
+  ISearchUserByUsername,
+  IPublicViewUser,
+};

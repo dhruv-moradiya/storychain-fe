@@ -16,9 +16,12 @@ export const QueryKey = {
     new: ['story', 'new'] as const,
     my: ['story', 'my'] as const,
 
+    overviewBySlug: (slug: string) => ['story', 'overview', slug] as const,
+    settingsBySlug: (slug: string) => ['story', 'settings', slug] as const,
     bySlug: (slug: string) => ['story', 'slug', slug] as const,
     byId: (storyId: string) => ['story', 'detail', storyId] as const,
     collaborators: (storyId: string) => ['story', storyId, 'collaborators'] as const,
+    signatureUrl: (slug: string) => ['story', slug, 'signature-url'] as const,
 
     // ----------------
     // CHAPTER ROUTES

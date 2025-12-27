@@ -1,25 +1,30 @@
-import { motion } from 'framer-motion';
-import { fadeIn } from '@/lib/utils';
-import {
-  Globe,
-  GitBranch,
-  MessageSquare,
-  Star,
-  ShieldCheck,
-  Lock,
-  Image,
-  Loader2,
-  Trash2,
-} from 'lucide-react';
-import { useParams } from 'react-router';
-import { Switch } from '@/components/ui/switch';
-import { useQueryClient } from '@tanstack/react-query';
-import type { IStory } from '@/type/story.type';
-import StoryNotFound from '@/components/common/story/story-not-found';
 import SettingSectionLoading from '@/components/common/story/setting-section-loading';
-import { useGetStoryBySlug } from '@/hooks/story/story.queries';
+import StoryNotFound from '@/components/common/story/story-not-found';
+import { Switch } from '@/components/ui/switch';
+import {
+  useUpdateStorySettings,
+  useUpdateStoryCoverImage,
+  useUpdateStoryCardImage,
+} from '@/hooks/story/story.mutations';
+import { useGetStorySettingsBySlug, useGetStorySignatureUrl } from '@/hooks/story/story.queries';
+import { fadeIn } from '@/lib/utils';
+import type { IStorySettings } from '@/type/story.type';
+import type { IStorySettingUpdateRequest } from '@/type/story/story-request.type';
+import { motion } from 'framer-motion';
+import {
+  GitBranch,
+  Globe,
+  Image,
+  Lock,
+  MessageSquare,
+  ShieldCheck,
+  Star,
+  Trash2,
+  Loader2,
+} from 'lucide-react';
 import { useState } from 'react';
-import { SectionDivider } from '@/components/common/story-editor/section-divider';
+import { useParams } from 'react-router';
+import { toast } from 'sonner';
 
 /* ---------------------------------------------
  * Main Section
@@ -27,41 +32,118 @@ import { SectionDivider } from '@/components/common/story-editor/section-divider
 
 const SettingSection = () => {
   const { slug } = useParams();
-  const queryClient = useQueryClient();
+
+  const { data: settings, isLoading } = useGetStorySettingsBySlug(slug ?? '');
+  const { mutate: updateSettings } = useUpdateStorySettings();
+  const { mutate: updateCoverImage } = useUpdateStoryCoverImage();
+  const { mutate: updateCardImage } = useUpdateStoryCardImage();
 
   const [cardUploading, setCardUploading] = useState(false);
   const [coverUploading, setCoverUploading] = useState(false);
   const [cardPreview, setCardPreview] = useState<string | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
 
-  const cachedStory = queryClient.getQueryData<IStory>(['story_by_slug', slug]);
-
-  const { data, isLoading } = useGetStoryBySlug(slug ?? '', {
-    enabled: !cachedStory,
+  const { refetch } = useGetStorySignatureUrl(slug ?? '', {
+    enabled: false,
   });
 
-  const story = cachedStory ?? data;
+  if (isLoading) return <SettingSectionLoading />;
+  if (!settings) return <StoryNotFound onCreate={() => {}} />;
 
-  if (!cachedStory && isLoading) return <SettingSectionLoading />;
-  if (!story) return <StoryNotFound onCreate={() => {}} />;
+  const handleSettingUpdate = (key: keyof IStorySettings, value: boolean | string) => {
+    toast.loading('Updating story settings...');
 
-  const settings = story.settings;
-
-  const handleUpdate = (key: keyof typeof settings, value: boolean | string) => {
-    // updateSettings.mutate({ slug, data: { [key]: value } });
+    updateSettings({ slug, [key]: value } as IStorySettingUpdateRequest, {
+      onSuccess: () => {
+        toast.success('Story settings updated successfully.');
+      },
+      onError: () => {
+        toast.error('Failed to update story settings. Please try again.');
+      },
+      onSettled: () => {
+        toast.dismiss();
+      },
+    });
   };
 
   const handleImageUpload = async (file: File, type: 'card' | 'cover') => {
-    const preview = URL.createObjectURL(file);
+    if (!slug) return;
 
     if (type === 'card') {
       setCardUploading(true);
-      setCardPreview(preview);
-      setTimeout(() => setCardUploading(false), 1200);
+      setCardPreview(URL.createObjectURL(file));
     } else {
       setCoverUploading(true);
-      setCoverPreview(preview);
-      setTimeout(() => setCoverUploading(false), 1200);
+      setCoverPreview(URL.createObjectURL(file));
+    }
+
+    try {
+      const sig = await refetch();
+      const uploadURL = sig.data?.data?.uploadURL;
+
+      if (!uploadURL) {
+        toast.error('Failed to get upload URL. Please try again.');
+        if (type === 'card') {
+          setCardUploading(false);
+          setCardPreview(null);
+        } else {
+          setCoverUploading(false);
+          setCoverPreview(null);
+        }
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const upload = await fetch(uploadURL, { method: 'POST', body: formData });
+      const uploadJson = await upload.json();
+
+      const cloudImageUrl = uploadJson.secure_url as string;
+      const publicId = uploadJson.public_id as string;
+
+      if (type === 'card') {
+        updateCardImage(
+          { slug, cardImage: { url: cloudImageUrl, publicId } },
+          {
+            onSuccess: () => {
+              toast.success('Card image updated successfully.');
+            },
+            onError: () => {
+              toast.error('Failed to update card image. Please try again.');
+              setCardPreview(null);
+            },
+            onSettled: () => {
+              setCardUploading(false);
+            },
+          }
+        );
+      } else {
+        updateCoverImage(
+          { slug, coverImage: { url: cloudImageUrl, publicId } },
+          {
+            onSuccess: () => {
+              toast.success('Cover image updated successfully.');
+            },
+            onError: () => {
+              toast.error('Failed to update cover image. Please try again.');
+              setCoverPreview(null);
+            },
+            onSettled: () => {
+              setCoverUploading(false);
+            },
+          }
+        );
+      }
+    } catch {
+      toast.error('Failed to upload image. Please try again.');
+      if (type === 'card') {
+        setCardUploading(false);
+        setCardPreview(null);
+      } else {
+        setCoverUploading(false);
+        setCoverPreview(null);
+      }
     }
   };
 
@@ -75,7 +157,7 @@ const SettingSection = () => {
           label="Visibility"
           description={settings.isPublic ? 'Public' : 'Private'}
           checked={settings.isPublic}
-          onChange={(v) => handleUpdate('isPublic', v)}
+          onChange={(v) => handleSettingUpdate('isPublic', v)}
         />
 
         <ToggleRow
@@ -83,7 +165,7 @@ const SettingSection = () => {
           label="Branching"
           description={settings.allowBranching ? 'Allowed' : 'Disabled'}
           checked={settings.allowBranching}
-          onChange={(v) => handleUpdate('allowBranching', v)}
+          onChange={(v) => handleSettingUpdate('allowBranching', v)}
         />
 
         <ToggleRow
@@ -91,7 +173,7 @@ const SettingSection = () => {
           label="Contributor Approval"
           description={settings.requireApproval ? 'Enabled' : 'Disabled'}
           checked={settings.requireApproval}
-          onChange={(v) => handleUpdate('requireApproval', v)}
+          onChange={(v) => handleSettingUpdate('requireApproval', v)}
         />
 
         <ToggleRow
@@ -99,7 +181,7 @@ const SettingSection = () => {
           label="Comments"
           description={settings.allowComments ? 'Allowed' : 'Disabled'}
           checked={settings.allowComments}
-          onChange={(v) => handleUpdate('allowComments', v)}
+          onChange={(v) => handleSettingUpdate('allowComments', v)}
         />
 
         <ToggleRow
@@ -107,7 +189,7 @@ const SettingSection = () => {
           label="Voting"
           description={settings.allowVoting ? 'Enabled' : 'Disabled'}
           checked={settings.allowVoting}
-          onChange={(v) => handleUpdate('allowVoting', v)}
+          onChange={(v) => handleSettingUpdate('allowVoting', v)}
         />
 
         <ReadonlyRow
@@ -116,7 +198,7 @@ const SettingSection = () => {
           value={settings.contentRating}
         />
 
-        <ReadonlyRow icon={<GitBranch size={18} />} label="Genre" value={settings.genre} />
+        <ReadonlyRow icon={<Globe size={18} />} label="Genre" value={settings.genre} />
 
         <ImageRow
           label="Card image"

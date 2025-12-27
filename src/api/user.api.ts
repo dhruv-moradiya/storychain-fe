@@ -1,34 +1,70 @@
-import { useApi } from '@/hooks/useApi';
-import type { IAuthUser, ISearchUserByUsername } from '@/type/user';
-import { useAuth } from '@clerk/clerk-react';
-import { useQuery } from '@tanstack/react-query';
+import type { AxiosInstance } from 'axios';
+import type { IAuthUser, ISearchUserByUsername, IPublicViewUser } from '@/type/user';
 
-export function useUserProfile() {
-  const api = useApi();
-  const { isSignedIn } = useAuth();
-
-  return useQuery({
-    queryKey: ['me'],
-    queryFn: async () => {
-      const res = await api.get<IAuthUser>('/users/me');
-      return res.data.data;
-    },
-    enabled: isSignedIn,
-    staleTime: Infinity,
-  });
+// Request payload types
+interface ISearchUserPayload {
+  username: string;
 }
 
-export function useSearchUserByUsername(username: string) {
-  const api = useApi();
-  const { isSignedIn } = useAuth();
-
-  return useQuery({
-    queryKey: ['search_user_by_username', username],
-    queryFn: async () => {
-      const res = await api.post<ISearchUserByUsername>('/users/search', { username });
-      return res.data.data;
-    },
-    enabled: isSignedIn && Boolean(username?.trim()),
-    staleTime: Infinity,
-  });
+interface IUpdateProfilePayload {
+  bio?: string;
+  avatarUrl?: string;
 }
+
+interface IUpdatePreferencesPayload {
+  emailNotifications?: boolean;
+  pushNotifications?: boolean;
+  theme?: 'light' | 'dark' | 'auto';
+}
+
+// User API factory
+const userApi = (api: AxiosInstance) => ({
+  // ===== QUERIES =====
+
+  getMe: async () => {
+    const res = await api.get<IAuthUser>('/users/me');
+    return res.data.data;
+  },
+
+  getById: async (userId: string) => {
+    const res = await api.get<{ success: boolean; message: string; data: IPublicViewUser }>(
+      `/users/id/${userId}`
+    );
+    return res.data.data;
+  },
+
+  getByUsername: async (username: string) => {
+    const res = await api.get<{ success: boolean; message: string; data: IPublicViewUser }>(
+      `/users/username/${username}`
+    );
+    return res.data.data;
+  },
+
+  searchByUsername: async (payload: ISearchUserPayload): Promise<IPublicViewUser[]> => {
+    const res = await api.post<ISearchUserByUsername>('/users/search', payload);
+    return res.data.data;
+  },
+
+  // ===== MUTATIONS =====
+
+  updateProfile: async (payload: IUpdateProfilePayload) => {
+    const res = await api.patch<{ success: boolean; message: string; data: IPublicViewUser }>(
+      '/users/me/profile',
+      payload
+    );
+    return res.data.data;
+  },
+
+  updatePreferences: async (payload: IUpdatePreferencesPayload) => {
+    const res = await api.patch<{ success: boolean; message: string; data: IPublicViewUser }>(
+      '/users/me/preferences',
+      payload
+    );
+    return res.data.data;
+  },
+});
+
+// Export types for external use
+export type { ISearchUserPayload, IUpdateProfilePayload, IUpdatePreferencesPayload };
+
+export { userApi };
