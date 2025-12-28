@@ -72,7 +72,6 @@ const StoryTree = () => {
 
   const rawNodes = useChapterNode(chapters);
   const rawEdges = useChapterEdge(chapters);
-  console.log('rawEdges :>> ', rawEdges);
 
   const { layout } = useChapterFlowLayout();
 

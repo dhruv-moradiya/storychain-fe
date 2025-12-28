@@ -17,9 +17,6 @@ export function CustomEdge({
 }: IChapterEdgeProps) {
   const navigate = useNavigate();
 
-  console.log('data :>> ', data);
-  console.log('id :>> ', id);
-
   const [path, labelX, labelY] = getSmoothStepPath({
     sourceX,
     sourceY,
@@ -56,7 +53,6 @@ export function CustomEdge({
             onClick={() => {
               const parentId = id.split('-')[0];
               navigate(`/stories/${data?.storyId ?? 'root'}/chapter/${parentId}/new`);
-              console.log('Add node between edge:', id);
             }}
           >
             <Plus size={10} />

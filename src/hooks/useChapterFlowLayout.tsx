@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import dagre from '@dagrejs/dagre';
+import dagre from '@dagrejs/dagre/dist/dagre.min.js';
 import type { Position } from '@xyflow/react';
 import type { IChapterEdge, IChapterNodeType } from '@/type/story-canvas.type';
 

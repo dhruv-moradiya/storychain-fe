@@ -28,7 +28,6 @@ const CustomCardNode = ({ id, data, selected }: IChapterNodeProps) => {
         className="!bg-primary relative !h-0.5 !w-3 !rounded-[3px] !border-none"
         onClick={() => {
           navigate(`/stories/${data.storyId ?? 'root'}/chapter/${data._id}/new`);
-          console.log('Add node between edge:', id);
         }}
       >
         <span className="absolute -top-1 left-1/2 -translate-x-1/2 opacity-0 transition group-hover:opacity-100">
