@@ -20,7 +20,7 @@ export const QueryKey = {
     settingsBySlug: (slug: string) => ['story', 'settings', slug] as const,
     bySlug: (slug: string) => ['story', 'slug', slug] as const,
     byId: (storyId: string) => ['story', 'detail', storyId] as const,
-    collaborators: (storyId: string) => ['story', storyId, 'collaborators'] as const,
+    collaborators: (slug: string) => ['story', slug, 'collaborators'] as const,
     signatureUrl: (slug: string) => ['story', slug, 'signature-url'] as const,
 
     // ----------------

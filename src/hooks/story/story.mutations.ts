@@ -23,11 +23,26 @@ export function useCreateInvitation() {
 
   return useMutation({
     mutationFn: (payload: {
-      storyId: string;
+      slug: string;
       role: TStoryCollaboratorRole;
       invitedUserId: string;
       invitedUserName: string;
     }) => storyApi(api).createInvitation(payload),
+  });
+}
+
+export function useAcceptInvitation() {
+  const api = useApi();
+
+  return useMutation({
+    mutationFn: (slug: string) => storyApi(api).acceptInvitation(slug),
+  });
+}
+
+export function useDeclineInvitation() {
+  const api = useApi();
+  return useMutation({
+    mutationFn: (slug: string) => storyApi(api).declineInvitation(slug),
   });
 }
 

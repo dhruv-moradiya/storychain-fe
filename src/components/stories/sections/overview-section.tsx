@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, BookOpen, Eye, FileEdit, Star, Users } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router';
 import { OverviewSectionError, OverviewSectionLoading } from './overview-section/index';
+import { StoryCollaboratorRole } from '@/type/story.type';
 
 const staticCreator = {
   id: 99,
@@ -55,6 +56,9 @@ const OverviewSection = () => {
     return <OverviewSectionError message="Story not found." />;
   }
 
+  const storyOwner = story.collaborators.find((c) => c.role === StoryCollaboratorRole.OWNER);
+  const collaborators = story.collaborators.filter((c) => c.role !== StoryCollaboratorRole.OWNER);
+
   return (
     <motion.section {...fadeIn(0)} className="mx-auto max-w-xl space-y-10 pb-14">
       <Button variant="outline" size="sm" className="flex cursor-pointer items-center gap-2">
@@ -100,42 +104,48 @@ const OverviewSection = () => {
 
         {/* Creator */}
         <div
-          onClick={() => navigate(`/profile/${staticCreator.id}`)}
+          onClick={() => navigate(`/profile/${storyOwner?.clerkId}`)}
           className="flex cursor-pointer items-center gap-3 transition hover:opacity-70"
         >
           <img
-            src={staticCreator.avatar}
-            alt={staticCreator.name}
+            src={
+              storyOwner?.avatarUrl ||
+              'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg'
+            }
+            alt={storyOwner?.username}
             className="h-8 w-8 rounded-full object-cover"
           />
           <div className="flex flex-col">
-            <span className="text-sm font-medium">{staticCreator.name}</span>
-            <span className="text-muted-foreground text-xs">{staticCreator.role}</span>
+            <span className="text-sm font-medium">{storyOwner?.username}</span>
+            <span className="text-muted-foreground text-xs">{storyOwner?.role}</span>
           </div>
         </div>
 
         {/* Contributors */}
         <div className="space-y-2">
-          {staticCollaborators.map((c) => (
+          {collaborators.map((c) => (
             <div
-              key={c.id}
-              onClick={() => navigate(`/profile/${c.id}`)}
+              key={c.clerkId}
+              onClick={() => navigate(`/profile/${c.clerkId}`)}
               className="flex cursor-pointer items-center gap-3 transition hover:opacity-70"
             >
-              <img src={c.avatar} alt={c.name} className="h-7 w-7 rounded-full object-cover" />
+              <img
+                src={c.avatarUrl}
+                alt={c.username}
+                className="h-7 w-7 rounded-full object-cover"
+              />
               <div className="flex flex-col">
-                <span className="text-sm">{c.name}</span>
+                <span className="text-sm">{c.username}</span>
                 <span className="text-muted-foreground text-xs">{c.role}</span>
               </div>
 
-              {/* Follow (static) */}
               <Button
                 variant="ghost"
                 size="sm"
                 className="ml-auto text-xs"
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log('Follow clicked for', c.name);
+                  console.log('Follow clicked for', c.username);
                 }}
               >
                 Follow
@@ -144,14 +154,15 @@ const OverviewSection = () => {
           ))}
         </div>
 
-        {/* View all contributors link */}
-        <Button
-          variant="link"
-          className="h-auto p-0 text-xs"
-          onClick={() => navigate(`/story/${slug}/contributors`)}
-        >
-          Show all contributors →
-        </Button>
+        {collaborators.length > 5 && (
+          <Button
+            variant="link"
+            className="h-auto p-0 text-xs"
+            onClick={() => navigate(`/story/${slug}/contributors`)}
+          >
+            Show all contributors →
+          </Button>
+        )}
       </motion.div>
 
       {/* ===== STATS ===== */}

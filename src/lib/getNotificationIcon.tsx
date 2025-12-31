@@ -54,32 +54,59 @@ const TOKEN_COLORS: Record<TokenType, string> = {
   role: 'font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-md',
 };
 
-export function highlightNotificationText(text: string): ReactNode[] {
+type HighlightMode = 'full' | 'color-only';
+
+export function highlightNotificationText(
+  text: string,
+  mode: HighlightMode = 'full'
+): React.ReactNode[] {
   const regex = /\[\[(actor|story|role):([^\]]+)\]\]/g;
 
-  const parts: ReactNode[] = [];
+  const parts: React.ReactNode[] = [];
   let lastIndex = 0;
 
   for (const match of text.matchAll(regex)) {
     const [full, type, value] = match;
     const index = match.index!;
 
-    // Plain text before token
+    // Push plain text before token
     if (index > lastIndex) {
       parts.push(text.slice(lastIndex, index));
     }
 
-    // Highlighted token
-    parts.push(
-      <span key={`${type}-${index}`} className={TOKEN_COLORS[type as TokenType]}>
-        {value}
-      </span>
-    );
+    // Convert token to uppercase
+    const upper = value.toUpperCase();
+
+    if (mode === 'color-only') {
+      // Keep ONLY text color from the class, remove bg/padding/rounding
+      const baseClass = TOKEN_COLORS[type as TokenType]
+        .replace(/bg-[^\s]+/g, '') // remove background utility
+        .replace(/px-[^\s]+/g, '') // remove padding X
+        .replace(/py-[^\s]+/g, '') // remove padding Y
+        .replace(/rounded-[^\s]+/g, '') // remove rounding
+        .trim();
+
+      parts.push(
+        <span key={`${type}-${index}`} className={baseClass}>
+          {upper}
+        </span>
+      );
+    } else {
+      // FULL version → keep original styles + add stronger emphasis
+      parts.push(
+        <span
+          key={`${type}-${index}`}
+          className={TOKEN_COLORS[type as TokenType] + ' font-semibold uppercase'}
+        >
+          {upper}
+        </span>
+      );
+    }
 
     lastIndex = index + full.length;
   }
 
-  // Remaining text
+  // Push remaining plain text
   if (lastIndex < text.length) {
     parts.push(text.slice(lastIndex));
   }

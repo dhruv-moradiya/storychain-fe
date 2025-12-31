@@ -90,6 +90,13 @@ interface IStoryCreator {
   avatar: string;
 }
 
+interface IStoryCollaboratorInfo {
+  clerkId: string;
+  username: string;
+  avatarUrl: string;
+  role: TStoryCollaboratorRole;
+}
+
 interface IStory {
   _id: string;
   title: string;
@@ -165,8 +172,13 @@ interface ICollaboratorUser {
   avatarUrl: string;
 }
 
-type IStoryCollaboratorWithUser = Omit<IStoryCollaborator, 'userId'> & {
+type IStoryCollaboratorWithUser = Omit<IStoryCollaborator, 'userId' | 'invitedBy'> & {
+  role: TStoryCollaboratorRole;
+  status: TStoryCollaboratorStatus;
+  invitedBy: ICollaboratorUser | null;
   user: ICollaboratorUser;
+  invitedAt: Date;
+  updatedAt: Date;
 };
 
 interface IGetAllUserStoryResponse extends IBaseType {
@@ -217,6 +229,7 @@ export type {
   IStoryUpdateSettingResponse,
   IStoryTreeResponse,
   IChapterTree,
+  IStoryCollaboratorInfo,
 };
 export {
   StoryStatus,

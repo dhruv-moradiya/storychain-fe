@@ -2,6 +2,7 @@ import type { IBaseType } from '..';
 import type {
   IStory,
   IStoryCollaborator,
+  IStoryCollaboratorInfo,
   IStoryCollaboratorWithUser,
   IStoryCreator,
   IStorySettings,
@@ -77,7 +78,12 @@ interface IGetStoryOverviewBySlugResponse extends IBaseType {
   data: Omit<
     IStory,
     'creatorId' | 'settings' | 'cardImage' | 'trendingScore' | 'createdAt' | 'updatedAt'
-  > & { creator: IStoryCreator; genre: string; contentRating: string };
+  > & {
+    // creator: IStoryCreator;
+    genre: string;
+    contentRating: string;
+    collaborators: IStoryCollaboratorInfo[];
+  };
 }
 
 interface IGetStorySettingsBySlugResponse extends IBaseType {

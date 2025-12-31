@@ -66,14 +66,14 @@ export function useGetStorySettingsBySlug(slug: string) {
   });
 }
 
-export function useGetStoryCollaborators(storyId: string) {
+export function useGetStoryCollaborators(slug: string) {
   const api = useApi();
   const { isSignedIn } = useAuth();
 
   return useQuery({
-    queryKey: QueryKey.story.collaborators(storyId),
-    queryFn: () => storyApi(api).getCollaborators(storyId),
-    enabled: isSignedIn && !!storyId,
+    queryKey: QueryKey.story.collaborators(slug),
+    queryFn: () => storyApi(api).getCollaborators(slug),
+    enabled: isSignedIn && !!slug,
     staleTime: STALE_TIME.MEDIUM,
   });
 }

@@ -1,17 +1,13 @@
-interface IChapterAutoSave {
-  _id: string;
-  chapterId?: string;
-  draftId?: string;
-  userId: string;
-  content: string;
-  title: string;
-  lastSavedAt: Date;
-  isEnabled: boolean;
-  saveCount: number;
-  changes?: {
-    additionsCount: number;
-    deletionsCount: number;
-  };
-}
-
-export type { IChapterAutoSave };
+export { ChapterAutoautoSaveType } from './chapterAutoSave.type';
+export { type IChapterAutoSave, type TautoSaveType } from './chapterAutoSave.type';
+export {
+  type IAutoSaveContentRequest,
+  type IDisableAutoSaveRequest,
+  type IEnableAutoSaveRequest,
+} from './chapterAutoSave.request.types';
+export {
+  type IChapterAutoSaveContentResponse,
+  type IDisableAutoSaveResponse,
+  type IEnableAutoSaveResponse,
+  type IGetAutoSaveDraftResponse,
+} from './chapterAutoSave.response.types';

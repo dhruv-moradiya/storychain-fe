@@ -48,7 +48,7 @@ interface INotification {
   userId: string; // Receiver of the notification
   type: TNotificationType;
 
-  relatedStoryId?: string;
+  relatedStorySlug?: string;
   relatedChapterId?: string;
   relatedPullRequestId?: string;
   relatedCommentId?: string;

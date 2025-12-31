@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
-import { cn } from '@/lib/utils';
+import { cn, handleApiError } from '@/lib/utils';
 import { useUser } from '@clerk/clerk-react';
 import { EditorContent } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
@@ -78,13 +78,17 @@ const StoryBuilder = () => {
         title: chapterTitle,
         content: editor.getHTML(),
         chapterId: parentChapterId,
+        autoSaveType: 'root_chapter',
+        storySlug: storyId ?? '',
+        draftId: 'bd9484d1-a0b4-4d4f-a4c9-c055b8dfe54c',
       },
       {
         onSuccess: () => {
           toast.success('Draft saved');
         },
-        onError: () => {
-          toast.error('Failed to save draft');
+        onError: (error) => {
+          const message = handleApiError(error);
+          toast.error(message, { position: 'top-right' });
         },
       }
     );

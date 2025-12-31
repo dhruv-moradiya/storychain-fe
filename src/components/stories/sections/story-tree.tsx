@@ -176,7 +176,7 @@ const StoryTree = () => {
   }
 
   if (!chapters.length) {
-    return <StoryTreeEmpty onCreateChapter={() => {}} />;
+    return <StoryTreeEmpty />;
   }
 
   /* ----------------------------------

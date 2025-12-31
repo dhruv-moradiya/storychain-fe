@@ -40,10 +40,10 @@ const INVITABLE_ROLES = Object.values(StoryCollaboratorRole).filter(
 interface InviteDialogProps {
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  storyId: string;
+  slug: string;
 }
 
-function InviteDialog({ open, onOpenChange, storyId }: InviteDialogProps) {
+function InviteDialog({ open, onOpenChange, slug }: InviteDialogProps) {
   const [search, setSearch] = useState('');
   const [selectedRole, setSelectedRole] = useState<TStoryCollaboratorRole | ''>('');
   const [invited, setInvited] = useState<string[]>([]);
@@ -65,7 +65,7 @@ function InviteDialog({ open, onOpenChange, storyId }: InviteDialogProps) {
 
     mutate(
       {
-        storyId,
+        slug,
         invitedUserId: userId,
         invitedUserName: username,
         role: selectedRole,
@@ -74,7 +74,7 @@ function InviteDialog({ open, onOpenChange, storyId }: InviteDialogProps) {
         onSuccess: () => {
           // Invalidate collaborators using correct query key
           queryClient.invalidateQueries({
-            queryKey: QueryKey.story.collaborators(storyId),
+            queryKey: QueryKey.story.collaborators(slug),
           });
 
           setInvited((prev) => [...prev, email]);

@@ -25,10 +25,11 @@ import type {
   IUpdateStoryCoverImageResponse,
   IUpdateStoryCardImageResponse,
 } from '@/type/story/story-response.type';
+import type { IBaseType } from '@/type';
 
 // Request payload types
 interface ICreateInvitationPayload {
-  storyId: string;
+  slug: string;
   role: TStoryCollaboratorRole;
   invitedUserId: string;
   invitedUserName: string;
@@ -86,9 +87,9 @@ const storyApi = (api: AxiosInstance) => ({
     return res.data.data;
   },
 
-  getCollaborators: async (storyId: string): Promise<IStoryCollaboratorWithUser[]> => {
+  getCollaborators: async (slug: string): Promise<IStoryCollaboratorWithUser[]> => {
     const res = await api.get<IGetStoryCollaboratorsResponse>(
-      `/stories/id/${storyId}/collaborators`
+      `/stories/slug/${slug}/collaborators`
     );
     return res.data.data;
   },
@@ -117,12 +118,22 @@ const storyApi = (api: AxiosInstance) => ({
   },
 
   createInvitation: async (payload: ICreateInvitationPayload) => {
-    const { storyId, ...body } = payload;
+    const { slug, ...body } = payload;
     const res = await api.post<ICreateInvitationResponse>(
-      `/stories/id/${storyId}/collaborators`,
+      `/stories/slug/${slug}/collaborators`,
       body
     );
     return res.data.data;
+  },
+
+  acceptInvitation: async (slug: string) => {
+    const res = await api.post<IBaseType>(`/stories/slug/${slug}/collaborators/accept-invitation`);
+    return res.data;
+  },
+
+  declineInvitation: async (slug: string) => {
+    const res = await api.post<IBaseType>(`/stories/slug/${slug}/collaborators/decline-invitation`);
+    return res.data;
   },
 
   createChapter: async (payload: ICreateChapterPayload) => {
@@ -157,10 +168,9 @@ const storyApi = (api: AxiosInstance) => ({
     payload: IUpdateStoryCardImageRequest
   ): Promise<IUpdateStoryCardImageResponse['data']> => {
     const { slug, cardImage } = payload;
-    const res = await api.patch<IUpdateStoryCardImageResponse>(
-      `/stories/slug/${slug}/card-image`,
-      { cardImage }
-    );
+    const res = await api.patch<IUpdateStoryCardImageResponse>(`/stories/slug/${slug}/card-image`, {
+      cardImage,
+    });
     return res.data.data;
   },
 });

@@ -220,6 +220,46 @@ export const storyChainLandingContent = {
   },
 
   footer: {
+    brand: {
+      name: 'Story Chain',
+      tagline: 'Write gently. Branch bravely. Let stories live.',
+      description: 'A living space for collaborative storytelling',
+    },
+    sections: [
+      {
+        title: 'Product',
+        links: [
+          { label: 'Features', href: '/features' },
+          { label: 'Explore Stories', href: '/explore' },
+          { label: 'Pricing', href: '/pricing' },
+        ],
+      },
+      {
+        title: 'Resources',
+        links: [
+          { label: 'Getting Started', href: '/docs/getting-started' },
+          { label: 'Writing Guide', href: '/docs/writing-guide' },
+          { label: 'API Docs', href: '/docs/api' },
+        ],
+      },
+      {
+        title: 'Community',
+        links: [
+          { label: 'Discord', href: 'https://discord.gg/storychain' },
+          { label: 'Twitter', href: 'https://twitter.com/storychain' },
+          { label: 'Blog', href: '/blog' },
+        ],
+      },
+      {
+        title: 'Legal',
+        links: [
+          { label: 'Privacy Policy', href: '/privacy' },
+          { label: 'Terms of Service', href: '/terms' },
+          { label: 'Contact', href: '/contact' },
+        ],
+      },
+    ],
+    copyright: '2024 Story Chain. All rights reserved.',
     tagline: ['Write gently.', 'Branch bravely.', 'Let stories live.'],
     links: ['Explore', 'Write', 'Docs', 'Community', 'Privacy', 'Terms'],
   },

@@ -1,3 +1,5 @@
+import type { TautoSaveType } from './chapterAutoSave.type';
+
 interface IEnableAutoSaveRequest {
   userId: string;
   draftId?: string;
@@ -10,6 +12,8 @@ interface IAutoSaveContentRequest {
   content: string;
   draftId?: string;
   chapterId?: string;
+  autoSaveType: TautoSaveType;
+  storySlug: string;
 }
 
 interface IDisableAutoSaveRequest {

@@ -9,12 +9,12 @@ import {
   EmptyDescription,
   EmptyContent,
 } from '@/components/ui/empty';
+import { useNavigate, useParams } from 'react-router';
 
-interface Props {
-  onCreateChapter: () => void;
-}
+const StoryTreeEmpty = () => {
+  const { slug } = useParams();
+  const navigate = useNavigate();
 
-const StoryTreeEmpty = ({ onCreateChapter }: Props) => {
   return (
     <Empty className="from-background/80 via-muted/30 to-muted/60 relative mx-auto overflow-hidden rounded-2xl border bg-gradient-to-b py-20 shadow-xl">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),transparent_70%)]" />
@@ -30,7 +30,9 @@ const StoryTreeEmpty = ({ onCreateChapter }: Props) => {
           </EmptyMedia>
         </motion.div>
 
-        <EmptyTitle className="text-xl font-semibold tracking-tight">No Chapters Yet</EmptyTitle>
+        <EmptyTitle className="cup text-xl font-semibold tracking-tight">
+          No Chapters Yet
+        </EmptyTitle>
 
         <EmptyDescription className="mx-auto max-w-md leading-relaxed text-balance">
           This story doesn’t have any chapters yet. Start by creating the first node in your story
@@ -40,8 +42,8 @@ const StoryTreeEmpty = ({ onCreateChapter }: Props) => {
 
       <EmptyContent>
         <Button
-          onClick={onCreateChapter}
-          className="rounded-lg px-6 shadow-md transition-transform hover:scale-[1.04]"
+          onClick={() => navigate(`/stories/${slug}/chapter/root/new/builder`)}
+          className="cursor-pointer rounded-lg px-6 shadow-md transition-transform hover:scale-[1.04]"
         >
           Create First Chapter
         </Button>

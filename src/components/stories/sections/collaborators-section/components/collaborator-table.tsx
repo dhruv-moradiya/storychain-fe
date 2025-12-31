@@ -147,7 +147,9 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
             <div className="text-muted-foreground flex flex-col gap-1 text-xs leading-snug">
               <span className="flex items-center gap-1">
                 <Reply size={12} />
-                by {col.invitedBy?.slice(0, 10)}...
+                {typeof col.invitedBy === 'object' && col.invitedBy
+                  ? col.invitedBy.username
+                  : 'System'}
               </span>
 
               <span className="flex items-center gap-1">
