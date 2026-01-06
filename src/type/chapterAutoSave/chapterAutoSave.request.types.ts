@@ -1,25 +1,50 @@
-import type { TautoSaveType } from './chapterAutoSave.type';
-
 interface IEnableAutoSaveRequest {
   userId: string;
   draftId?: string;
   chapterId?: string;
 }
 
-interface IAutoSaveContentRequest {
-  userId: string;
+interface IDisableAutoSaveRequest {
+  autoSaveId: string;
+}
+
+type TAutoSaveContentRootChapter = {
   title: string;
   content: string;
-  draftId?: string;
-  chapterId?: string;
-  autoSaveType: TautoSaveType;
+  autoSaveType: 'root_chapter';
   storySlug: string;
-}
+  autoSaveId?: string;
+};
 
-interface IDisableAutoSaveRequest {
-  userId: string;
-  draftId?: string;
-  chapterId?: string;
-}
+type TAutoSaveContentNewChapter = {
+  title: string;
+  content: string;
+  autoSaveType: 'new_chapter';
+  storySlug: string;
+  parentChapterId: string;
+  autoSaveId?: string;
+};
 
-export type { IEnableAutoSaveRequest, IAutoSaveContentRequest, IDisableAutoSaveRequest };
+type TAutoSaveContentUpdateChapter = {
+  title: string;
+  content: string;
+  autoSaveType: 'update_chapter';
+  storySlug: string;
+  parentChapterId: string;
+  chapterId: string;
+  autoSaveId?: string;
+};
+
+type TAutoSaveContentRequest =
+  | TAutoSaveContentRootChapter
+  | TAutoSaveContentNewChapter
+  | TAutoSaveContentUpdateChapter;
+
+export type {
+  IEnableAutoSaveRequest,
+  IDisableAutoSaveRequest,
+  TAutoSaveContentRequest,
+  TAutoSaveContentRootChapter,
+  TAutoSaveContentNewChapter,
+  TAutoSaveContentUpdateChapter,
+};

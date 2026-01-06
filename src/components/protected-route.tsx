@@ -1,5 +1,5 @@
-import { useAuth } from "@clerk/clerk-react";
-import { useNavigate } from "react-router";
+import { useAuth } from '@clerk/clerk-react';
+import { useNavigate } from 'react-router';
 
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
@@ -8,7 +8,7 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   if (!isLoaded) return null;
 
   if (!isSignedIn) {
-    navigate("/sign-up");
+    navigate('/sign-up');
     return;
   }
 

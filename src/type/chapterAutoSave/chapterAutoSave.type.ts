@@ -1,15 +1,14 @@
 enum ChapterAutoautoSaveType {
-  UPDATE = 'update',
+  UPDATE_CHAPTER = 'update_chapter',
   NEW_CHAPTER = 'new_chapter',
   ROOT_CHAPTER = 'root_chapter',
 }
 
-type TautoSaveType = 'update' | 'new_chapter' | 'root_chapter';
+type TautoSaveType = 'update_chapter' | 'new_chapter' | 'root_chapter';
 
 interface IChapterAutoSave {
   _id: string;
   chapterId?: string;
-  draftId?: string;
   userId: string;
   content: string;
   title: string;

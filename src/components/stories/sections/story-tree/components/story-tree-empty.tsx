@@ -42,7 +42,7 @@ const StoryTreeEmpty = () => {
 
       <EmptyContent>
         <Button
-          onClick={() => navigate(`/stories/${slug}/chapter/root/new/builder`)}
+          onClick={() => navigate(`/stories/${slug}/builder?mode=new&parent=root`)}
           className="cursor-pointer rounded-lg px-6 shadow-md transition-transform hover:scale-[1.04]"
         >
           Create First Chapter

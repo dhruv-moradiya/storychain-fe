@@ -2,7 +2,6 @@ import { lazy } from 'react';
 
 // Lazy pages
 const Home = lazy(() => import('./pages/home'));
-const StoryBuilder = lazy(() => import('./pages/story-builder'));
 const ChapterRead = lazy(() => import('./pages/chapter-read'));
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const Story = lazy(() => import('./pages/stories'));
@@ -19,6 +18,7 @@ import { Suspense } from 'react';
 import { createBrowserRouter } from 'react-router';
 import Profile from './pages/profile';
 import { PageLoader } from './components/common/page-loader';
+import StoryBuilder from './pages/story-builder';
 
 export const router = createBrowserRouter([
   {
@@ -41,14 +41,14 @@ export const router = createBrowserRouter([
       },
 
       // Stories
-      // mode → "new" | "edit" | "update"
+      // Query params: mode (new|edit|continue), parent (root|chapterId), chapter (chapterId), draft (autoSaveId)
+      // /stories/:storySlug/builder?mode=new&parent=root
+      // /stories/:storySlug/builder?mode=new&parent=:parentChapterId
+      // /stories/:storySlug/builder?mode=edit&chapter=:chapterId
+      // /stories/:storySlug/builder?mode=continue&draft=:autoSaveId
       {
-        path: 'stories/:storyId/chapter/:chapterId/:mode/builder',
-        element: (
-          <Suspense fallback={<div>Loading story builder...</div>}>
-            <StoryBuilder />
-          </Suspense>
-        ),
+        path: 'stories/:storySlug/builder',
+        element: <StoryBuilder />,
       },
       {
         path: 'stories/:storyId/chapter/:chapterId',

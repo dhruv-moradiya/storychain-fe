@@ -1,18 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-} from "@/components/ui/select";
-import { Download, Settings, Trash, X } from "lucide-react";
-import type { FC } from "react";
+} from '@/components/ui/select';
+import { Download, Settings, Trash, X } from 'lucide-react';
+import type { FC } from 'react';
 
 interface StorySettingsPanelProps {
   onClose: () => void;
@@ -39,9 +39,7 @@ const SettingToggle: FC<SettingToggleProps> = ({
         <Label htmlFor={id} className="text-sm font-medium">
           {label}
         </Label>
-        {description && (
-          <p className="text-xs text-muted-foreground">{description}</p>
-        )}
+        {description && <p className="text-muted-foreground text-xs">{description}</p>}
       </div>
       <Switch
         id={id}
@@ -52,13 +50,11 @@ const SettingToggle: FC<SettingToggleProps> = ({
   );
 };
 
-export default function StorySettingsPanel({
-  onClose,
-}: StorySettingsPanelProps) {
+export default function StorySettingsPanel({ onClose }: StorySettingsPanelProps) {
   return (
-    <div className="scrollbar overflow-auto flex flex-col h-full w-full shadow-xl bg-background rounded-l-lg relative">
-      <div className="w-full border-b bg-background/80 backdrop-blur-sm sticky top-0 z-40 flex items-center justify-between p-3">
-        <h3 className="font-medium text-base flex items-center gap-2">
+    <div className="scrollbar bg-background relative flex h-full w-full flex-col overflow-auto rounded-l-lg shadow-xl">
+      <div className="bg-background/80 sticky top-0 z-40 flex w-full items-center justify-between border-b p-3 backdrop-blur-sm">
+        <h3 className="flex items-center gap-2 text-base font-medium">
           <Settings size={18} className="text-primary" />
           Settings
         </h3>
@@ -92,10 +88,7 @@ export default function StorySettingsPanel({
         {/* --- Story Info --- */}
         <div className="space-y-3">
           <h3 className="font-semibold">Story Info</h3>
-          <Input
-            placeholder="Story Title"
-            className="text-gray-800 dark:text-gray-100"
-          />
+          <Input placeholder="Story Title" className="text-gray-800 dark:text-gray-100" />
           <Textarea
             placeholder="Story Description"
             rows={4}
@@ -124,7 +117,7 @@ export default function StorySettingsPanel({
             label="Allow Comments"
             description="Readers can leave comments on your chapters."
             checked={true}
-            onChange={(val) => console.log("Private toggle:", val)}
+            onChange={(val) => console.log('Private toggle:', val)}
           />
 
           <SettingToggle
@@ -132,7 +125,7 @@ export default function StorySettingsPanel({
             label="Lock Chapters"
             description="Prevent edits to chapters once they are finalized."
             checked={true}
-            onChange={(val) => console.log("Private toggle:", val)}
+            onChange={(val) => console.log('Private toggle:', val)}
           />
         </div>
 
@@ -169,21 +162,13 @@ export default function StorySettingsPanel({
         <div className="space-y-3">
           <h3 className="font-semibold">Advanced</h3>
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full flex items-center gap-2"
-          >
-            <Download className="w-4 h-4" />
+          <Button variant="outline" size="sm" className="flex w-full items-center gap-2">
+            <Download className="h-4 w-4" />
             Export Story
           </Button>
 
-          <Button
-            variant="destructive"
-            size="sm"
-            className="w-full flex items-center gap-2"
-          >
-            <Trash className="w-4 h-4" />
+          <Button variant="destructive" size="sm" className="flex w-full items-center gap-2">
+            <Trash className="h-4 w-4" />
             Delete Story
           </Button>
         </div>

@@ -167,7 +167,7 @@ export function ReportDialog({
                       <RadioGroupItem value={item.value} id={item.value} className="mt-0.5" />
                       <div className="flex-1">
                         <p className="text-sm font-medium">{item.label}</p>
-                        <p className="text-xs text-muted-foreground">{item.description}</p>
+                        <p className="text-muted-foreground text-xs">{item.description}</p>
                       </div>
                     </label>
                   </motion.div>
@@ -196,8 +196,8 @@ export function ReportDialog({
               transition={{ duration: 0.2 }}
               className="space-y-4"
             >
-              <div className="rounded-lg bg-muted/50 p-3">
-                <p className="text-xs text-muted-foreground">Reporting for:</p>
+              <div className="bg-muted/50 rounded-lg p-3">
+                <p className="text-muted-foreground text-xs">Reporting for:</p>
                 <p className="text-sm font-medium">
                   {REPORT_REASONS.find((r) => r.value === reason)?.label}
                 </p>
@@ -216,7 +216,7 @@ export function ReportDialog({
                   rows={4}
                   className="resize-none"
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   {description.length}/1000 characters (minimum 10)
                 </p>
               </div>
@@ -245,13 +245,13 @@ export function ReportDialog({
             >
               <div className="space-y-2">
                 <Label>Supporting evidence (optional)</Label>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-muted-foreground text-xs">
                   Add links to screenshots, documents, or other evidence that supports your report
                 </p>
 
                 <div className="flex gap-2">
                   <div className="relative flex-1">
-                    <LinkIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <LinkIcon className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                     <Input
                       placeholder="https://example.com/evidence"
                       value={newUrl}
@@ -287,7 +287,7 @@ export function ReportDialog({
 
               {evidenceUrls.length > 0 && (
                 <div className="space-y-2">
-                  <Label className="text-xs text-muted-foreground">Added evidence:</Label>
+                  <Label className="text-muted-foreground text-xs">Added evidence:</Label>
                   <div className="space-y-2">
                     {evidenceUrls.map((url) => (
                       <motion.div
@@ -295,9 +295,9 @@ export function ReportDialog({
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className="flex items-center gap-2 rounded-md border bg-muted/30 p-2"
+                        className="bg-muted/30 flex items-center gap-2 rounded-md border p-2"
                       >
-                        <LinkIcon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        <LinkIcon className="text-muted-foreground h-3.5 w-3.5 shrink-0" />
                         <span className="flex-1 truncate text-sm">{url}</span>
                         <Button
                           type="button"
@@ -314,9 +314,9 @@ export function ReportDialog({
                 </div>
               )}
 
-              <div className="rounded-lg border bg-muted/30 p-4">
-                <h4 className="text-sm font-medium mb-2">Review your report</h4>
-                <div className="space-y-1 text-sm text-muted-foreground">
+              <div className="bg-muted/30 rounded-lg border p-4">
+                <h4 className="mb-2 text-sm font-medium">Review your report</h4>
+                <div className="text-muted-foreground space-y-1 text-sm">
                   <p>
                     <strong>Reason:</strong> {REPORT_REASONS.find((r) => r.value === reason)?.label}
                   </p>
@@ -376,11 +376,7 @@ export function ReportDialog({
             </Button>
           )}
           {step === 'evidence' && (
-            <Button
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="gap-2"
-            >
+            <Button onClick={handleSubmit} disabled={isLoading} className="gap-2">
               {isLoading ? (
                 <>Submitting...</>
               ) : (

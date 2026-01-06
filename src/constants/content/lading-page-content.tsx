@@ -35,6 +35,11 @@ export const storyChainLandingContent = {
   },
 
   ownership: {
+    imageUrl: {
+      url: 'https://res.cloudinary.com/dpji4qfnu/image/upload/v1767521224/Gemini_Generated_Image_f77ghef77ghef77g_zohcvq.png',
+      alt: 'Ownership illustration',
+    },
+    smallTitle: 'Ownership',
     title: ['What you create', 'belongs to you.'],
     description:
       'Your stories are yours — their shape, their voice, their future. Choose who enters, who writes, and how far the branches may grow.',
@@ -137,6 +142,10 @@ export const storyChainLandingContent = {
   },
 
   collaboration: {
+    imageUrl: {
+      url: 'https://res.cloudinary.com/dpji4qfnu/image/upload/v1767521223/Gemini_Generated_Image_qg7ks4qg7ks4qg7k_bin6n6.png',
+      alt: 'Clouds',
+    },
     eyebrow: 'Written together',
     title: ['Stories sound better', 'when many voices speak softly.'],
     description:
@@ -190,6 +199,10 @@ export const storyChainLandingContent = {
   },
 
   creatorTools: {
+    imageUrl: {
+      url: 'https://res.cloudinary.com/dpji4qfnu/image/upload/v1767521222/Gemini_Generated_Image_5b8cs15b8cs15b8c-removebg-preview_t0ez4n.png',
+      alt: `You're the captain`,
+    },
     eyebrow: 'Made for storytellers',
     title: ['A gentle place', 'where ideas learn to breathe'],
     description:
@@ -204,6 +217,10 @@ export const storyChainLandingContent = {
   },
 
   darkCta: {
+    imageUrl: {
+      url: 'https://res.cloudinary.com/dpji4qfnu/image/upload/v1767521224/Gemini_Generated_Image_7zwxkp7zwxkp7zwx_pf3x06.png',
+      alt: 'For developers',
+    },
     eyebrow: 'When the moment feels right',
     title: ['Begin with a thought.', 'Let it find its own way.'],
     description:

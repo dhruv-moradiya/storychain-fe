@@ -1,16 +1,15 @@
 import type { IBaseType } from '..';
+import type { IChapterNodeData } from '../story-canvas.type';
 import type {
   IStory,
   IStoryCollaborator,
   IStoryCollaboratorInfo,
   IStoryCollaboratorWithUser,
-  IStoryCreator,
   IStorySettings,
   IStoryStats,
   TStoryCollaboratorRole,
   TStoryStatus,
 } from '../story.type';
-import type { IChapterNodeData } from '../story-canvas.type';
 
 // Story Response Types
 
@@ -232,33 +231,33 @@ interface IUpdateStoryCardImageResponse extends IBaseType {
 }
 
 export type {
-  // Story Types
-  IStoryResponse,
-  IStoryListItemResponse,
-  IStoryDetailResponse,
+  IAcceptInvitationResponse,
+  // Chapter Response Types
+  IAddChapterResponse,
+  ICreateInvitationResponse,
+  ICreateStoryResponse,
+  IDeclineInvitationResponse,
+  IGetAllStoriesResponse,
+  IGetDraftStoriesResponse,
+  IGetMyStoriesResponse,
+  IGetNewStoriesResponse,
+  IGetSignatureUrlResponse,
   // API Response Wrappers
   IGetStoryByIdResponse,
   IGetStoryBySlugResponse,
-  IGetStoryOverviewBySlugResponse,
-  IGetAllStoriesResponse,
-  IGetNewStoriesResponse,
-  IGetMyStoriesResponse,
-  IGetDraftStoriesResponse,
-  ICreateStoryResponse,
-  IPublishStoryResponse,
-  IUpdateStorySettingsBySlugResponse,
-  IGetSignatureUrlResponse,
-  IGetStorySettingsBySlugResponse,
-  IUpdateStoryCoverImageResponse,
-  IUpdateStoryCardImageResponse,
   // Collaborator Response Types
   IGetStoryCollaboratorsResponse,
-  ICreateInvitationResponse,
-  IAcceptInvitationResponse,
-  IDeclineInvitationResponse,
+  IGetStoryOverviewBySlugResponse,
+  IGetStorySettingsBySlugResponse,
+  IGetStoryTreeResponse,
+  IPublishStoryResponse,
   // Story Tree Response Types
   IStoryChapterNodeResponse,
-  IGetStoryTreeResponse,
-  // Chapter Response Types
-  IAddChapterResponse,
+  IStoryDetailResponse,
+  IStoryListItemResponse,
+  // Story Types
+  IStoryResponse,
+  IUpdateStoryCardImageResponse,
+  IUpdateStoryCoverImageResponse,
+  IUpdateStorySettingsBySlugResponse,
 };

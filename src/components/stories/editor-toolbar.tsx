@@ -1,29 +1,24 @@
-import { Button } from "../ui/button";
-import { ButtonGroup } from "../ui/button-group";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "../ui/tooltip";
+import { Button } from '../ui/button';
+import { ButtonGroup } from '../ui/button-group';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Bold, Italic, Underline, Link, Type } from "lucide-react";
+} from '../ui/dropdown-menu';
+import { Bold, Italic, Underline, Link, Type } from 'lucide-react';
 
 const EditorToolbar = () => {
   return (
     <TooltipProvider>
-      <div className="border-b p-2 bg-muted/40 flex items-center justify-between flex-wrap gap-2">
+      <div className="bg-muted/40 flex flex-wrap items-center justify-between gap-2 border-b p-2">
         {/* Text formatting buttons */}
         <ButtonGroup className="flex flex-wrap gap-1">
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="outline" size="sm">
-                <Bold className="w-4 h-4" />
+                <Bold className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Bold</TooltipContent>
@@ -32,7 +27,7 @@ const EditorToolbar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="outline" size="sm">
-                <Italic className="w-4 h-4" />
+                <Italic className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Italic</TooltipContent>
@@ -41,7 +36,7 @@ const EditorToolbar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="outline" size="sm">
-                <Underline className="w-4 h-4" />
+                <Underline className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Underline</TooltipContent>
@@ -50,7 +45,7 @@ const EditorToolbar = () => {
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="outline" size="sm">
-                <Link className="w-4 h-4" />
+                <Link className="h-4 w-4" />
               </Button>
             </TooltipTrigger>
             <TooltipContent>Insert Link</TooltipContent>
@@ -63,7 +58,7 @@ const EditorToolbar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
-                <Type className="w-4 h-4 mr-1" /> Heading
+                <Type className="mr-1 h-4 w-4" /> Heading
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

@@ -58,7 +58,7 @@ export function ToolbarSeparator({
 }: React.ComponentProps<typeof ToolbarPrimitive.Separator>) {
   return (
     <ToolbarPrimitive.Separator
-      className={cn('mx-2 my-1 w-px shrink-0 bg-border', className)}
+      className={cn('bg-border mx-2 my-1 w-px shrink-0', className)}
       {...props}
     />
   );
@@ -115,10 +115,7 @@ const dropdownArrowVariants = cva(
 type ToolbarButtonProps = {
   isDropdown?: boolean;
   pressed?: boolean;
-} & Omit<
-  React.ComponentPropsWithoutRef<typeof ToolbarToggleItem>,
-  'asChild' | 'value'
-> &
+} & Omit<React.ComponentPropsWithoutRef<typeof ToolbarToggleItem>, 'asChild' | 'value'> &
   VariantProps<typeof toolbarButtonVariants>;
 
 export const ToolbarButton = withTooltip(function ToolbarButton({
@@ -146,14 +143,9 @@ export const ToolbarButton = withTooltip(function ToolbarButton({
       >
         {isDropdown ? (
           <>
-            <div className="flex flex-1 items-center gap-2 whitespace-nowrap">
-              {children}
-            </div>
+            <div className="flex flex-1 items-center gap-2 whitespace-nowrap">{children}</div>
             <div>
-              <ChevronDown
-                className="size-3.5 text-muted-foreground"
-                data-icon
-              />
+              <ChevronDown className="text-muted-foreground size-3.5" data-icon />
             </div>
           </>
         ) : (
@@ -226,8 +218,7 @@ export function ToolbarSplitButtonSecondary({
   size,
   variant,
   ...props
-}: React.ComponentPropsWithoutRef<'span'> &
-  VariantProps<typeof dropdownArrowVariants>) {
+}: React.ComponentPropsWithoutRef<'span'> & VariantProps<typeof dropdownArrowVariants>) {
   return (
     <span
       className={cn(
@@ -242,7 +233,7 @@ export function ToolbarSplitButtonSecondary({
       role="button"
       {...props}
     >
-      <ChevronDown className="size-3.5 text-muted-foreground" data-icon />
+      <ChevronDown className="text-muted-foreground size-3.5" data-icon />
     </span>
   );
 }
@@ -262,18 +253,9 @@ export function ToolbarToggleItem({
   );
 }
 
-export function ToolbarGroup({
-  children,
-  className,
-}: React.ComponentProps<'div'>) {
+export function ToolbarGroup({ children, className }: React.ComponentProps<'div'>) {
   return (
-    <div
-      className={cn(
-        'group/toolbar-group',
-        'relative hidden has-[button]:flex',
-        className
-      )}
-    >
+    <div className={cn('group/toolbar-group', 'relative hidden has-[button]:flex', className)}>
       <div className="flex items-center">{children}</div>
 
       <div className="mx-1.5 py-0.5 group-last/toolbar-group:hidden!">
@@ -285,14 +267,8 @@ export function ToolbarGroup({
 
 type TooltipProps<T extends React.ElementType> = {
   tooltip?: React.ReactNode;
-  tooltipContentProps?: Omit<
-    React.ComponentPropsWithoutRef<typeof TooltipContent>,
-    'children'
-  >;
-  tooltipProps?: Omit<
-    React.ComponentPropsWithoutRef<typeof Tooltip>,
-    'children'
-  >;
+  tooltipContentProps?: Omit<React.ComponentPropsWithoutRef<typeof TooltipContent>, 'children'>;
+  tooltipProps?: Omit<React.ComponentPropsWithoutRef<typeof Tooltip>, 'children'>;
   tooltipTriggerProps?: React.ComponentPropsWithoutRef<typeof TooltipTrigger>;
 } & React.ComponentProps<T>;
 
@@ -339,7 +315,7 @@ function TooltipContent({
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
         className={cn(
-          'z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md bg-primary px-3 py-1.5 text-xs text-balance text-primary-foreground',
+          'bg-primary text-primary-foreground z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-md px-3 py-1.5 text-xs text-balance',
           className
         )}
         data-slot="tooltip-content"
@@ -378,7 +354,7 @@ export function ToolbarMenuGroup({
         )}
       >
         {label && (
-          <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground select-none">
+          <DropdownMenuLabel className="text-muted-foreground text-xs font-semibold select-none">
             {label}
           </DropdownMenuLabel>
         )}

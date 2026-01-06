@@ -1,5 +1,9 @@
 import { useApi } from '@/hooks/useApi';
-import { userApi, type IUpdateProfilePayload, type IUpdatePreferencesPayload } from '@/api/user.api';
+import {
+  userApi,
+  type IUpdateProfilePayload,
+  type IUpdatePreferencesPayload,
+} from '@/api/user.api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QueryKey } from '@/lib/query-keys';
 

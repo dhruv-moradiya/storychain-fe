@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
-import { CommentTree } from "./CommentTree";
+import { Button } from '@/components/ui/button';
+import { X } from 'lucide-react';
+import { CommentTree } from './CommentTree';
 
 interface Props {
   onClose: () => void;
@@ -8,11 +8,11 @@ interface Props {
 
 export default function CommentsPanel({ onClose }: Props) {
   return (
-    <div className="flex h-full shadow-lg w-full relative p-4">
+    <div className="relative flex h-full w-full p-4 shadow-lg">
       <Button
         variant="outline"
         size="icon"
-        className="size-7 absolute right-2 top-2"
+        className="absolute top-2 right-2 size-7"
         onClick={onClose}
       >
         <X />

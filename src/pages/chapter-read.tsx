@@ -21,12 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { ChapterReader, type ChapterData } from '@/components/common/chapter-reader';
@@ -142,22 +137,17 @@ export default function ChapterReadPage() {
     <TooltipProvider>
       <div className="min-h-screen">
         {/* Top Navigation Bar */}
-        <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-md">
+        <header className="bg-background/80 sticky top-0 z-10 border-b backdrop-blur-md">
           <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
             {/* Left - Back Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(-1)}
-              className="gap-2"
-            >
+            <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="gap-2">
               <ArrowLeft className="h-4 w-4" />
               <span className="hidden sm:inline">Back</span>
             </Button>
 
             {/* Center - Story Title */}
             <div className="flex items-center gap-2 text-sm">
-              <span className="max-w-[150px] truncate text-muted-foreground sm:max-w-[250px]">
+              <span className="text-muted-foreground max-w-[150px] truncate sm:max-w-[250px]">
                 {chapter.storyTitle}
               </span>
               {chapter.chapterNumber && (
@@ -185,7 +175,7 @@ export default function ChapterReadPage() {
                 <TooltipTrigger asChild>
                   <Button variant="ghost" size="icon" onClick={handleBookmark}>
                     {isBookmarked ? (
-                      <BookmarkCheck className="h-4 w-4 text-primary" />
+                      <BookmarkCheck className="text-primary h-4 w-4" />
                     ) : (
                       <Bookmark className="h-4 w-4" />
                     )}
@@ -229,7 +219,7 @@ export default function ChapterReadPage() {
           {/* Action Bar - minimal floating style */}
           <div className="mt-16 flex flex-wrap items-center justify-center gap-3 py-6">
             {/* Voting */}
-            <div className="flex items-center gap-1.5 rounded-full border bg-background/80 px-2 py-1.5 shadow-sm backdrop-blur-sm">
+            <div className="bg-background/80 flex items-center gap-1.5 rounded-full border px-2 py-1.5 shadow-sm backdrop-blur-sm">
               <Button
                 variant={userVote === 'up' ? 'default' : 'ghost'}
                 size="sm"
@@ -240,7 +230,9 @@ export default function ChapterReadPage() {
                 )}
               >
                 <ThumbsUp className={cn('h-3.5 w-3.5', userVote === 'up' && 'fill-current')} />
-                <span className="text-sm">{(chapter.stats?.likes || 0) + (userVote === 'up' ? 1 : 0)}</span>
+                <span className="text-sm">
+                  {(chapter.stats?.likes || 0) + (userVote === 'up' ? 1 : 0)}
+                </span>
               </Button>
 
               <Button
@@ -253,7 +245,7 @@ export default function ChapterReadPage() {
               </Button>
             </div>
 
-            <div className="flex items-center gap-1.5 rounded-full border bg-background/80 px-2 py-1.5 shadow-sm backdrop-blur-sm">
+            <div className="bg-background/80 flex items-center gap-1.5 rounded-full border px-2 py-1.5 shadow-sm backdrop-blur-sm">
               <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-full px-3">
                 <MessageSquare className="h-3.5 w-3.5" />
                 <span className="text-sm">{chapter.stats?.comments || 0}</span>
@@ -269,16 +261,16 @@ export default function ChapterReadPage() {
 
           {/* Navigation to Next/Previous Chapters */}
           {chapter.parentChapter && (
-            <div className="mt-8 border-t border-border/30 pt-8">
+            <div className="border-border/30 mt-8 border-t pt-8">
               <Button
                 variant="ghost"
-                className="flex h-auto w-full flex-col items-start gap-1 rounded-xl border border-border/50 bg-muted/20 p-5 text-left transition-colors hover:bg-muted/40"
+                className="border-border/50 bg-muted/20 hover:bg-muted/40 flex h-auto w-full flex-col items-start gap-1 rounded-xl border p-5 text-left transition-colors"
                 onClick={() => navigate(`/stories/${storyId}/chapter/${chapter.parentChapter?.id}`)}
               >
-                <span className="text-xs font-medium uppercase tracking-wider text-muted-foreground/70">
+                <span className="text-muted-foreground/70 text-xs font-medium tracking-wider uppercase">
                   Previous Chapter
                 </span>
-                <span className="font-serif text-base font-medium text-foreground">
+                <span className="text-foreground font-serif text-base font-medium">
                   {chapter.parentChapter.title}
                 </span>
               </Button>

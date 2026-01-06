@@ -23,12 +23,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import {
   type IReport,
@@ -70,141 +65,138 @@ export function ReportCard({
         animate={{ opacity: 1, y: 0 }}
         whileHover={{ y: -2 }}
         transition={{ duration: 0.2 }}
-        className="group relative rounded-xl border bg-card p-4 transition-shadow hover:shadow-md"
+        className="group bg-card relative rounded-xl border p-4 transition-shadow hover:shadow-md"
       >
         {/* Status indicator bar */}
-      <div
-        className={cn(
-          'absolute left-0 top-0 h-full w-1 rounded-l-xl transition-all group-hover:w-1.5',
-          report.status === 'PENDING' && 'bg-amber-500',
-          report.status === 'REVIEWED' && 'bg-blue-500',
-          report.status === 'RESOLVED' && 'bg-green-500',
-          report.status === 'DISMISSED' && 'bg-slate-400'
-        )}
-      />
+        <div
+          className={cn(
+            'absolute top-0 left-0 h-full w-1 rounded-l-xl transition-all group-hover:w-1.5',
+            report.status === 'PENDING' && 'bg-amber-500',
+            report.status === 'REVIEWED' && 'bg-blue-500',
+            report.status === 'RESOLVED' && 'bg-green-500',
+            report.status === 'DISMISSED' && 'bg-slate-400'
+          )}
+        />
 
-      <div className="flex items-start justify-between gap-4">
-        {/* Left side - Reporter info */}
-        <div className="flex items-start gap-3">
-          <Avatar className="h-10 w-10">
-            <AvatarImage src={report.reporterAvatar} />
-            <AvatarFallback>
-              {report.reporterName?.charAt(0) || 'U'}
-            </AvatarFallback>
-          </Avatar>
+        <div className="flex items-start justify-between gap-4">
+          {/* Left side - Reporter info */}
+          <div className="flex items-start gap-3">
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={report.reporterAvatar} />
+              <AvatarFallback>{report.reporterName?.charAt(0) || 'U'}</AvatarFallback>
+            </Avatar>
 
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="font-medium">{report.reporterName || 'Anonymous'}</span>
-              <span className="text-muted-foreground">reported</span>
-              <Badge variant="outline" className="gap-1">
-                <TypeIcon className="h-3 w-3" />
-                {report.reportType.charAt(0) + report.reportType.slice(1).toLowerCase()}
-              </Badge>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="font-medium">{report.reporterName || 'Anonymous'}</span>
+                <span className="text-muted-foreground">reported</span>
+                <Badge variant="outline" className="gap-1">
+                  <TypeIcon className="h-3 w-3" />
+                  {report.reportType.charAt(0) + report.reportType.slice(1).toLowerCase()}
+                </Badge>
+              </div>
+
+              {report.relatedTitle && (
+                <p className="text-muted-foreground mt-0.5 max-w-[300px] truncate text-sm">
+                  "{report.relatedTitle}"
+                </p>
+              )}
             </div>
+          </div>
 
-            {report.relatedTitle && (
-              <p className="mt-0.5 text-sm text-muted-foreground truncate max-w-[300px]">
-                "{report.relatedTitle}"
-              </p>
+          {/* Right side - Status & Actions */}
+          <div className="flex items-center gap-2">
+            <Badge className={cn('shrink-0', statusConfig.color)}>{statusConfig.label}</Badge>
+
+            {isAdmin && report.status === 'PENDING' && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => onView?.(report)} className="gap-2">
+                    <Eye className="h-4 w-4" />
+                    View Details
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => onResolve?.(report)} className="gap-2">
+                    <CheckCircle className="h-4 w-4" />
+                    Mark Resolved
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => onDismiss?.(report)}
+                    className="text-muted-foreground gap-2"
+                  >
+                    <XCircle className="h-4 w-4" />
+                    Dismiss
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
         </div>
 
-        {/* Right side - Status & Actions */}
-        <div className="flex items-center gap-2">
-          <Badge className={cn('shrink-0', statusConfig.color)}>
-            {statusConfig.label}
+        {/* Report reason and description */}
+        <div className="mt-3 space-y-2">
+          <Badge variant="secondary" className="gap-1.5">
+            <Flag className="h-3 w-3" />
+            {reasonLabel}
           </Badge>
 
-          {isAdmin && report.status === 'PENDING' && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => onView?.(report)} className="gap-2">
-                  <Eye className="h-4 w-4" />
-                  View Details
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => onResolve?.(report)} className="gap-2">
-                  <CheckCircle className="h-4 w-4" />
-                  Mark Resolved
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => onDismiss?.(report)} className="gap-2 text-muted-foreground">
-                  <XCircle className="h-4 w-4" />
-                  Dismiss
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+          <p className="text-muted-foreground line-clamp-2 text-sm">{report.description}</p>
         </div>
-      </div>
 
-      {/* Report reason and description */}
-      <div className="mt-3 space-y-2">
-        <Badge variant="secondary" className="gap-1.5">
-          <Flag className="h-3 w-3" />
-          {reasonLabel}
-        </Badge>
-
-        <p className="text-sm text-muted-foreground line-clamp-2">{report.description}</p>
-      </div>
-
-      {/* Evidence links */}
-      {report.evidenceUrls && report.evidenceUrls.length > 0 && (
-        <div className="mt-3 flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">Evidence:</span>
-          <div className="flex items-center gap-1">
-            {report.evidenceUrls.slice(0, 3).map((url) => (
-              <Tooltip key={url}>
-                <TooltipTrigger asChild>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-6 w-6 items-center justify-center rounded bg-muted hover:bg-muted/80"
-                  >
-                    <ExternalLink className="h-3 w-3" />
-                  </a>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="max-w-[200px] truncate text-xs">{url}</p>
-                </TooltipContent>
-              </Tooltip>
-            ))}
-            {report.evidenceUrls.length > 3 && (
-              <span className="text-xs text-muted-foreground">
-                +{report.evidenceUrls.length - 3} more
-              </span>
-            )}
+        {/* Evidence links */}
+        {report.evidenceUrls && report.evidenceUrls.length > 0 && (
+          <div className="mt-3 flex items-center gap-2">
+            <span className="text-muted-foreground text-xs">Evidence:</span>
+            <div className="flex items-center gap-1">
+              {report.evidenceUrls.slice(0, 3).map((url) => (
+                <Tooltip key={url}>
+                  <TooltipTrigger asChild>
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-muted hover:bg-muted/80 flex h-6 w-6 items-center justify-center rounded"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-[200px] truncate text-xs">{url}</p>
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+              {report.evidenceUrls.length > 3 && (
+                <span className="text-muted-foreground text-xs">
+                  +{report.evidenceUrls.length - 3} more
+                </span>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-
-      {/* Footer */}
-      <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-        <div className="flex items-center gap-1">
-          <Clock className="h-3 w-3" />
-          {formatDistanceToNow(new Date(report.createdAt), { addSuffix: true })}
-        </div>
-
-        {report.reviewedBy && (
-          <span>Reviewed by {report.reviewerName || 'Admin'}</span>
         )}
-      </div>
+
+        {/* Footer */}
+        <div className="text-muted-foreground mt-3 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-1">
+            <Clock className="h-3 w-3" />
+            {formatDistanceToNow(new Date(report.createdAt), { addSuffix: true })}
+          </div>
+
+          {report.reviewedBy && <span>Reviewed by {report.reviewerName || 'Admin'}</span>}
+        </div>
 
         {/* Resolution note */}
         {report.resolution && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
-            className="mt-3 rounded-lg bg-muted/50 p-3 text-sm"
+            className="bg-muted/50 mt-3 rounded-lg p-3 text-sm"
           >
-            <p className="font-medium text-xs text-muted-foreground mb-1">Resolution:</p>
+            <p className="text-muted-foreground mb-1 text-xs font-medium">Resolution:</p>
             <p>{report.resolution}</p>
           </motion.div>
         )}

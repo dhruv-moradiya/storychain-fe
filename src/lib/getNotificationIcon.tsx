@@ -9,7 +9,6 @@ import {
   XCircle,
   BadgeCheck,
 } from 'lucide-react';
-import type { ReactNode } from 'react';
 
 export function getNotificationIcon(type: TNotificationType) {
   switch (type) {

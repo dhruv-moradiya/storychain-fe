@@ -8,35 +8,6 @@ import { useNavigate, useParams } from 'react-router';
 import { OverviewSectionError, OverviewSectionLoading } from './overview-section/index';
 import { StoryCollaboratorRole } from '@/type/story.type';
 
-const staticCreator = {
-  id: 99,
-  name: 'Dhruv',
-  avatar: 'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg',
-  role: 'Author • Creator • Universe Architect',
-  bio: 'Dreams stories into existence.',
-};
-
-const staticCollaborators = [
-  {
-    id: 1,
-    name: 'Aarav',
-    avatar: 'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg',
-    role: 'Co-Writer',
-  },
-  {
-    id: 2,
-    name: 'Meera',
-    avatar: 'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg',
-    role: 'Editor',
-  },
-  {
-    id: 3,
-    name: 'Ishaan',
-    avatar: 'https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg',
-    role: 'Reviewer',
-  },
-];
-
 const OverviewSection = () => {
   const { slug } = useParams();
   const navigate = useNavigate();

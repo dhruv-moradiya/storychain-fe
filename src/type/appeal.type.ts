@@ -71,7 +71,10 @@ export interface ReviewAppealData {
   escalationReason?: string;
 }
 
-export const APPEAL_STATUS_CONFIG: Record<AppealStatus, { label: string; color: string; dotColor: string }> = {
+export const APPEAL_STATUS_CONFIG: Record<
+  AppealStatus,
+  { label: string; color: string; dotColor: string }
+> = {
   PENDING: {
     label: 'Pending',
     color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
@@ -101,7 +104,16 @@ export const APPEAL_STATUS_CONFIG: Record<AppealStatus, { label: string; color: 
 
 export const APPEAL_PRIORITY_CONFIG: Record<AppealPriority, { label: string; color: string }> = {
   LOW: { label: 'Low', color: 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400' },
-  NORMAL: { label: 'Normal', color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' },
-  HIGH: { label: 'High', color: 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400' },
-  URGENT: { label: 'Urgent', color: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400' },
+  NORMAL: {
+    label: 'Normal',
+    color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
+  },
+  HIGH: {
+    label: 'High',
+    color: 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400',
+  },
+  URGENT: {
+    label: 'Urgent',
+    color: 'bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400',
+  },
 };

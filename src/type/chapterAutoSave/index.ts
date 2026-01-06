@@ -1,7 +1,10 @@
 export { ChapterAutoautoSaveType } from './chapterAutoSave.type';
 export { type IChapterAutoSave, type TautoSaveType } from './chapterAutoSave.type';
 export {
-  type IAutoSaveContentRequest,
+  type TAutoSaveContentRequest,
+  type TAutoSaveContentRootChapter,
+  type TAutoSaveContentNewChapter,
+  type TAutoSaveContentUpdateChapter,
   type IDisableAutoSaveRequest,
   type IEnableAutoSaveRequest,
 } from './chapterAutoSave.request.types';

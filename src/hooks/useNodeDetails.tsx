@@ -1,13 +1,10 @@
-import { useReactFlow } from "@xyflow/react";
-import { useMemo } from "react";
+import { useReactFlow } from '@xyflow/react';
+import { useMemo } from 'react';
 
 export function useNodeDetails(nodeId: string) {
   const { getNodes, getEdges } = useReactFlow();
 
-  const node = useMemo(
-    () => getNodes().find((n) => n.id === nodeId),
-    [getNodes, nodeId]
-  );
+  const node = useMemo(() => getNodes().find((n) => n.id === nodeId), [getNodes, nodeId]);
 
   const incomingEdges = useMemo(
     () => getEdges().filter((edge) => edge.target === nodeId),

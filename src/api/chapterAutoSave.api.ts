@@ -1,6 +1,6 @@
 import type { AxiosInstance } from 'axios';
 import type {
-  IAutoSaveContentRequest,
+  TAutoSaveContentRequest,
   IDisableAutoSaveRequest,
   IEnableAutoSaveRequest,
 } from '@/type/chapterAutoSave/chapterAutoSave.request.types';
@@ -16,7 +16,7 @@ const chapterAutoSaveApi = (api: AxiosInstance) => ({
     const res = await api.post<IEnableAutoSaveResponse>(`/auto-save/enable`, input);
     return res.data;
   },
-  autoSaveContent: async (input: IAutoSaveContentRequest) => {
+  autoSaveContent: async (input: TAutoSaveContentRequest) => {
     const res = await api.post<IChapterAutoSaveContentResponse>(`/auto-save/save`, input);
     return res.data;
   },

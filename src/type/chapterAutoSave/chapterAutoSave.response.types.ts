@@ -1,5 +1,6 @@
 import type { IChapterAutoSave } from '.';
 import type { IBaseType } from '..';
+import type { IStory } from '../story.type';
 
 interface IEnableAutoSaveResponse extends IBaseType {
   data: {
@@ -11,7 +12,10 @@ interface IEnableAutoSaveResponse extends IBaseType {
 }
 
 interface IChapterAutoSaveContentResponse extends IBaseType {
-  data: Record<string, never>;
+  data: {
+    _id: string;
+    saveCount: number;
+  };
 }
 
 interface IDisableAutoSaveResponse extends IBaseType {
@@ -22,9 +26,14 @@ interface IGetAutoSaveDraftResponse extends IBaseType {
   data: IChapterAutoSave[];
 }
 
+interface IPublishDraftResponse extends IBaseType {
+  data: IStory;
+}
+
 export type {
   IEnableAutoSaveResponse,
   IChapterAutoSaveContentResponse,
   IDisableAutoSaveResponse,
   IGetAutoSaveDraftResponse,
+  IPublishDraftResponse,
 };

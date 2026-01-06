@@ -130,7 +130,7 @@ const Home = () => {
             <>
               <Link to="/dashboard">
                 <button
-                  className="flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white transition-all"
+                  className="flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-[clamp(12px,1.6vw,16px)] font-medium text-white shadow-md transition-all hover:shadow-lg"
                   style={{
                     backgroundColor: colors.brand.pink[500],
                     boxShadow: `0 10px 15px -3px ${colors.brand.pink.shadow25}, 0 0 0 2px ${colors.brand.pink.ring30}`,
@@ -141,18 +141,18 @@ const Home = () => {
                 </button>
               </Link>
 
-              <Link to="/explore">
-                <button className="flex items-center gap-2 rounded-[6px] border border-white/35 px-6 py-2.5 text-sm font-medium text-white/90 backdrop-blur transition hover:border-white/50 hover:bg-white/10">
+              {/* <Link to="/explore">
+                <button className="flex items-center gap-2 rounded-[6px] border border-white/35 px-6 py-2.5 text-[clamp(12px,1.6vw,16px)] font-medium text-white/90 backdrop-blur transition hover:border-white/50 hover:bg-white/10">
                   <Compass size={16} />
                   Explore Stories
                 </button>
-              </Link>
+              </Link> */}
             </>
           ) : (
             <>
               <Link to="/sign-up">
                 <button
-                  className="rounded-[6px] px-7 py-2.5 text-sm font-medium text-white transition-all"
+                  className="rounded-[6px] px-7 py-2.5 text-[clamp(13px,1.7vw,17px)] font-medium text-white shadow-md transition-all hover:shadow-lg"
                   style={{
                     backgroundColor: colors.brand.pink[500],
                     boxShadow: `0 10px 15px -3px ${colors.brand.pink.shadow25}, 0 0 0 2px ${colors.brand.pink.ring30}`,
@@ -163,7 +163,7 @@ const Home = () => {
               </Link>
 
               <Link to="/sign-in">
-                <button className="rounded-[6px] border border-white/35 px-6 py-2.5 text-sm font-medium text-white/90 backdrop-blur transition hover:border-white/50 hover:bg-white/10">
+                <button className="rounded-[6px] border border-white/35 px-6 py-2.5 text-[clamp(13px,1.7vw,17px)] font-medium text-white/90 backdrop-blur transition hover:border-white/50 hover:bg-white/10">
                   {storyChainLandingContent.hero.secondaryCta}
                 </button>
               </Link>
@@ -172,12 +172,12 @@ const Home = () => {
         </motion.div>
 
         {/* Helper text */}
-        <motion.p
+        {/* <motion.p
           {...fadeIn(0.5)}
           className="mt-6 max-w-xl font-mono text-xs font-medium tracking-normal text-white/55"
         >
           {storyChainLandingContent.hero.helperText}
-        </motion.p>
+        </motion.p> */}
       </section>
 
       {/* ================= SECTION BLEND TO CREAM ================= */}
@@ -255,39 +255,41 @@ const Home = () => {
       {/* ================= OWNERSHIP ================= */}
       <section className="relative z-10" style={{ backgroundColor: colors.background.cream }}>
         {/* ---------- IMAGE STRIP with TOP/BOTTOM blending ---------- */}
-        <div className="relative h-[280px] w-full overflow-hidden">
+        <div className="relative w-full overflow-hidden">
           <motion.img
             {...scrollReveal.image}
-            src="/src/assets/Gemini_Generated_Image_f77ghef77ghef77g.png"
-            alt="Ownership illustration"
+            src={storyChainLandingContent.ownership.imageUrl.url}
+            alt={storyChainLandingContent.ownership.imageUrl.alt}
             className="h-full w-full object-cover"
           />
 
           {/* Top fade - enhanced multi-layer blend */}
           <div
-            className="pointer-events-none absolute inset-x-0 top-0 h-40"
+            className="pointer-events-none absolute inset-x-0 top-0 h-32"
             style={{
-              background: `linear-gradient(to bottom, ${colors.background.cream}, ${colors.opacity.cream[80]}, transparent)`,
+              background: `linear-gradient(to bottom, ${colors.background.cream} 0%, rgba(255,245,230,0.6) 40%, transparent 100%)`,
             }}
           />
           <div
-            className="pointer-events-none absolute inset-x-0 top-0 h-24"
+            className="pointer-events-none absolute inset-x-0 top-0 h-20"
             style={{
-              background: `linear-gradient(to bottom, ${colors.opacity.cream[95]}, transparent)`,
+              background: `linear-gradient(to bottom, rgba(255,250,240,0.85) 0%, transparent 100%)`,
+              filter: 'blur(8px)',
             }}
           />
 
           {/* Bottom fade - enhanced multi-layer blend */}
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-32"
             style={{
-              background: `linear-gradient(to top, ${colors.background.cream}, ${colors.opacity.cream[80]}, transparent)`,
+              background: `linear-gradient(to top, ${colors.background.cream} 0%, rgba(255,245,230,0.6) 40%, transparent 100%)`,
             }}
           />
           <div
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-24"
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-20"
             style={{
-              background: `linear-gradient(to top, ${colors.opacity.cream[95]}, transparent)`,
+              background: `linear-gradient(to top, rgba(255,250,240,0.85) 0%, transparent 100%)`,
+              filter: 'blur(8px)',
             }}
           />
         </div>
@@ -300,7 +302,7 @@ const Home = () => {
             className="font-yellowtail mb-5 block text-lg"
             style={{ color: colors.brand.blue }}
           >
-            Ownership
+            {storyChainLandingContent.ownership.smallTitle}
           </motion.span>
 
           {/* Title */}
@@ -367,8 +369,8 @@ const Home = () => {
           {/* Illustration */}
           <motion.div {...scrollReveal.image} className="mb-16 flex justify-center">
             <img
-              src="/src/assets/Gemini_Generated_Image_5b8cs15b8cs15b8c-removebg-preview.png"
-              alt="You're the captain"
+              src={storyChainLandingContent.creatorTools.imageUrl.url}
+              alt={storyChainLandingContent.creatorTools.imageUrl.alt}
               className="h-[240px] w-auto"
             />
           </motion.div>
@@ -417,7 +419,10 @@ const Home = () => {
                 </div>
 
                 <div className="text-center">
-                  <div className="font-mono text-xs font-semibold" style={{ color: colors.text.tertiary }}>
+                  <div
+                    className="font-mono text-xs font-semibold"
+                    style={{ color: colors.text.tertiary }}
+                  >
                     {app.name}
                   </div>
                   <div
@@ -449,8 +454,8 @@ const Home = () => {
         <div className="relative h-[260px] w-full overflow-hidden">
           <motion.img
             {...scrollReveal.image}
-            src="/src/assets/Gemini_Generated_Image_qg7ks4qg7ks4qg7k.png"
-            alt="Clouds"
+            src={storyChainLandingContent.collaboration.imageUrl.url}
+            alt={storyChainLandingContent.collaboration.imageUrl.alt}
             className="h-full w-full object-cover"
           />
 
@@ -522,10 +527,19 @@ const Home = () => {
               className="rounded-xl bg-white/75 p-7 shadow-sm ring-1 ring-black/[0.04] backdrop-blur"
             >
               <div className="mb-4 flex justify-center gap-2">
-                <div className="h-6 w-6 rounded-md" style={{ backgroundColor: colors.text.tertiary }} />
-                <div className="h-6 w-6 rounded-md" style={{ backgroundColor: colors.brand.blue }} />
+                <div
+                  className="h-6 w-6 rounded-md"
+                  style={{ backgroundColor: colors.text.tertiary }}
+                />
+                <div
+                  className="h-6 w-6 rounded-md"
+                  style={{ backgroundColor: colors.brand.blue }}
+                />
               </div>
-              <p className="font-mono text-xs leading-relaxed" style={{ color: colors.text.secondaryOpacity75 }}>
+              <p
+                className="font-mono text-xs leading-relaxed"
+                style={{ color: colors.text.secondaryOpacity75 }}
+              >
                 Minima + Port
                 <br />
                 Turn your notes into a website.
@@ -538,10 +552,19 @@ const Home = () => {
               className="rounded-xl bg-white/75 p-7 shadow-sm ring-1 ring-black/[0.04] backdrop-blur"
             >
               <div className="mb-4 flex justify-center gap-2">
-                <div className="h-6 w-6 rounded-md" style={{ backgroundColor: colors.brand.pink[500] }} />
-                <div className="h-6 w-6 rounded-md" style={{ backgroundColor: colors.text.secondary }} />
+                <div
+                  className="h-6 w-6 rounded-md"
+                  style={{ backgroundColor: colors.brand.pink[500] }}
+                />
+                <div
+                  className="h-6 w-6 rounded-md"
+                  style={{ backgroundColor: colors.text.secondary }}
+                />
               </div>
-              <p className="font-mono text-xs leading-relaxed" style={{ color: colors.text.secondaryOpacity75 }}>
+              <p
+                className="font-mono text-xs leading-relaxed"
+                style={{ color: colors.text.secondaryOpacity75 }}
+              >
                 Telescope + Black Hole
                 <br />
                 Generate images and store them safely.
@@ -554,10 +577,19 @@ const Home = () => {
               className="rounded-xl bg-white/75 p-7 shadow-sm ring-1 ring-black/[0.04] backdrop-blur"
             >
               <div className="mb-4 flex justify-center gap-2">
-                <div className="h-6 w-6 rounded-md" style={{ backgroundColor: colors.brand.blue }} />
-                <div className="h-6 w-6 rounded-md" style={{ backgroundColor: colors.brand.pink[400] }} />
+                <div
+                  className="h-6 w-6 rounded-md"
+                  style={{ backgroundColor: colors.brand.blue }}
+                />
+                <div
+                  className="h-6 w-6 rounded-md"
+                  style={{ backgroundColor: colors.brand.pink[400] }}
+                />
               </div>
-              <p className="font-mono text-xs leading-relaxed" style={{ color: colors.text.secondaryOpacity75 }}>
+              <p
+                className="font-mono text-xs leading-relaxed"
+                style={{ color: colors.text.secondaryOpacity75 }}
+              >
                 Any Space App + Your Idea
                 <br />
                 Build against and extend anything.
@@ -589,8 +621,8 @@ const Home = () => {
           <motion.div {...scrollReveal.image} className="mb-16 flex justify-center">
             <div className="relative">
               <img
-                src="/src/assets/Gemini_Generated_Image_7zwxkp7zwxkp7zwx.png"
-                alt="For developers"
+                src={storyChainLandingContent.darkCta.imageUrl.url}
+                alt={storyChainLandingContent.darkCta.imageUrl.alt}
                 className="h-[280px] w-auto rounded-lg"
               />
               {/* Top fade */}
@@ -774,7 +806,10 @@ const Home = () => {
         >
           {/* Brand */}
           <div>
-            <div className="mb-3 flex items-center gap-2 font-medium" style={{ color: colors.text.tertiary }}>
+            <div
+              className="mb-3 flex items-center gap-2 font-medium"
+              style={{ color: colors.text.tertiary }}
+            >
               <span
                 className="h-2.5 w-2.5 rounded-full"
                 style={{ backgroundColor: colors.brand.pink[500] }}
@@ -798,10 +833,7 @@ const Home = () => {
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <Link
-                      to={link.href}
-                      className="transition-colors hover:opacity-80"
-                    >
+                    <Link to={link.href} className="transition-colors hover:opacity-80">
                       {link.label}
                     </Link>
                   </li>

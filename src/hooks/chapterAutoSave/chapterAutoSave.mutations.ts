@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { useApi } from '../useApi';
 import type {
-  IAutoSaveContentRequest,
+  TAutoSaveContentRequest,
   IDisableAutoSaveRequest,
   IEnableAutoSaveRequest,
 } from '@/type/chapterAutoSave/chapterAutoSave.request.types';
-import { chapterAutoSaveApi } from '@/api/chapterAutoSave';
+import { chapterAutoSaveApi } from '@/api/chapterAutoSave.api';
 
 export function useEnableAutoSave() {
   const api = useApi();
@@ -21,7 +21,7 @@ export function useAutoSaveContent() {
   const api = useApi();
 
   return useMutation({
-    mutationFn: (payload: IAutoSaveContentRequest) =>
+    mutationFn: (payload: TAutoSaveContentRequest) =>
       chapterAutoSaveApi(api).autoSaveContent(payload),
     meta: { requiresAuth: true },
   });
