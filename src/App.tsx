@@ -1,45 +1,52 @@
-import { lazy } from 'react';
+import { createBrowserRouter, Navigate } from 'react-router';
+import { lazyRoute } from '@/lib/lazy-route';
+import { ProtectedRoute } from '@/components/protected-route';
+import { ErrorBoundary } from '@/components/error-boundary';
 
 // Lazy pages
-const Home = lazy(() => import('./pages/home'));
-const ChapterRead = lazy(() => import('./pages/chapter-read'));
-const Dashboard = lazy(() => import('./pages/dashboard'));
-const Story = lazy(() => import('./pages/stories'));
-const Reports = lazy(() => import('./pages/reports'));
-const Appeals = lazy(() => import('./pages/appeals'));
-const SignUp = lazy(() => import('./pages/sign-up'));
-const SignIn = lazy(() => import('./pages/sign-in'));
-const Layout = lazy(() => import('./layout/layout'));
+const Home = lazyRoute(() => import('./pages/home'), 'page');
+const Dashboard = lazyRoute(() => import('./pages/dashboard'), 'dashboard');
+const Story = lazyRoute(() => import('./pages/stories'), 'story');
+const StoryBuilder = lazyRoute(() => import('./pages/story-builder'), 'storyBuilder');
+const ChapterRead = lazyRoute(() => import('./pages/chapter-read'), 'chapter');
+const Profile = lazyRoute(() => import('./pages/profile'), 'profile');
+const Reports = lazyRoute(() => import('./pages/reports'), 'dashboard');
+const Appeals = lazyRoute(() => import('./pages/appeals'), 'dashboard');
+const SignUp = lazyRoute(() => import('./pages/sign-up'), 'auth');
+const SignIn = lazyRoute(() => import('./pages/sign-in'), 'auth');
 
-// Non-lazy (small components)
-import { ProtectedRoute } from './components/protected-route';
-
-import { Suspense } from 'react';
-import { createBrowserRouter } from 'react-router';
-import Profile from './pages/profile';
-import { PageLoader } from './components/common/page-loader';
-import StoryBuilder from './pages/story-builder';
+const Layout = lazyRoute(() => import('./layout/layout'), 'page');
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <ProtectedRoute>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Layout />
-        </Suspense>
+        <Layout />
       </ProtectedRoute>
+    ),
+    errorElement: (
+      <ErrorBoundary>
+        <div>Route Error</div>
+      </ErrorBoundary>
     ),
     children: [
       {
         index: true,
-        element: (
-          <Suspense fallback={<div>Loading...</div>}>
-            <Home />
-          </Suspense>
-        ),
+        element: <Home />,
       },
-
+      {
+        path: 'dashboard/*',
+        element: <Dashboard />,
+      },
+      {
+        path: 'stories/:slug/*',
+        element: <Story />,
+      },
+      {
+        path: 'stories/:storyId/chapter/:chapterId',
+        element: <ChapterRead />,
+      },
       // Stories
       // Query params: mode (new|edit|continue), parent (root|chapterId), chapter (chapterId), draft (autoSaveId)
       // /stories/:storySlug/builder?mode=new&parent=root
@@ -51,54 +58,16 @@ export const router = createBrowserRouter([
         element: <StoryBuilder />,
       },
       {
-        path: 'stories/:storyId/chapter/:chapterId',
-        element: (
-          <Suspense fallback={<PageLoader text="Loading chapter..." />}>
-            <ChapterRead />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'stories/:slug/*',
-        element: (
-          <Suspense fallback={<div>Loading story...</div>}>
-            <Story />
-          </Suspense>
-        ),
-      },
-      {
         path: 'profile',
-        element: (
-          <Suspense fallback={<div>Loading story...</div>}>
-            <Profile />
-          </Suspense>
-        ),
+        element: <Profile />,
       },
-      // Dashboard
-      {
-        path: 'dashboard/*',
-        element: (
-          <Suspense fallback={<div>Loading dashboard...</div>}>
-            <Dashboard />
-          </Suspense>
-        ),
-      },
-      // Admin - Reports & Appeals
       {
         path: 'reports',
-        element: (
-          <Suspense fallback={<div>Loading reports...</div>}>
-            <Reports />
-          </Suspense>
-        ),
+        element: <Reports />,
       },
       {
         path: 'appeals',
-        element: (
-          <Suspense fallback={<div>Loading appeals...</div>}>
-            <Appeals />
-          </Suspense>
-        ),
+        element: <Appeals />,
       },
     ],
   },
@@ -106,18 +75,10 @@ export const router = createBrowserRouter([
   // Auth (unprotected)
   {
     path: '/sign-up',
-    element: (
-      <Suspense fallback={<div>Loading sign-up...</div>}>
-        <SignUp />
-      </Suspense>
-    ),
+    element: <SignUp />,
   },
   {
     path: '/sign-in',
-    element: (
-      <Suspense fallback={<div>Loading sign-in...</div>}>
-        <SignIn />
-      </Suspense>
-    ),
+    element: <SignIn />,
   },
 ]);
