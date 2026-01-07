@@ -1,7 +1,7 @@
-import { createBrowserRouter, Navigate } from 'react-router';
-import { lazyRoute } from '@/lib/lazy-route';
-import { ProtectedRoute } from '@/components/protected-route';
 import { ErrorBoundary } from '@/components/error-boundary';
+import { ProtectedRoute } from '@/components/protected-route';
+import { lazyRoute } from '@/lib/lazy-route';
+import { createBrowserRouter } from 'react-router';
 
 // Lazy pages
 const Home = lazyRoute(() => import('./pages/home'), 'page');
