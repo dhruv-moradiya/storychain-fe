@@ -12,7 +12,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import { colors } from '@/constants';
 import { GitMerge, AlertTriangle, Check, X } from 'lucide-react';
 import type { IPullRequest } from '@/type/pull-request.type';
 
@@ -55,22 +54,13 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="border-black/10 bg-white sm:max-w-[450px]">
         <DialogHeader>
-          <DialogTitle
-            className="flex items-center gap-2 font-serif"
-            style={{ color: colors.text.primary }}
-          >
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-lg"
-              style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)' }}
-            >
-              <GitMerge className="h-4 w-4" style={{ color: '#10b981' }} />
+          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#10b981]/10">
+              <GitMerge className="h-4 w-4 text-[#10b981]" />
             </div>
             Merge Request
           </DialogTitle>
-          <DialogDescription
-            className="font-mono text-sm"
-            style={{ color: colors.text.secondaryOpacity70 }}
-          >
+          <DialogDescription className="text-text-secondary-70 font-mono text-sm">
             Merge this submission into the story
           </DialogDescription>
         </DialogHeader>
@@ -78,18 +68,10 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
         <div className="space-y-4 py-4">
           {/* PR Info */}
           {pullRequest && (
-            <div
-              className="rounded-xl border border-black/5 p-4"
-              style={{ backgroundColor: `${colors.brand.blue}08` }}
-            >
-              <p className="font-medium" style={{ color: colors.text.primary }}>
-                {pullRequest.title}
-              </p>
+            <div className="bg-brand-blue/[0.08] rounded-xl border border-black/5 p-4">
+              <p className="text-text-primary font-medium">{pullRequest.title}</p>
               {pullRequest.description && (
-                <p
-                  className="mt-1 line-clamp-2 font-mono text-sm"
-                  style={{ color: colors.text.secondaryOpacity65 }}
-                >
+                <p className="text-text-secondary-65 mt-1 line-clamp-2 font-mono text-sm">
                   {pullRequest.description}
                 </p>
               )}
@@ -98,10 +80,7 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
 
           {/* Status Checks */}
           <div className="space-y-2">
-            <Label
-              className="font-mono text-xs tracking-wider uppercase"
-              style={{ color: colors.text.secondaryOpacity65 }}
-            >
+            <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
               Merge Checks
             </Label>
 
@@ -118,9 +97,7 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
                 ) : (
                   <AlertTriangle className="h-4 w-4 text-amber-600" />
                 )}
-                <span className="font-mono text-sm" style={{ color: colors.text.primary }}>
-                  Approvals
-                </span>
+                <span className="text-text-primary font-mono text-sm">Approvals</span>
               </div>
               <span
                 className={cn(
@@ -145,7 +122,7 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
                 ) : (
                   <Check className="h-4 w-4 text-green-600" />
                 )}
-                <span className="font-mono text-sm" style={{ color: colors.text.primary }}>
+                <span className="text-text-primary font-mono text-sm">
                   {hasBlockers ? 'Has blockers' : 'No blockers'}
                 </span>
               </div>
@@ -154,15 +131,9 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
 
           {/* Warning if can't merge */}
           {!canMerge && (
-            <div
-              className="flex items-start gap-2 rounded-xl border p-3"
-              style={{
-                borderColor: `${colors.brand.orange}40`,
-                backgroundColor: `${colors.brand.orange}10`,
-              }}
-            >
-              <AlertTriangle className="mt-0.5 h-4 w-4" style={{ color: colors.brand.orange }} />
-              <p className="font-mono text-sm" style={{ color: colors.brand.orange }}>
+            <div className="border-brand-orange/40 bg-brand-orange/10 flex items-start gap-2 rounded-xl border p-3">
+              <AlertTriangle className="text-brand-orange mt-0.5 h-4 w-4" />
+              <p className="text-brand-orange font-mono text-sm">
                 This request needs more approvals or has blocking reviews.
               </p>
             </div>
@@ -170,9 +141,7 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
 
           {/* Merge Message */}
           <div className="space-y-2">
-            <Label className="font-medium" style={{ color: colors.text.primary }}>
-              Merge Message (optional)
-            </Label>
+            <Label className="text-text-primary font-medium">Merge Message (optional)</Label>
             <Textarea
               placeholder="Add a message for this merge..."
               value={formData.mergeMessage}
@@ -186,12 +155,8 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
           <div className="space-y-3 rounded-xl border border-black/5 bg-black/[0.02] p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium" style={{ color: colors.text.primary }}>
-                  Delete source after merge
-                </p>
-                <p className="font-mono text-xs" style={{ color: colors.text.secondaryOpacity65 }}>
-                  Remove the draft content
-                </p>
+                <p className="text-text-primary font-medium">Delete source after merge</p>
+                <p className="text-text-secondary-65 font-mono text-xs">Remove the draft content</p>
               </div>
               <Switch
                 checked={formData.deleteSourceBranch}
@@ -202,12 +167,8 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <p className="font-medium" style={{ color: colors.text.primary }}>
-                  Notify the author
-                </p>
-                <p className="font-mono text-xs" style={{ color: colors.text.secondaryOpacity65 }}>
-                  Send a notification
-                </p>
+                <p className="text-text-primary font-medium">Notify the author</p>
+                <p className="text-text-secondary-65 font-mono text-xs">Send a notification</p>
               </div>
               <Switch
                 checked={formData.notifyAuthor}
@@ -230,8 +191,7 @@ export function MergeDialog({ open, onOpenChange, onConfirm, pullRequest }: Merg
           <Button
             onClick={handleConfirm}
             disabled={!canMerge}
-            className="gap-2 font-mono text-white"
-            style={{ backgroundColor: '#10b981' }}
+            className="gap-2 bg-[#10b981] font-mono text-white hover:bg-[#059669]"
           >
             <GitMerge className="h-4 w-4" />
             Confirm Merge

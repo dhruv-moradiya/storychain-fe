@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
-import { colors } from '@/constants';
 import {
   GitPullRequest,
   Plus,
@@ -63,28 +62,32 @@ const PR_TYPES: {
   label: string;
   description: string;
   icon: React.ElementType;
-  color: string;
+  colorClass: string;
+  bgClass: string;
 }[] = [
   {
     value: 'NEW_CHAPTER',
     label: 'New Chapter',
     description: 'Add a new chapter to the story',
     icon: Plus,
-    color: '#10b981',
+    colorClass: 'text-[#10b981]',
+    bgClass: 'bg-[#10b981]/15',
   },
   {
     value: 'EDIT_CHAPTER',
     label: 'Edit Chapter',
     description: 'Propose changes to an existing chapter',
     icon: FileEdit,
-    color: colors.brand.blue,
+    colorClass: 'text-brand-blue',
+    bgClass: 'bg-brand-blue/15',
   },
   {
     value: 'DELETE_CHAPTER',
     label: 'Delete Chapter',
     description: 'Request removal of a chapter',
     icon: Trash2,
-    color: '#ef4444',
+    colorClass: 'text-[#ef4444]',
+    bgClass: 'bg-[#ef4444]/15',
   },
 ];
 
@@ -184,27 +187,15 @@ export function CreatePRDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="border-black/10 bg-white sm:max-w-[600px]">
         <DialogHeader>
-          <DialogTitle
-            className="flex items-center gap-2 font-serif"
-            style={{ color: colors.text.primary }}
-          >
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-lg"
-              style={{ backgroundColor: `${colors.brand.pink[500]}15` }}
-            >
-              <GitPullRequest className="h-4 w-4" style={{ color: colors.brand.pink[500] }} />
+          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
+            <div className="bg-brand-pink-500/15 flex h-8 w-8 items-center justify-center rounded-lg">
+              <GitPullRequest className="text-brand-pink-500 h-4 w-4" />
             </div>
             Create Submit Request
           </DialogTitle>
-          <DialogDescription
-            className="font-mono text-sm"
-            style={{ color: colors.text.secondaryOpacity70 }}
-          >
+          <DialogDescription className="text-text-secondary-70 font-mono text-sm">
             Submit a change request for{' '}
-            <span
-              className="rounded px-1.5 py-0.5 font-medium"
-              style={{ backgroundColor: `${colors.brand.blue}15`, color: colors.brand.blue }}
-            >
+            <span className="bg-brand-blue/15 text-brand-blue rounded px-1.5 py-0.5 font-medium">
               {storyTitle}
             </span>
           </DialogDescription>
@@ -217,21 +208,19 @@ export function CreatePRDialog({
               <div
                 className={cn(
                   'flex h-8 w-8 items-center justify-center rounded-full font-mono text-xs font-medium transition-all',
-                  idx <= currentStep ? 'text-white' : 'bg-black/5'
+                  idx <= currentStep
+                    ? 'bg-brand-pink-500 text-white'
+                    : 'text-text-secondary-65 bg-black/5'
                 )}
-                style={{
-                  backgroundColor: idx <= currentStep ? colors.brand.pink[500] : undefined,
-                  color: idx > currentStep ? colors.text.secondaryOpacity65 : undefined,
-                }}
               >
                 {idx < currentStep ? <Check className="h-4 w-4" /> : idx + 1}
               </div>
               {idx < STEPS.length - 1 && (
                 <div
-                  className="mx-2 h-px w-8 transition-colors"
-                  style={{
-                    backgroundColor: idx < currentStep ? colors.brand.pink[500] : 'rgba(0,0,0,0.1)',
-                  }}
+                  className={cn(
+                    'mx-2 h-px w-8 transition-colors',
+                    idx < currentStep ? 'bg-brand-pink-500' : 'bg-black/10'
+                  )}
                 />
               )}
             </div>
@@ -251,7 +240,7 @@ export function CreatePRDialog({
                 transition={{ duration: 0.15 }}
                 className="space-y-3"
               >
-                <p className="font-mono text-sm" style={{ color: colors.text.secondaryOpacity65 }}>
+                <p className="text-text-secondary-65 font-mono text-sm">
                   Select the type of change
                 </p>
                 {PR_TYPES.map((type) => {
@@ -270,27 +259,21 @@ export function CreatePRDialog({
                       )}
                     >
                       <div
-                        className="flex h-11 w-11 items-center justify-center rounded-xl"
-                        style={{ backgroundColor: `${type.color}15` }}
+                        className={cn(
+                          'flex h-11 w-11 items-center justify-center rounded-xl',
+                          type.bgClass
+                        )}
                       >
-                        <TypeIcon className="h-5 w-5" style={{ color: type.color }} />
+                        <TypeIcon className={cn('h-5 w-5', type.colorClass)} />
                       </div>
                       <div className="flex-1">
-                        <p className="font-medium" style={{ color: colors.text.primary }}>
-                          {type.label}
-                        </p>
-                        <p
-                          className="font-mono text-sm"
-                          style={{ color: colors.text.secondaryOpacity65 }}
-                        >
+                        <p className="text-text-primary font-medium">{type.label}</p>
+                        <p className="text-text-secondary-65 font-mono text-sm">
                           {type.description}
                         </p>
                       </div>
                       {isSelected && (
-                        <div
-                          className="flex h-6 w-6 items-center justify-center rounded-full"
-                          style={{ backgroundColor: colors.brand.pink[500] }}
-                        >
+                        <div className="bg-brand-pink-500 flex h-6 w-6 items-center justify-center rounded-full">
                           <Check className="h-3.5 w-3.5 text-white" />
                         </div>
                       )}
@@ -311,10 +294,7 @@ export function CreatePRDialog({
                 className="space-y-5"
               >
                 <div className="space-y-2">
-                  <Label
-                    className="font-mono text-xs tracking-wider uppercase"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
                     Title
                   </Label>
                   <Input
@@ -326,10 +306,7 @@ export function CreatePRDialog({
                 </div>
 
                 <div className="space-y-2">
-                  <Label
-                    className="font-mono text-xs tracking-wider uppercase"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
                     Description
                   </Label>
                   <Textarea
@@ -342,10 +319,7 @@ export function CreatePRDialog({
                 </div>
 
                 <div className="space-y-2">
-                  <Label
-                    className="font-mono text-xs tracking-wider uppercase"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
                     {formData.prType === 'NEW_CHAPTER' ? 'Insert After' : 'Target Chapter'}
                   </Label>
                   <Select
@@ -361,10 +335,7 @@ export function CreatePRDialog({
                       {formData.prType === 'NEW_CHAPTER' && (
                         <SelectItem value="root">
                           <span className="flex items-center gap-2 font-mono">
-                            <BookOpen
-                              className="h-3.5 w-3.5"
-                              style={{ color: colors.brand.blue }}
-                            />
+                            <BookOpen className="text-brand-blue h-3.5 w-3.5" />
                             Story Introduction
                           </span>
                         </SelectItem>
@@ -408,16 +379,10 @@ export function CreatePRDialog({
                 ) : (
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <Label
-                        className="font-mono text-xs tracking-wider uppercase"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
+                      <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
                         {formData.prType === 'NEW_CHAPTER' ? 'Chapter Content' : 'Proposed Changes'}
                       </Label>
-                      <span
-                        className="font-mono text-xs"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
+                      <span className="text-text-secondary-65 font-mono text-xs">
                         {formData.proposedContent.length} characters
                       </span>
                     </div>
@@ -449,10 +414,7 @@ export function CreatePRDialog({
               >
                 {/* Labels */}
                 <div className="space-y-3">
-                  <Label
-                    className="font-mono text-xs tracking-wider uppercase"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
                     Labels
                   </Label>
                   <div className="flex flex-wrap gap-2">
@@ -465,13 +427,9 @@ export function CreatePRDialog({
                           className={cn(
                             'rounded-full border px-3 py-1.5 font-mono text-xs transition-all',
                             isSelected
-                              ? 'border-transparent text-white'
-                              : 'border-black/10 hover:border-black/20'
+                              ? 'bg-brand-blue border-transparent text-white'
+                              : 'text-text-secondary-75 border-black/10 hover:border-black/20'
                           )}
-                          style={{
-                            backgroundColor: isSelected ? colors.brand.blue : 'transparent',
-                            color: isSelected ? '#fff' : colors.text.secondaryOpacity75,
-                          }}
                         >
                           {label.label}
                         </button>
@@ -484,13 +442,8 @@ export function CreatePRDialog({
                 <div className="space-y-4 rounded-xl border border-black/5 bg-black/[0.02] p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium" style={{ color: colors.text.primary }}>
-                        Create as draft
-                      </p>
-                      <p
-                        className="font-mono text-xs"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
+                      <p className="text-text-primary font-medium">Create as draft</p>
+                      <p className="text-text-secondary-65 font-mono text-xs">
                         Won't be reviewed until marked ready
                       </p>
                     </div>
@@ -502,13 +455,8 @@ export function CreatePRDialog({
                   <div className="h-px bg-black/5" />
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium" style={{ color: colors.text.primary }}>
-                        Community auto-approval
-                      </p>
-                      <p
-                        className="font-mono text-xs"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
+                      <p className="text-text-primary font-medium">Community auto-approval</p>
+                      <p className="text-text-secondary-65 font-mono text-xs">
                         Auto-approve when vote threshold is reached
                       </p>
                     </div>
@@ -521,39 +469,31 @@ export function CreatePRDialog({
 
                 {/* Summary */}
                 <div className="rounded-xl border border-black/5 bg-black/[0.02] p-4">
-                  <p
-                    className="font-mono text-xs font-medium tracking-wider uppercase"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <p className="text-text-secondary-65 font-mono text-xs font-medium tracking-wider uppercase">
                     Summary
                   </p>
                   <div className="mt-3 space-y-2">
                     <div className="flex items-center justify-between font-mono text-sm">
-                      <span style={{ color: colors.text.secondaryOpacity65 }}>Type</span>
-                      <span style={{ color: colors.text.primary }}>
+                      <span className="text-text-secondary-65">Type</span>
+                      <span className="text-text-primary">
                         {PR_TYPES.find((t) => t.value === formData.prType)?.label}
                       </span>
                     </div>
                     <div className="flex items-center justify-between font-mono text-sm">
-                      <span style={{ color: colors.text.secondaryOpacity65 }}>Title</span>
-                      <span
-                        className="max-w-[200px] truncate"
-                        style={{ color: colors.text.primary }}
-                      >
+                      <span className="text-text-secondary-65">Title</span>
+                      <span className="text-text-primary max-w-[200px] truncate">
                         {formData.title}
                       </span>
                     </div>
                     <div className="flex items-center justify-between font-mono text-sm">
-                      <span style={{ color: colors.text.secondaryOpacity65 }}>Status</span>
+                      <span className="text-text-secondary-65">Status</span>
                       <Badge
-                        className="font-mono text-xs"
-                        style={{
-                          backgroundColor: formData.isDraft
-                            ? `${colors.brand.orange}15`
-                            : `${colors.brand.pink[500]}15`,
-                          color: formData.isDraft ? colors.brand.orange : colors.brand.pink[500],
-                          border: 'none',
-                        }}
+                        className={cn(
+                          'border-none font-mono text-xs',
+                          formData.isDraft
+                            ? 'bg-brand-orange/15 text-brand-orange'
+                            : 'bg-brand-pink-500/15 text-brand-pink-500'
+                        )}
                       >
                         {formData.isDraft ? 'Draft' : 'Ready'}
                       </Badge>
@@ -580,8 +520,7 @@ export function CreatePRDialog({
             <Button
               onClick={handleNext}
               disabled={!canProceed()}
-              className="gap-1 font-mono text-white"
-              style={{ backgroundColor: colors.brand.blue }}
+              className="bg-brand-blue hover:bg-brand-blue-alt gap-1 font-mono text-white"
             >
               Next
               <ChevronRight className="h-4 w-4" />
@@ -590,8 +529,7 @@ export function CreatePRDialog({
             <Button
               onClick={handleSubmit}
               disabled={!canProceed()}
-              className="gap-2 font-mono text-white"
-              style={{ backgroundColor: colors.brand.pink[500] }}
+              className="bg-brand-pink-500 hover:bg-brand-pink-400 gap-2 font-mono text-white"
             >
               <GitPullRequest className="h-4 w-4" />
               {formData.isDraft ? 'Create Draft' : 'Submit Request'}

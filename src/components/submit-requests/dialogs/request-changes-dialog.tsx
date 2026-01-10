@@ -12,7 +12,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { colors } from '@/constants';
 import { AlertCircle, Plus, X, Send } from 'lucide-react';
 
 interface RequestChangesDialogProps {
@@ -78,30 +77,15 @@ export function RequestChangesDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="border-black/10 bg-white sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle
-            className="flex items-center gap-2 font-serif"
-            style={{ color: colors.text.primary }}
-          >
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-lg"
-              style={{ backgroundColor: `${colors.brand.orange}15` }}
-            >
-              <AlertCircle className="h-4 w-4" style={{ color: colors.brand.orange }} />
+          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
+            <div className="bg-brand-orange/15 flex h-8 w-8 items-center justify-center rounded-lg">
+              <AlertCircle className="text-brand-orange h-4 w-4" />
             </div>
             Request Changes
           </DialogTitle>
-          <DialogDescription
-            className="font-mono text-sm"
-            style={{ color: colors.text.secondaryOpacity70 }}
-          >
+          <DialogDescription className="text-text-secondary-70 font-mono text-sm">
             Request specific changes for:{' '}
-            <span
-              className="rounded px-1.5 py-0.5 font-medium"
-              style={{
-                backgroundColor: `${colors.brand.pink[500]}15`,
-                color: colors.brand.pink[500],
-              }}
-            >
+            <span className="bg-brand-pink-500/15 text-brand-pink-500 rounded px-1.5 py-0.5 font-medium">
               {prTitle}
             </span>
           </DialogDescription>
@@ -110,9 +94,7 @@ export function RequestChangesDialog({
         <div className="max-h-[400px] space-y-4 overflow-y-auto py-4">
           {/* Summary */}
           <div className="space-y-2">
-            <Label className="font-medium" style={{ color: colors.text.primary }}>
-              Summary (optional)
-            </Label>
+            <Label className="text-text-primary font-medium">Summary (optional)</Label>
             <Textarea
               placeholder="Provide an overview of the changes needed..."
               value={summary}
@@ -125,10 +107,7 @@ export function RequestChangesDialog({
           {/* Change Requests */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label
-                className="font-mono text-xs tracking-wider uppercase"
-                style={{ color: colors.text.secondaryOpacity65 }}
-              >
+              <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
                 Requested Changes
               </Label>
               <Button
@@ -149,12 +128,7 @@ export function RequestChangesDialog({
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 space-y-2">
-                    <Label
-                      className="font-mono text-xs"
-                      style={{ color: colors.text.secondaryOpacity65 }}
-                    >
-                      Category
-                    </Label>
+                    <Label className="text-text-secondary-65 font-mono text-xs">Category</Label>
                     <div className="flex flex-wrap gap-1.5">
                       {CATEGORIES.map((cat) => (
                         <button
@@ -163,14 +137,9 @@ export function RequestChangesDialog({
                           className={cn(
                             'rounded-full border px-2.5 py-1 font-mono text-xs transition-all',
                             change.category === cat
-                              ? 'border-transparent text-white'
-                              : 'border-black/10 hover:border-black/20 hover:bg-white'
+                              ? 'bg-brand-orange border-transparent text-white'
+                              : 'text-text-primary border-black/10 hover:border-black/20 hover:bg-white'
                           )}
-                          style={{
-                            backgroundColor:
-                              change.category === cat ? colors.brand.orange : undefined,
-                            color: change.category === cat ? 'white' : colors.text.primary,
-                          }}
                         >
                           {cat}
                         </button>
@@ -190,12 +159,7 @@ export function RequestChangesDialog({
                 </div>
 
                 <div className="space-y-1">
-                  <Label
-                    className="font-mono text-xs"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
-                    Description
-                  </Label>
+                  <Label className="text-text-secondary-65 font-mono text-xs">Description</Label>
                   <Input
                     placeholder="Describe the change needed..."
                     value={change.description}
@@ -219,8 +183,7 @@ export function RequestChangesDialog({
           <Button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="gap-2 font-mono text-white"
-            style={{ backgroundColor: colors.brand.orange }}
+            className="bg-brand-orange hover:bg-brand-orange-alt gap-2 font-mono text-white"
           >
             <Send className="h-4 w-4" />
             Submit Request

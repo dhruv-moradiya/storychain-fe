@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { colors } from '@/constants';
 import { GitPullRequestClosed, X, AlertTriangle } from 'lucide-react';
 
 interface CloseDialogProps {
@@ -69,30 +68,26 @@ export function CloseDialog({
       <DialogContent className="border-black/10 bg-white sm:max-w-[450px]">
         <DialogHeader>
           <DialogTitle
-            className="flex items-center gap-2 font-serif"
-            style={{ color: isReject ? colors.brand.pink[500] : colors.text.primary }}
+            className={cn(
+              'flex items-center gap-2 font-serif',
+              isReject ? 'text-brand-pink-500' : 'text-text-primary'
+            )}
           >
             <div
-              className="flex h-8 w-8 items-center justify-center rounded-lg"
-              style={{
-                backgroundColor: isReject ? `${colors.brand.pink[500]}15` : 'rgba(0,0,0,0.05)',
-              }}
+              className={cn(
+                'flex h-8 w-8 items-center justify-center rounded-lg',
+                isReject ? 'bg-brand-pink-500/15' : 'bg-black/5'
+              )}
             >
               {isReject ? (
-                <X className="h-4 w-4" style={{ color: colors.brand.pink[500] }} />
+                <X className="text-brand-pink-500 h-4 w-4" />
               ) : (
-                <GitPullRequestClosed
-                  className="h-4 w-4"
-                  style={{ color: colors.text.secondaryOpacity65 }}
-                />
+                <GitPullRequestClosed className="text-text-secondary-65 h-4 w-4" />
               )}
             </div>
             {isReject ? 'Reject Request' : 'Close Request'}
           </DialogTitle>
-          <DialogDescription
-            className="font-mono text-sm"
-            style={{ color: colors.text.secondaryOpacity70 }}
-          >
+          <DialogDescription className="text-text-secondary-70 font-mono text-sm">
             {isReject
               ? 'This will permanently reject this submission.'
               : 'This will close the request without merging.'}
@@ -102,25 +97,15 @@ export function CloseDialog({
         <div className="space-y-4 py-4">
           {/* PR Title */}
           <div className="rounded-xl border border-black/5 bg-black/[0.02] p-4">
-            <p className="font-mono text-xs" style={{ color: colors.text.secondaryOpacity65 }}>
-              Request
-            </p>
-            <p className="mt-1 font-medium" style={{ color: colors.text.primary }}>
-              {prTitle}
-            </p>
+            <p className="text-text-secondary-65 font-mono text-xs">Request</p>
+            <p className="text-text-primary mt-1 font-medium">{prTitle}</p>
           </div>
 
           {/* Warning for reject */}
           {isReject && (
-            <div
-              className="flex items-start gap-2 rounded-xl border p-3"
-              style={{
-                borderColor: `${colors.brand.pink[500]}40`,
-                backgroundColor: `${colors.brand.pink[500]}10`,
-              }}
-            >
-              <AlertTriangle className="mt-0.5 h-4 w-4" style={{ color: colors.brand.pink[500] }} />
-              <p className="font-mono text-sm" style={{ color: colors.brand.pink[500] }}>
+            <div className="border-brand-pink-500/40 bg-brand-pink-500/10 flex items-start gap-2 rounded-xl border p-3">
+              <AlertTriangle className="text-brand-pink-500 mt-0.5 h-4 w-4" />
+              <p className="text-brand-pink-500 font-mono text-sm">
                 This action cannot be undone. The submission will be marked as rejected.
               </p>
             </div>
@@ -128,10 +113,7 @@ export function CloseDialog({
 
           {/* Reason Selection */}
           <div className="space-y-2">
-            <Label
-              className="font-mono text-xs tracking-wider uppercase"
-              style={{ color: colors.text.secondaryOpacity65 }}
-            >
+            <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
               Reason
             </Label>
             <div className="space-y-2">
@@ -142,27 +124,13 @@ export function CloseDialog({
                   className={cn(
                     'w-full rounded-xl border p-3 text-left transition-all',
                     formData.selectedReason === reason
-                      ? 'border-black/20 bg-white shadow-sm'
+                      ? isReject
+                        ? 'border-brand-pink-500/40 bg-brand-pink-500/5 shadow-sm'
+                        : 'border-black/20 bg-white shadow-sm'
                       : 'border-black/5 hover:border-black/15 hover:bg-black/[0.02]'
                   )}
-                  style={{
-                    borderColor:
-                      formData.selectedReason === reason
-                        ? isReject
-                          ? `${colors.brand.pink[500]}40`
-                          : 'rgba(0,0,0,0.2)'
-                        : undefined,
-                    backgroundColor:
-                      formData.selectedReason === reason
-                        ? isReject
-                          ? `${colors.brand.pink[500]}05`
-                          : 'white'
-                        : undefined,
-                  }}
                 >
-                  <span className="font-mono text-sm" style={{ color: colors.text.primary }}>
-                    {reason}
-                  </span>
+                  <span className="text-text-primary font-mono text-sm">{reason}</span>
                 </button>
               ))}
             </div>
@@ -170,9 +138,7 @@ export function CloseDialog({
 
           {/* Additional Details */}
           <div className="space-y-2">
-            <Label className="font-medium" style={{ color: colors.text.primary }}>
-              Additional Details (optional)
-            </Label>
+            <Label className="text-text-primary font-medium">Additional Details (optional)</Label>
             <Textarea
               placeholder="Provide more context..."
               value={formData.reason}
@@ -194,8 +160,12 @@ export function CloseDialog({
           <Button
             onClick={handleConfirm}
             disabled={!formData.selectedReason}
-            className="gap-2 font-mono text-white"
-            style={{ backgroundColor: isReject ? colors.brand.pink[500] : colors.text.secondary }}
+            className={cn(
+              'gap-2 font-mono text-white',
+              isReject
+                ? 'bg-brand-pink-500 hover:bg-brand-pink-400'
+                : 'bg-text-secondary hover:bg-text-secondary/90'
+            )}
           >
             {isReject ? (
               <>

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { storyChainLandingContent, colors } from '@/constants';
+import { storyChainLandingContent } from '@/constants';
 import { fadeIn, scrollReveal } from '@/lib/utils';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { Link } from 'react-router';
@@ -36,7 +36,7 @@ const ScrollProgress = () => {
       className="fixed top-0 right-0 left-0 z-50 h-1 origin-left"
       style={{
         scaleX,
-        background: `linear-gradient(90deg, ${colors.brand.pink[500]}, ${colors.brand.blue})`,
+        background: 'linear-gradient(90deg, var(--brand-pink-500), var(--brand-blue))',
       }}
     />
   );
@@ -117,10 +117,7 @@ const TestimonialCard = ({
         <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
       ))}
     </div>
-    <p
-      className="mb-4 font-mono text-sm leading-relaxed italic"
-      style={{ color: colors.text.secondaryOpacity75 }}
-    >
+    <p className="text-text-secondary-75 mb-4 font-mono text-sm leading-relaxed italic">
       "{quote}"
     </p>
     <div className="flex items-center gap-3">
@@ -130,12 +127,8 @@ const TestimonialCard = ({
         className="h-10 w-10 rounded-full object-cover ring-2 ring-white"
       />
       <div>
-        <p className="text-sm font-medium" style={{ color: colors.text.tertiary }}>
-          {author}
-        </p>
-        <p className="font-mono text-xs" style={{ color: colors.text.secondaryOpacity65 }}>
-          {role}
-        </p>
+        <p className="text-text-tertiary text-sm font-medium">{author}</p>
+        <p className="text-text-secondary-65 font-mono text-xs">{role}</p>
       </div>
     </div>
   </motion.div>
@@ -150,19 +143,19 @@ const Home = () => {
       icon: GitBranch,
       title: 'Infinite Branching',
       description: 'Let your story split into countless paths. Every choice creates a new reality.',
-      color: colors.brand.blue,
+      color: 'var(--brand-blue)',
     },
     {
       icon: Users,
       title: 'Collaborative Writing',
       description: 'Invite co-authors into your world. Write together in real-time harmony.',
-      color: colors.brand.pink[500],
+      color: 'var(--brand-pink-500)',
     },
     {
       icon: MessageCircle,
       title: 'Inline Comments',
       description: 'Discuss moments within the story. Let feedback flow naturally.',
-      color: colors.brand.orange,
+      color: 'var(--brand-orange)',
     },
     {
       icon: Layers,
@@ -217,16 +210,17 @@ const Home = () => {
       <div
         className="absolute inset-0 h-screen w-full bg-gradient-to-b"
         style={{
-          backgroundImage: `linear-gradient(to bottom, ${colors.hero.gradient.from}, ${colors.hero.gradient.via1}, ${colors.hero.gradient.via2}, ${colors.hero.gradient.via3}, ${colors.hero.gradient.to})`,
+          backgroundImage:
+            'linear-gradient(to bottom, var(--hero-gradient-from), var(--hero-gradient-via1), var(--hero-gradient-via2), var(--hero-gradient-via3), var(--hero-gradient-to))',
         }}
       />
       <div
         className="pointer-events-none absolute inset-0 mix-blend-soft-light"
-        style={{ backgroundColor: colors.hero.overlay.white10 }}
+        style={{ backgroundColor: 'var(--hero-overlay-white10)' }}
       />
       <div
         className="pointer-events-none absolute inset-0 mix-blend-screen"
-        style={{ backgroundColor: colors.hero.overlay.purple5 }}
+        style={{ backgroundColor: 'var(--hero-overlay-purple5)' }}
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-transparent" />
 
@@ -234,21 +228,21 @@ const Home = () => {
       <motion.div
         className="pointer-events-none absolute top-32 left-1/4 h-64 w-64 rounded-full opacity-25 blur-3xl"
         style={{
-          background: `radial-gradient(circle, ${colors.hero.gradient.via1} 0%, transparent 70%)`,
+          background: 'radial-gradient(circle, var(--hero-gradient-via1) 0%, transparent 70%)',
         }}
         // {...floatingOrb.slow}
       />
       <motion.div
         className="pointer-events-none absolute top-48 right-1/4 h-48 w-48 rounded-full opacity-20 blur-3xl"
         style={{
-          background: `radial-gradient(circle, ${colors.hero.gradient.via2} 0%, transparent 70%)`,
+          background: 'radial-gradient(circle, var(--hero-gradient-via2) 0%, transparent 70%)',
         }}
         // {...floatingOrb.medium}
       />
       <motion.div
         className="pointer-events-none absolute top-64 left-1/3 h-32 w-32 rounded-full opacity-30 blur-2xl"
         style={{
-          background: `radial-gradient(circle, ${colors.brand.pink[400]} 0%, transparent 70%)`,
+          background: 'radial-gradient(circle, var(--brand-pink-400) 0%, transparent 70%)',
         }}
         // {...floatingOrb.fast}
       />
@@ -370,7 +364,8 @@ const Home = () => {
               }}
               className="bg-clip-text text-transparent"
               style={{
-                backgroundImage: `linear-gradient(135deg, ${colors.text.primary} 0%, ${colors.brand.blue} 50%, ${colors.brand.pink[500]} 100%)`,
+                backgroundImage:
+                  'linear-gradient(135deg, var(--text-primary) 0%, var(--brand-blue) 50%, var(--brand-pink-500) 100%)',
               }}
             >
               {line}
@@ -379,10 +374,7 @@ const Home = () => {
         </motion.h1>
 
         {/* Description */}
-        <motion.p
-          className="mb-12 flex max-w-xl flex-wrap justify-center gap-x-1.5 font-mono text-sm leading-[1.8] font-medium"
-          style={{ color: colors.text.secondaryOpacity75 }}
-        >
+        <motion.p className="text-text-secondary-75 mb-12 flex max-w-xl flex-wrap justify-center gap-x-1.5 font-mono text-sm leading-[1.8] font-medium">
           {storyChainLandingContent.hero.description.split(' ').map((word, i) => (
             <motion.span
               key={i}
@@ -407,11 +399,7 @@ const Home = () => {
           {isSignedIn ? (
             <Link to="/dashboard">
               <motion.button
-                className="group flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
-                style={{
-                  backgroundColor: colors.brand.pink[500],
-                  boxShadow: `0 10px 15px -3px ${colors.brand.pink.shadow25}`,
-                }}
+                className="group bg-brand-pink-500 shadow-brand-pink-shadow25 flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -424,11 +412,7 @@ const Home = () => {
             <>
               <Link to="/sign-up">
                 <motion.button
-                  className="group flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
-                  style={{
-                    backgroundColor: colors.brand.pink[500],
-                    boxShadow: `0 10px 15px -3px ${colors.brand.pink.shadow25}`,
-                  }}
+                  className="group bg-brand-pink-500 shadow-brand-pink-shadow25 flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -493,38 +477,28 @@ const Home = () => {
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(to bottom, transparent, ${colors.opacity.creamBlend[50]}, ${colors.background.cream})`,
+            background:
+              'linear-gradient(to bottom, transparent, var(--cream-blend-50), var(--bg-cream))',
           }}
         />
       </section>
 
       {/* ================= NOT JUST AN APP ================= */}
-      <section
-        className="relative z-10 px-6 pt-8 pb-20"
-        style={{ backgroundColor: colors.background.cream }}
-      >
+      <section className="bg-bg-cream relative z-10 px-6 pt-8 pb-20">
         <div className="mx-auto max-w-6xl">
-          <div
-            className="relative overflow-hidden rounded-[28px] px-6 py-32 shadow-sm backdrop-blur-sm"
-            style={{ backgroundColor: colors.background.creamLight }}
-          >
+          <div className="bg-bg-cream-light relative overflow-hidden rounded-[28px] px-6 py-32 shadow-sm backdrop-blur-sm">
             <div className="pointer-events-none absolute inset-0 rounded-[28px] bg-[radial-gradient(circle,_rgba(0,0,0,0.03)_1px,_transparent_1px)] [background-size:24px_24px] opacity-60" />
             <div
               className="pointer-events-none absolute inset-0 rounded-[28px]"
               style={{
-                background: `linear-gradient(to bottom, ${colors.opacity.cream[20]}, transparent, ${colors.opacity.cream[20]})`,
+                background:
+                  'linear-gradient(to bottom, var(--cream-20), transparent, var(--cream-20))',
               }}
             />
 
             {/* Decorative corner elements */}
-            <div
-              className="absolute top-6 left-6 h-12 w-12 rounded-tl-lg border-t-2 border-l-2 opacity-10"
-              style={{ borderColor: colors.brand.pink[500] }}
-            />
-            <div
-              className="absolute right-6 bottom-6 h-12 w-12 rounded-br-lg border-r-2 border-b-2 opacity-10"
-              style={{ borderColor: colors.brand.blue }}
-            />
+            <div className="border-brand-pink-500 absolute top-6 left-6 h-12 w-12 rounded-tl-lg border-t-2 border-l-2 opacity-10" />
+            <div className="border-brand-blue absolute right-6 bottom-6 h-12 w-12 rounded-br-lg border-r-2 border-b-2 opacity-10" />
 
             <div className="relative z-10 mx-auto max-w-3xl text-center">
               <motion.span
@@ -536,8 +510,7 @@ const Home = () => {
 
               <motion.h2
                 {...scrollReveal.heading}
-                className="font-libreBaskerville mb-12 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
-                style={{ color: colors.text.tertiary }}
+                className="font-libreBaskerville text-text-tertiary mb-12 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
               >
                 {storyChainLandingContent.notJustAnApp.lines.map((line) => (
                   <div key={line}>{line}</div>
@@ -546,8 +519,7 @@ const Home = () => {
 
               <motion.p
                 {...scrollReveal.paragraph}
-                className="mx-auto mb-12 max-w-xl font-mono text-sm leading-[1.85]"
-                style={{ color: colors.text.secondaryOpacity70 }}
+                className="text-text-secondary-70 mx-auto mb-12 max-w-xl font-mono text-sm leading-[1.85]"
               >
                 {storyChainLandingContent.notJustAnApp.description}
               </motion.p>
@@ -561,10 +533,10 @@ const Home = () => {
                 <div className="absolute top-1/2 right-1/4 left-1/4 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-black/10 to-transparent" />
 
                 {[
-                  { Icon: BookOpen, color: colors.brand.orange },
-                  { Icon: Sparkles, color: colors.brand.blue },
-                  { Icon: GitBranch, color: colors.brand.pink[500] },
-                  { Icon: Users, color: colors.text.tertiary },
+                  { Icon: BookOpen, color: 'var(--brand-orange)' },
+                  { Icon: Sparkles, color: 'var(--brand-blue)' },
+                  { Icon: GitBranch, color: 'var(--brand-pink-500)' },
+                  { Icon: Users, color: 'var(--text-tertiary)' },
                 ].map(({ Icon, color }, i) => (
                   <motion.div
                     key={i}
@@ -581,10 +553,7 @@ const Home = () => {
       </section>
 
       {/* ================= FEATURES GRID - BENTO STYLE ================= */}
-      <section
-        className="relative z-10 px-6 py-20"
-        style={{ backgroundColor: colors.background.cream }}
-      >
+      <section className="bg-bg-cream relative z-10 px-6 py-20">
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -592,16 +561,10 @@ const Home = () => {
             viewport={{ once: true }}
             className="mb-12 text-center"
           >
-            <motion.span
-              className="font-yellowtail mb-4 block text-lg"
-              style={{ color: colors.brand.blue }}
-            >
+            <motion.span className="font-yellowtail text-brand-blue mb-4 block text-lg">
               Everything you need
             </motion.span>
-            <h2
-              className="font-libreBaskerville text-3xl leading-tight tracking-tight sm:text-4xl"
-              style={{ color: colors.text.tertiary }}
-            >
+            <h2 className="font-libreBaskerville text-text-tertiary text-3xl leading-tight tracking-tight sm:text-4xl">
               {storyChainLandingContent.features.title.map((line) => (
                 <div key={line}>{line}</div>
               ))}
@@ -651,8 +614,7 @@ const Home = () => {
                         <feature.icon className="h-6 w-6" style={{ color: feature.color }} />
                       </motion.div>
                       <motion.h3
-                        className="font-libreBaskerville text-lg font-semibold tracking-tight"
-                        style={{ color: colors.text.tertiary }}
+                        className="font-libreBaskerville text-text-tertiary text-lg font-semibold tracking-tight"
                         whileHover={{ scale: 1.02 }}
                       >
                         {feature.title}
@@ -660,10 +622,7 @@ const Home = () => {
                     </div>
 
                     {/* Description */}
-                    <p
-                      className="text-center font-mono text-xs leading-relaxed"
-                      style={{ color: colors.text.secondaryOpacity65 }}
-                    >
+                    <p className="text-text-secondary-65 text-center font-mono text-xs leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -681,7 +640,7 @@ const Home = () => {
       </section>
 
       {/* ================= OWNERSHIP ================= */}
-      <section className="relative z-10" style={{ backgroundColor: colors.background.cream }}>
+      <section className="bg-bg-cream relative z-10">
         <div className="relative w-full overflow-hidden">
           <motion.img
             {...scrollReveal.image}
@@ -692,13 +651,15 @@ const Home = () => {
           <div
             className="pointer-events-none absolute inset-x-0 top-0 h-32"
             style={{
-              background: `linear-gradient(to bottom, ${colors.background.cream} 0%, rgba(255,245,230,0.6) 40%, transparent 100%)`,
+              background:
+                'linear-gradient(to bottom, var(--bg-cream) 0%, rgba(255,245,230,0.6) 40%, transparent 100%)',
             }}
           />
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0 h-32"
             style={{
-              background: `linear-gradient(to top, ${colors.background.cream} 0%, rgba(255,245,230,0.6) 40%, transparent 100%)`,
+              background:
+                'linear-gradient(to top, var(--bg-cream) 0%, rgba(255,245,230,0.6) 40%, transparent 100%)',
             }}
           />
         </div>
@@ -706,16 +667,14 @@ const Home = () => {
         <div className="relative mx-auto max-w-3xl px-6 pt-16 pb-20 text-center">
           <motion.span
             {...scrollReveal.paragraph}
-            className="font-yellowtail mb-5 block text-lg"
-            style={{ color: colors.brand.blue }}
+            className="font-yellowtail text-brand-blue mb-5 block text-lg"
           >
             {storyChainLandingContent.ownership.smallTitle}
           </motion.span>
 
           <motion.h2
             {...scrollReveal.heading}
-            className="font-libreBaskerville mb-10 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
-            style={{ color: colors.text.tertiary }}
+            className="font-libreBaskerville text-text-tertiary mb-10 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
           >
             {storyChainLandingContent.ownership.title.map((line) => (
               <div key={line}>{line}</div>
@@ -724,21 +683,16 @@ const Home = () => {
 
           <motion.p
             {...scrollReveal.paragraph}
-            className="mx-auto mb-12 max-w-xl font-mono text-sm leading-[1.85]"
-            style={{ color: colors.text.secondaryOpacity70 }}
+            className="text-text-secondary-70 mx-auto mb-12 max-w-xl font-mono text-sm leading-[1.85]"
           >
             {storyChainLandingContent.ownership.description}
           </motion.p>
 
-          <ul
-            className="mx-auto mb-14 max-w-md space-y-4 text-left font-mono text-sm"
-            style={{ color: colors.text.secondaryOpacity75 }}
-          >
+          <ul className="text-text-secondary-75 mx-auto mb-14 max-w-md space-y-4 text-left font-mono text-sm">
             {storyChainLandingContent.ownership.points.map((point, i) => (
               <motion.li key={point} {...scrollReveal.list(i)} className="flex items-start gap-3">
                 <motion.span
-                  className="mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"
-                  style={{ backgroundColor: colors.brand.blue }}
+                  className="bg-brand-blue mt-1.5 h-1.5 w-1.5 flex-shrink-0 rounded-full"
                   whileInView={{ scale: [0, 1.5, 1] }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
@@ -750,8 +704,7 @@ const Home = () => {
 
           <motion.div {...scrollReveal.paragraph}>
             <motion.button
-              className="group flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
-              style={{ backgroundColor: colors.brand.blue }}
+              className="group bg-brand-blue flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -763,10 +716,7 @@ const Home = () => {
       </section>
 
       {/* ================= TESTIMONIALS ================= */}
-      <section
-        className="relative z-10 px-6 py-20"
-        style={{ backgroundColor: colors.background.cream }}
-      >
+      <section className="bg-bg-cream relative z-10 px-6 py-20">
         {/* Decorative quote marks */}
         <motion.div
           className="absolute top-32 left-[10%] hidden lg:block"
@@ -774,7 +724,7 @@ const Home = () => {
           whileInView={{ opacity: 0.1 }}
           viewport={{ once: true }}
         >
-          <Quote className="h-24 w-24" style={{ color: colors.brand.pink[500] }} />
+          <Quote className="text-brand-pink-500 h-24 w-24" />
         </motion.div>
 
         <div className="mx-auto max-w-6xl">
@@ -784,16 +734,10 @@ const Home = () => {
             viewport={{ once: true }}
             className="mb-16 text-center"
           >
-            <motion.span
-              className="font-yellowtail mb-4 block text-lg"
-              style={{ color: colors.brand.pink[500] }}
-            >
+            <motion.span className="font-yellowtail text-brand-pink-500 mb-4 block text-lg">
               Loved by writers
             </motion.span>
-            <h2
-              className="font-libreBaskerville text-3xl leading-tight tracking-tight sm:text-4xl"
-              style={{ color: colors.text.tertiary }}
-            >
+            <h2 className="font-libreBaskerville text-text-tertiary text-3xl leading-tight tracking-tight sm:text-4xl">
               <div>Stories from</div>
               <div>our community</div>
             </h2>
@@ -808,14 +752,11 @@ const Home = () => {
       </section>
 
       {/* ================= CREATOR TOOLS ================= */}
-      <section
-        className="relative z-10 px-6 pt-20 pb-24"
-        style={{ backgroundColor: colors.background.cream }}
-      >
+      <section className="bg-bg-cream relative z-10 px-6 pt-20 pb-24">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-20"
           style={{
-            background: `linear-gradient(to bottom, ${colors.opacity.cream[80]}, transparent)`,
+            background: 'linear-gradient(to bottom, var(--cream-80), transparent)',
           }}
         />
         <div className="mx-auto max-w-6xl text-center">
@@ -836,8 +777,7 @@ const Home = () => {
 
           <motion.h2
             {...scrollReveal.heading}
-            className="font-libreBaskerville mb-8 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
-            style={{ color: colors.text.tertiary }}
+            className="font-libreBaskerville text-text-tertiary mb-8 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
           >
             {storyChainLandingContent.creatorTools.title.map((line) => (
               <div key={line}>{line}</div>
@@ -846,8 +786,7 @@ const Home = () => {
 
           <motion.p
             {...scrollReveal.paragraph}
-            className="mx-auto mb-20 max-w-xl font-mono text-sm leading-[1.85]"
-            style={{ color: colors.text.secondaryOpacity70 }}
+            className="text-text-secondary-70 mx-auto mb-20 max-w-xl font-mono text-sm leading-[1.85]"
           >
             {storyChainLandingContent.creatorTools.description}
           </motion.p>
@@ -888,8 +827,7 @@ const Home = () => {
                     {/* Title - centered */}
                     <div className="flex flex-1 items-center justify-center">
                       <motion.h3
-                        className="font-libreBaskerville text-xl font-semibold tracking-tight"
-                        style={{ color: colors.text.tertiary }}
+                        className="font-libreBaskerville text-text-tertiary text-xl font-semibold tracking-tight"
                         whileHover={{ scale: 1.03 }}
                       >
                         {app.name}
@@ -898,18 +836,11 @@ const Home = () => {
 
                     {/* Bottom content */}
                     <div className="space-y-3">
-                      <p
-                        className="font-mono text-xs leading-relaxed"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
+                      <p className="text-text-secondary-65 font-mono text-xs leading-relaxed">
                         {app.description}
                       </p>
                       <motion.button
-                        className="inline-flex items-center gap-1 rounded-full border px-4 py-1.5 text-xs font-medium transition-all"
-                        style={{
-                          color: colors.text.secondaryOpacity75,
-                          borderColor: 'rgba(0,0,0,0.15)',
-                        }}
+                        className="text-text-secondary-75 inline-flex items-center gap-1 rounded-full border border-black/15 px-4 py-1.5 text-xs font-medium transition-all"
                         whileHover={{
                           scale: 1.02,
                           backgroundColor: 'rgba(0,0,0,0.03)',
@@ -933,8 +864,7 @@ const Home = () => {
 
           <motion.div {...scrollReveal.paragraph}>
             <motion.button
-              className="group flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
-              style={{ backgroundColor: colors.brand.pink[500] }}
+              className="group bg-brand-pink-500 flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -946,7 +876,7 @@ const Home = () => {
       </section>
 
       {/* ================= TEAMWORK ================= */}
-      <section className="relative z-10" style={{ backgroundColor: colors.background.cream }}>
+      <section className="bg-bg-cream relative z-10">
         <div className="relative h-[260px] w-full overflow-hidden">
           <motion.img
             {...scrollReveal.image}
@@ -957,13 +887,14 @@ const Home = () => {
           <div
             className="pointer-events-none absolute inset-x-0 top-0 h-36"
             style={{
-              background: `linear-gradient(to bottom, ${colors.background.cream}, ${colors.opacity.cream[75]}, transparent)`,
+              background:
+                'linear-gradient(to bottom, var(--bg-cream), var(--cream-75), transparent)',
             }}
           />
           <div
             className="pointer-events-none absolute inset-x-0 bottom-0 h-36"
             style={{
-              background: `linear-gradient(to top, ${colors.background.cream}, ${colors.opacity.cream[75]}, transparent)`,
+              background: 'linear-gradient(to top, var(--bg-cream), var(--cream-75), transparent)',
             }}
           />
         </div>
@@ -971,16 +902,14 @@ const Home = () => {
         <div className="mx-auto max-w-4xl px-6 pt-16 pb-20 text-center">
           <motion.span
             {...scrollReveal.paragraph}
-            className="font-yellowtail mb-4 block text-lg"
-            style={{ color: colors.brand.pink[500] }}
+            className="font-yellowtail text-brand-pink-500 mb-4 block text-lg"
           >
             {storyChainLandingContent.collaboration.eyebrow}
           </motion.span>
 
           <motion.h2
             {...scrollReveal.heading}
-            className="font-libreBaskerville mb-8 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
-            style={{ color: colors.text.tertiary }}
+            className="font-libreBaskerville text-text-tertiary mb-8 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
           >
             {storyChainLandingContent.collaboration.title.map((line) => (
               <div key={line}>{line}</div>
@@ -989,8 +918,7 @@ const Home = () => {
 
           <motion.p
             {...scrollReveal.paragraph}
-            className="mx-auto mb-12 max-w-xl font-mono text-sm leading-[1.85]"
-            style={{ color: colors.text.secondaryOpacity65 }}
+            className="text-text-secondary-65 mx-auto mb-12 max-w-xl font-mono text-sm leading-[1.85]"
           >
             {storyChainLandingContent.collaboration.description}
           </motion.p>
@@ -1007,24 +935,15 @@ const Home = () => {
                 whileHover={{ scale: 1.02 }}
                 className="flex items-center gap-2 rounded-xl bg-white/60 px-4 py-3 text-left shadow-sm ring-1 ring-black/5"
               >
-                <Feather
-                  className="h-4 w-4 flex-shrink-0"
-                  style={{ color: colors.brand.pink[500] }}
-                />
-                <span
-                  className="font-mono text-xs"
-                  style={{ color: colors.text.secondaryOpacity75 }}
-                >
-                  {feature}
-                </span>
+                <Feather className="text-brand-pink-500 h-4 w-4 flex-shrink-0" />
+                <span className="text-text-secondary-75 font-mono text-xs">{feature}</span>
               </motion.div>
             ))}
           </div>
 
           <motion.div {...scrollReveal.paragraph}>
             <motion.button
-              className="group flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
-              style={{ backgroundColor: colors.brand.blue }}
+              className="group bg-brand-blue flex items-center gap-2 rounded-[6px] px-7 py-2.5 text-sm font-medium text-white shadow-md"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -1036,17 +955,15 @@ const Home = () => {
       </section>
 
       {/* ================= DARK CTA SECTION ================= */}
-      <section
-        className="relative z-10 overflow-hidden py-32"
-        style={{ backgroundColor: colors.background.dark }}
-      >
+      <section className="bg-bg-dark relative z-10 overflow-hidden py-32">
         {/* Animated gradient mesh background */}
         <div className="pointer-events-none absolute inset-0">
           {/* Primary gradient orb - large, slow */}
           <motion.div
             className="absolute top-1/4 left-1/4 h-[500px] w-[500px] rounded-full blur-[120px]"
             style={{
-              background: `linear-gradient(135deg, ${colors.brand.pink[500]}40, ${colors.brand.blue}30)`,
+              background:
+                'linear-gradient(135deg, rgba(var(--brand-pink-500-rgb), 0.25), rgba(var(--brand-blue-rgb), 0.19))',
             }}
             animate={{
               x: [0, 50, 0],
@@ -1059,7 +976,8 @@ const Home = () => {
           <motion.div
             className="absolute right-1/4 bottom-1/4 h-[400px] w-[400px] rounded-full blur-[100px]"
             style={{
-              background: `linear-gradient(225deg, ${colors.brand.blue}35, ${colors.brand.pink[400]}25)`,
+              background:
+                'linear-gradient(225deg, rgba(var(--brand-blue-rgb), 0.22), rgba(var(--brand-pink-400-rgb), 0.16))',
             }}
             animate={{
               x: [0, -40, 0],
@@ -1072,7 +990,8 @@ const Home = () => {
           <motion.div
             className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[80px]"
             style={{
-              background: `radial-gradient(circle, ${colors.brand.pink[500]}20, transparent 70%)`,
+              background:
+                'radial-gradient(circle, rgba(var(--brand-pink-500-rgb), 0.13), transparent 70%)',
             }}
             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
             transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
@@ -1110,8 +1029,9 @@ const Home = () => {
                 <div
                   className="flex h-20 w-20 items-center justify-center rounded-2xl shadow-2xl"
                   style={{
-                    background: `linear-gradient(135deg, ${colors.brand.pink[500]}, ${colors.brand.blue})`,
-                    boxShadow: `0 0 60px ${colors.brand.pink[500]}50, 0 0 100px ${colors.brand.blue}30`,
+                    background: 'linear-gradient(135deg, var(--brand-pink-500), var(--brand-blue))',
+                    boxShadow:
+                      '0 0 60px rgba(var(--brand-pink-500-rgb), 0.31), 0 0 100px rgba(var(--brand-blue-rgb), 0.19)',
                   }}
                 >
                   <BookOpen className="h-8 w-8 text-white" />
@@ -1145,7 +1065,8 @@ const Home = () => {
                     className="absolute top-1/2 left-1/2 h-px origin-left"
                     style={{
                       width: '70px',
-                      background: `linear-gradient(90deg, ${colors.brand.pink[500]}60, transparent)`,
+                      background:
+                        'linear-gradient(90deg, rgba(var(--brand-pink-500-rgb), 0.38), transparent)',
                       transform: `rotate(${angle}deg)`,
                     }}
                     animate={{ opacity: [0.3, 0.6, 0.3] }}
@@ -1186,16 +1107,14 @@ const Home = () => {
           <div className="text-center">
             <motion.span
               {...scrollReveal.paragraph}
-              className="font-yellowtail mb-4 block text-xl"
-              style={{ color: colors.brand.pink[400] }}
+              className="font-yellowtail text-brand-pink-400 mb-4 block text-xl"
             >
               {storyChainLandingContent.darkCta.eyebrow}
             </motion.span>
 
             <motion.h2
               {...scrollReveal.heading}
-              className="font-libreBaskerville mb-6 text-4xl leading-[1.15] tracking-tight sm:text-5xl"
-              style={{ color: colors.text.light }}
+              className="font-libreBaskerville text-text-light mb-6 text-4xl leading-[1.15] tracking-tight sm:text-5xl"
             >
               {storyChainLandingContent.darkCta.title.map((line) => (
                 <div key={line}>{line}</div>
@@ -1204,8 +1123,7 @@ const Home = () => {
 
             <motion.p
               {...scrollReveal.paragraph}
-              className="mx-auto mb-12 max-w-xl font-mono text-sm leading-[1.9]"
-              style={{ color: 'rgba(255,255,255,0.6)' }}
+              className="mx-auto mb-12 max-w-xl font-mono text-sm leading-[1.9] text-white/60"
             >
               {storyChainLandingContent.darkCta.description}
             </motion.p>
@@ -1215,13 +1133,14 @@ const Home = () => {
               <motion.button
                 className="group flex items-center gap-2 rounded-full px-8 py-3 text-sm font-medium text-white shadow-lg"
                 style={{
-                  background: `linear-gradient(135deg, ${colors.brand.pink[500]}, ${colors.brand.pink[600] || colors.brand.pink[500]})`,
-                  boxShadow: `0 10px 40px -10px ${colors.brand.pink[500]}80`,
+                  background:
+                    'linear-gradient(135deg, var(--brand-pink-500), var(--brand-pink-600))',
+                  boxShadow: '0 10px 40px -10px rgba(var(--brand-pink-500-rgb), 0.5)',
                 }}
                 whileHover={{
                   scale: 1.03,
                   y: -3,
-                  boxShadow: `0 20px 50px -10px ${colors.brand.pink[500]}90`,
+                  boxShadow: '0 20px 50px -10px rgba(var(--brand-pink-500-rgb), 0.56)',
                 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 17 }}
@@ -1248,10 +1167,7 @@ const Home = () => {
       </section>
 
       {/* ================= FINAL VISION ================= */}
-      <section
-        className="relative z-10 px-6 pt-28 pb-20 text-center"
-        style={{ backgroundColor: colors.background.cream }}
-      >
+      <section className="bg-bg-cream relative z-10 px-6 pt-28 pb-20 text-center">
         <motion.div {...scrollReveal.image} className="mb-20 flex justify-center">
           <div className="relative h-[200px] w-[400px] overflow-hidden rounded-[100px]">
             <img
@@ -1262,25 +1178,29 @@ const Home = () => {
             <div
               className="pointer-events-none absolute inset-x-0 top-0 h-16"
               style={{
-                background: `linear-gradient(to bottom, ${colors.background.cream}, ${colors.opacity.cream[80]}, transparent)`,
+                background:
+                  'linear-gradient(to bottom, var(--bg-cream), var(--cream-80), transparent)',
               }}
             />
             <div
               className="pointer-events-none absolute inset-x-0 bottom-0 h-16"
               style={{
-                background: `linear-gradient(to top, ${colors.background.cream}, ${colors.opacity.cream[80]}, transparent)`,
+                background:
+                  'linear-gradient(to top, var(--bg-cream), var(--cream-80), transparent)',
               }}
             />
             <div
               className="pointer-events-none absolute inset-y-0 left-0 w-20"
               style={{
-                background: `linear-gradient(to right, ${colors.background.cream}, ${colors.opacity.cream[80]}, transparent)`,
+                background:
+                  'linear-gradient(to right, var(--bg-cream), var(--cream-80), transparent)',
               }}
             />
             <div
               className="pointer-events-none absolute inset-y-0 right-0 w-20"
               style={{
-                background: `linear-gradient(to left, ${colors.background.cream}, ${colors.opacity.cream[80]}, transparent)`,
+                background:
+                  'linear-gradient(to left, var(--bg-cream), var(--cream-80), transparent)',
               }}
             />
           </div>
@@ -1288,16 +1208,14 @@ const Home = () => {
 
         <motion.span
           {...scrollReveal.paragraph}
-          className="font-yellowtail mb-4 block text-base"
-          style={{ color: colors.brand.blue }}
+          className="font-yellowtail text-brand-blue mb-4 block text-base"
         >
           {storyChainLandingContent.vision.eyebrow}
         </motion.span>
 
         <motion.h2
           {...scrollReveal.heading}
-          className="font-libreBaskerville mb-8 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
-          style={{ color: colors.text.tertiary }}
+          className="font-libreBaskerville text-text-tertiary mb-8 text-3xl leading-[1.2] tracking-tight sm:text-4xl"
         >
           {storyChainLandingContent.vision.title.map((line) => (
             <div key={line}>{line}</div>
@@ -1306,46 +1224,31 @@ const Home = () => {
 
         <motion.p
           {...scrollReveal.paragraph}
-          className="mx-auto max-w-xl font-mono text-sm leading-[1.85]"
-          style={{ color: colors.text.secondaryOpacity65 }}
+          className="text-text-secondary-65 mx-auto max-w-xl font-mono text-sm leading-[1.85]"
         >
           {storyChainLandingContent.vision.description}
         </motion.p>
       </section>
 
       {/* ================= FOOTER ================= */}
-      <footer
-        className="relative z-10 px-6 pt-12 pb-24"
-        style={{ backgroundColor: colors.background.cream }}
-      >
-        <div
-          className="mx-auto grid max-w-6xl grid-cols-2 gap-12 text-left text-xs sm:grid-cols-5"
-          style={{ color: colors.text.secondaryOpacity65 }}
-        >
+      <footer className="bg-bg-cream relative z-10 px-6 pt-12 pb-24">
+        <div className="text-text-secondary-65 mx-auto grid max-w-6xl grid-cols-2 gap-12 text-left text-xs sm:grid-cols-5">
           <div>
-            <div
-              className="mb-3 flex items-center gap-2 font-medium"
-              style={{ color: colors.text.tertiary }}
-            >
-              <span
-                className="h-2.5 w-2.5 rounded-full"
-                style={{ backgroundColor: colors.brand.pink[500] }}
-              />
+            <div className="text-text-tertiary mb-3 flex items-center gap-2 font-medium">
+              <span className="bg-brand-pink-500 h-2.5 w-2.5 rounded-full" />
               {storyChainLandingContent.footer.brand.name}
             </div>
             <div className="mb-2 leading-relaxed">
               {storyChainLandingContent.footer.brand.description}
             </div>
-            <div className="text-[10px] italic" style={{ color: colors.text.secondaryOpacity65 }}>
+            <div className="text-text-secondary-65 text-[10px] italic">
               {storyChainLandingContent.footer.brand.tagline}
             </div>
           </div>
 
           {storyChainLandingContent.footer.sections.map((section) => (
             <div key={section.title}>
-              <div className="mb-3 font-medium" style={{ color: colors.text.tertiary }}>
-                {section.title}
-              </div>
+              <div className="text-text-tertiary mb-3 font-medium">{section.title}</div>
               <ul className="space-y-2">
                 {section.links.map((link) => (
                   <li key={link.label}>
@@ -1359,13 +1262,7 @@ const Home = () => {
           ))}
         </div>
 
-        <div
-          className="mx-auto mt-12 max-w-6xl border-t pt-6 text-center text-xs"
-          style={{
-            borderColor: colors.text.secondaryOpacity65,
-            color: colors.text.secondaryOpacity65,
-          }}
-        >
+        <div className="border-text-secondary-65 text-text-secondary-65 mx-auto mt-12 max-w-6xl border-t pt-6 text-center text-xs">
           {storyChainLandingContent.footer.copyright}
         </div>
       </footer>

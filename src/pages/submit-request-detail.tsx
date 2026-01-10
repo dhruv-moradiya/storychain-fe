@@ -43,7 +43,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { colors } from '@/constants';
 import { getPullRequestById, getCommentsByPRId, getReviewsByPRId } from '@/mock-data/pull-requests';
 import type {
   IPRComment,
@@ -64,21 +63,41 @@ import {
 // Status configuration with brand colors
 const PR_STATUS_CONFIG: Record<
   PRStatus,
-  { icon: React.ElementType; color: string; bgColor: string; label: string }
+  { icon: React.ElementType; color: string; bgColor: string; bgColorLight: string; label: string }
 > = {
   OPEN: {
     icon: GitPullRequest,
     color: 'text-emerald-600',
     bgColor: 'bg-emerald-500',
+    bgColorLight: 'bg-emerald-500/15',
     label: 'Open',
   },
-  APPROVED: { icon: Check, color: 'text-[#6b7cff]', bgColor: 'bg-[#6b7cff]', label: 'Approved' },
-  MERGED: { icon: GitMerge, color: 'text-[#ec4899]', bgColor: 'bg-[#ec4899]', label: 'Merged' },
-  REJECTED: { icon: X, color: 'text-red-600', bgColor: 'bg-red-500', label: 'Rejected' },
+  APPROVED: {
+    icon: Check,
+    color: 'text-brand-blue',
+    bgColor: 'bg-brand-blue',
+    bgColorLight: 'bg-brand-blue/15',
+    label: 'Approved',
+  },
+  MERGED: {
+    icon: GitMerge,
+    color: 'text-brand-pink-500',
+    bgColor: 'bg-brand-pink-500',
+    bgColorLight: 'bg-brand-pink-500/15',
+    label: 'Merged',
+  },
+  REJECTED: {
+    icon: X,
+    color: 'text-red-600',
+    bgColor: 'bg-red-500',
+    bgColorLight: 'bg-red-500/15',
+    label: 'Rejected',
+  },
   CLOSED: {
     icon: GitPullRequestClosed,
     color: 'text-slate-500',
     bgColor: 'bg-slate-500',
+    bgColorLight: 'bg-slate-500/15',
     label: 'Closed',
   },
 };
@@ -93,7 +112,7 @@ const PR_TYPE_CONFIG: Record<PRType, { icon: React.ElementType; label: string; c
   EDIT_CHAPTER: {
     icon: FileEdit,
     label: 'Edit Chapter',
-    color: 'text-[#6b7cff] bg-[#6b7cff]/10 border-[#6b7cff]/30',
+    color: 'text-brand-blue bg-brand-blue/10 border-brand-blue/30',
   },
   DELETE_CHAPTER: {
     icon: Trash2,
@@ -108,17 +127,17 @@ const TIMELINE_ACTION_CONFIG: Record<
   { icon: React.ElementType; color: string; label: string }
 > = {
   CREATED: { icon: Plus, color: 'text-emerald-500', label: 'created this submit request' },
-  REVIEW_REQUESTED: { icon: Eye, color: 'text-[#6b7cff]', label: 'requested a review' },
-  REVIEW_SUBMITTED: { icon: MessageSquare, color: 'text-[#6b7cff]', label: 'submitted a review' },
+  REVIEW_REQUESTED: { icon: Eye, color: 'text-brand-blue', label: 'requested a review' },
+  REVIEW_SUBMITTED: { icon: MessageSquare, color: 'text-brand-blue', label: 'submitted a review' },
   APPROVED: { icon: Check, color: 'text-emerald-500', label: 'approved this request' },
-  CHANGES_REQUESTED: { icon: AlertCircle, color: 'text-[#ff9f68]', label: 'requested changes' },
-  VOTED: { icon: ThumbsUp, color: 'text-[#ec4899]', label: 'voted on this request' },
+  CHANGES_REQUESTED: { icon: AlertCircle, color: 'text-brand-orange', label: 'requested changes' },
+  VOTED: { icon: ThumbsUp, color: 'text-brand-pink-500', label: 'voted on this request' },
   AUTO_APPROVED: { icon: Check, color: 'text-emerald-500', label: 'auto-approved by community' },
-  MERGED: { icon: GitMerge, color: 'text-[#ec4899]', label: 'merged this request' },
+  MERGED: { icon: GitMerge, color: 'text-brand-pink-500', label: 'merged this request' },
   CLOSED: { icon: GitPullRequestClosed, color: 'text-slate-500', label: 'closed this request' },
   REOPENED: { icon: GitPullRequest, color: 'text-emerald-500', label: 'reopened this request' },
   MARKED_DRAFT: { icon: FileText, color: 'text-slate-500', label: 'marked as draft' },
-  READY_FOR_REVIEW: { icon: Eye, color: 'text-[#6b7cff]', label: 'marked ready for review' },
+  READY_FOR_REVIEW: { icon: Eye, color: 'text-brand-blue', label: 'marked ready for review' },
 };
 
 // Animation variants
@@ -163,23 +182,17 @@ export default function SubmitRequestDetailPage() {
 
   if (!pullRequest) {
     return (
-      <div className="min-h-screen px-4 py-16" style={{ backgroundColor: colors.background.cream }}>
+      <div className="bg-bg-cream min-h-screen px-4 py-16">
         <motion.div {...fadeIn()} className="mx-auto max-w-md text-center">
-          <div
-            className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full"
-            style={{ backgroundColor: `${colors.brand.pink[500]}15` }}
-          >
-            <GitPullRequest className="h-10 w-10" style={{ color: colors.brand.pink[500] }} />
+          <div className="bg-brand-pink-500/15 mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full">
+            <GitPullRequest className="text-brand-pink-500 h-10 w-10" />
           </div>
-          <h1 className="font-serif text-2xl font-bold" style={{ color: colors.text.primary }}>
-            Request Not Found
-          </h1>
-          <p className="mt-2" style={{ color: colors.text.secondaryOpacity70 }}>
+          <h1 className="text-text-primary font-serif text-2xl font-bold">Request Not Found</h1>
+          <p className="text-text-secondary-70 mt-2">
             The submit request you're looking for doesn't exist or has been removed.
           </p>
           <Button
-            className="mt-6 gap-2"
-            style={{ backgroundColor: colors.brand.blue }}
+            className="bg-brand-blue hover:bg-brand-blue-alt mt-6 gap-2"
             onClick={() => navigate('/submit-requests')}
           >
             <ArrowLeft className="h-4 w-4" />
@@ -245,7 +258,7 @@ export default function SubmitRequestDetailPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen" style={{ backgroundColor: colors.background.cream }}>
+      <div className="bg-bg-cream min-h-screen">
         <div className="container mx-auto max-w-6xl px-4 py-8">
           {/* Back Button */}
           <motion.div {...fadeIn()}>
@@ -253,8 +266,7 @@ export default function SubmitRequestDetailPage() {
               variant="ghost"
               size="sm"
               onClick={() => navigate('/submit-requests')}
-              className="mb-6 gap-2 font-mono text-sm hover:bg-white/60"
-              style={{ color: colors.text.secondaryOpacity75 }}
+              className="text-text-secondary-75 mb-6 gap-2 font-mono text-sm hover:bg-white/60"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Submit Requests
@@ -269,25 +281,19 @@ export default function SubmitRequestDetailPage() {
             <div className="flex items-start gap-4">
               {/* Status Icon */}
               <div
-                className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl"
-                style={{
-                  backgroundColor: `${statusConfig.bgColor.includes('#') ? statusConfig.bgColor.replace('bg-', '') : ''}15`,
-                }}
+                className={cn(
+                  'flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl',
+                  statusConfig.bgColorLight
+                )}
               >
                 <StatusIcon className={cn('h-6 w-6', statusConfig.color)} />
               </div>
 
               {/* Title & Meta */}
               <div className="min-w-0 flex-1">
-                <h1
-                  className="font-serif text-2xl leading-tight font-bold"
-                  style={{ color: colors.text.primary }}
-                >
+                <h1 className="text-text-primary font-serif text-2xl leading-tight font-bold">
                   {pullRequest.title}
-                  <span
-                    className="ml-2 font-mono text-lg font-normal"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <span className="text-text-secondary-65 ml-2 font-mono text-lg font-normal">
                     #{pullRequest._id.slice(-4)}
                   </span>
                 </h1>
@@ -321,18 +327,12 @@ export default function SubmitRequestDetailPage() {
                 </div>
 
                 {/* Author Line */}
-                <p
-                  className="mt-3 font-mono text-sm"
-                  style={{ color: colors.text.secondaryOpacity70 }}
-                >
-                  <span style={{ color: colors.text.primary }} className="font-medium">
+                <p className="text-text-secondary-70 mt-3 font-mono text-sm">
+                  <span className="text-text-primary font-medium">
                     {pullRequest.author?.displayName}
                   </span>{' '}
                   wants to merge into{' '}
-                  <span
-                    className="rounded px-1.5 py-0.5 font-medium"
-                    style={{ backgroundColor: `${colors.brand.blue}15`, color: colors.brand.blue }}
-                  >
+                  <span className="bg-brand-blue/15 text-brand-blue rounded px-1.5 py-0.5 font-medium">
                     {pullRequest.story?.title}
                   </span>
                 </p>
@@ -359,10 +359,7 @@ export default function SubmitRequestDetailPage() {
                     Copy Link
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="gap-2 font-mono text-sm"
-                    style={{ color: colors.brand.orange }}
-                  >
+                  <DropdownMenuItem className="text-brand-orange gap-2 font-mono text-sm">
                     <Flag className="h-4 w-4" />
                     Flag for Review
                   </DropdownMenuItem>
@@ -384,13 +381,7 @@ export default function SubmitRequestDetailPage() {
                   >
                     <MessageSquare className="h-4 w-4" />
                     Conversation
-                    <span
-                      className="rounded-full px-1.5 py-0.5 text-xs"
-                      style={{
-                        backgroundColor: `${colors.brand.pink[500]}15`,
-                        color: colors.brand.pink[500],
-                      }}
-                    >
+                    <span className="bg-brand-pink-500/15 text-brand-pink-500 rounded-full px-1.5 py-0.5 text-xs">
                       {comments.length}
                     </span>
                   </TabsTrigger>
@@ -416,13 +407,7 @@ export default function SubmitRequestDetailPage() {
                   >
                     <CheckCircle className="h-4 w-4" />
                     Reviews
-                    <span
-                      className="rounded-full px-1.5 py-0.5 text-xs"
-                      style={{
-                        backgroundColor: `${colors.brand.blue}15`,
-                        color: colors.brand.blue,
-                      }}
-                    >
+                    <span className="bg-brand-blue/15 text-brand-blue rounded-full px-1.5 py-0.5 text-xs">
                       {reviews.length}
                     </span>
                   </TabsTrigger>
@@ -435,23 +420,15 @@ export default function SubmitRequestDetailPage() {
                     <div className="flex items-center gap-3 border-b border-black/5 px-5 py-4">
                       <Avatar className="h-10 w-10 ring-2 ring-white">
                         <AvatarImage src={pullRequest.author?.avatar} />
-                        <AvatarFallback
-                          style={{
-                            backgroundColor: `${colors.brand.pink[500]}20`,
-                            color: colors.brand.pink[500],
-                          }}
-                        >
+                        <AvatarFallback className="bg-brand-pink-500/20 text-brand-pink-500">
                           {pullRequest.author?.displayName?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <span className="font-medium" style={{ color: colors.text.primary }}>
+                        <span className="text-text-primary font-medium">
                           {pullRequest.author?.displayName}
                         </span>
-                        <span
-                          className="ml-2 font-mono text-sm"
-                          style={{ color: colors.text.secondaryOpacity65 }}
-                        >
+                        <span className="text-text-secondary-65 ml-2 font-mono text-sm">
                           {formatDistanceToNow(new Date(pullRequest.createdAt), {
                             addSuffix: true,
                           })}
@@ -459,10 +436,7 @@ export default function SubmitRequestDetailPage() {
                       </div>
                     </div>
                     <div className="p-5">
-                      <p
-                        className="leading-relaxed"
-                        style={{ color: colors.text.secondaryOpacity75 }}
-                      >
+                      <p className="text-text-secondary-75 leading-relaxed">
                         {pullRequest.description}
                       </p>
                     </div>
@@ -487,18 +461,12 @@ export default function SubmitRequestDetailPage() {
                             <EventIcon className={cn('h-4 w-4', config?.color)} />
                           </div>
                           <div className="flex-1">
-                            <span
-                              className="font-mono text-sm"
-                              style={{ color: colors.text.secondaryOpacity75 }}
-                            >
-                              <span style={{ color: colors.text.primary }} className="font-medium">
+                            <span className="text-text-secondary-75 font-mono text-sm">
+                              <span className="text-text-primary font-medium">
                                 {event.performedBy ? 'User' : 'System'}
                               </span>{' '}
                               {config?.label}
-                              <span
-                                className="ml-2 text-xs"
-                                style={{ color: colors.text.secondaryOpacity65 }}
-                              >
+                              <span className="text-text-secondary-65 ml-2 text-xs">
                                 {formatDistanceToNow(new Date(event.performedAt), {
                                   addSuffix: true,
                                 })}
@@ -520,12 +488,7 @@ export default function SubmitRequestDetailPage() {
                     <div className="flex gap-4">
                       <Avatar className="h-10 w-10 flex-shrink-0 ring-2 ring-white">
                         <AvatarImage src="https://api.dicebear.com/7.x/avataaars/svg?seed=currentuser" />
-                        <AvatarFallback
-                          style={{
-                            backgroundColor: `${colors.brand.blue}20`,
-                            color: colors.brand.blue,
-                          }}
-                        >
+                        <AvatarFallback className="bg-brand-blue/20 text-brand-blue">
                           U
                         </AvatarFallback>
                       </Avatar>
@@ -549,8 +512,7 @@ export default function SubmitRequestDetailPage() {
                           <Button
                             onClick={handleComment}
                             disabled={!newComment.trim()}
-                            className="gap-2 font-mono text-sm"
-                            style={{ backgroundColor: colors.brand.pink[500] }}
+                            className="bg-brand-pink-500 gap-2 font-mono text-sm"
                           >
                             <Send className="h-4 w-4" />
                             Comment
@@ -566,7 +528,7 @@ export default function SubmitRequestDetailPage() {
                   <div className="overflow-hidden rounded-xl border border-black/5 bg-white/80 shadow-sm">
                     <div className="flex items-center justify-between border-b border-black/5 px-5 py-4">
                       <div className="flex items-center gap-4">
-                        <span className="font-medium" style={{ color: colors.text.primary }}>
+                        <span className="text-text-primary font-medium">
                           {pullRequest.chapter?.title}
                         </span>
                         <div className="flex items-center gap-3 font-mono text-xs">
@@ -630,22 +592,13 @@ export default function SubmitRequestDetailPage() {
                 <TabsContent value="reviews" className="mt-6 space-y-4">
                   {reviews.length === 0 ? (
                     <div className="flex flex-col items-center rounded-xl border border-black/5 bg-white/80 py-16 text-center shadow-sm">
-                      <div
-                        className="mb-4 flex h-16 w-16 items-center justify-center rounded-full"
-                        style={{ backgroundColor: `${colors.brand.blue}15` }}
-                      >
-                        <Eye className="h-8 w-8" style={{ color: colors.brand.blue }} />
+                      <div className="bg-brand-blue/15 mb-4 flex h-16 w-16 items-center justify-center rounded-full">
+                        <Eye className="text-brand-blue h-8 w-8" />
                       </div>
-                      <h3
-                        className="font-serif text-lg font-medium"
-                        style={{ color: colors.text.primary }}
-                      >
+                      <h3 className="text-text-primary font-serif text-lg font-medium">
                         No reviews yet
                       </h3>
-                      <p
-                        className="mt-1 font-mono text-sm"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
+                      <p className="text-text-secondary-65 mt-1 font-mono text-sm">
                         Reviews will appear here once submitted
                       </p>
                     </div>
@@ -655,23 +608,16 @@ export default function SubmitRequestDetailPage() {
 
                   {/* Submit Review Card */}
                   <div className="overflow-hidden rounded-xl border border-black/5 bg-white/80 p-5 shadow-sm">
-                    <h3
-                      className="font-serif text-lg font-medium"
-                      style={{ color: colors.text.primary }}
-                    >
+                    <h3 className="text-text-primary font-serif text-lg font-medium">
                       Submit Your Review
                     </h3>
-                    <p
-                      className="mt-1 font-mono text-sm"
-                      style={{ color: colors.text.secondaryOpacity65 }}
-                    >
+                    <p className="text-text-secondary-65 mt-1 font-mono text-sm">
                       Review this submission and provide feedback to the author.
                     </p>
                     <div className="mt-4 flex flex-wrap gap-2">
                       <Button
                         variant="outline"
-                        className="gap-2 border-black/10 font-mono text-sm hover:bg-white"
-                        style={{ color: colors.brand.orange }}
+                        className="text-brand-orange gap-2 border-black/10 font-mono text-sm hover:bg-white"
                         onClick={() => setIsRequestChangesDialogOpen(true)}
                       >
                         <AlertCircle className="h-4 w-4" />
@@ -679,16 +625,14 @@ export default function SubmitRequestDetailPage() {
                       </Button>
                       <Button
                         variant="outline"
-                        className="gap-2 border-black/10 font-mono text-sm hover:bg-white"
-                        style={{ color: colors.brand.blue }}
+                        className="text-brand-blue gap-2 border-black/10 font-mono text-sm hover:bg-white"
                         onClick={() => setIsReviewDialogOpen(true)}
                       >
                         <Star className="h-4 w-4" />
                         Write Review
                       </Button>
                       <Button
-                        className="gap-2 font-mono text-sm text-white"
-                        style={{ backgroundColor: colors.brand.pink[500] }}
+                        className="bg-brand-pink-500 gap-2 font-mono text-sm text-white"
                         onClick={() => setIsReviewDialogOpen(true)}
                       >
                         <Check className="h-4 w-4" />
@@ -704,10 +648,7 @@ export default function SubmitRequestDetailPage() {
             <motion.div {...fadeIn(0.15)} className="space-y-4">
               {/* Voting Card */}
               <div className="overflow-hidden rounded-xl border border-black/5 bg-white/80 p-5 shadow-sm">
-                <h3
-                  className="mb-4 font-mono text-xs font-medium tracking-wider uppercase"
-                  style={{ color: colors.text.secondaryOpacity65 }}
-                >
+                <h3 className="text-text-secondary-65 mb-4 font-mono text-xs font-medium tracking-wider uppercase">
                   Community Votes
                 </h3>
                 <div className="flex items-center gap-3">
@@ -751,21 +692,17 @@ export default function SubmitRequestDetailPage() {
                     <TooltipContent>Downvote this request</TooltipContent>
                   </Tooltip>
                 </div>
-                <div
-                  className="mt-3 text-center font-mono text-sm"
-                  style={{ color: colors.text.secondaryOpacity65 }}
-                >
+                <div className="text-text-secondary-65 mt-3 text-center font-mono text-sm">
                   Score:{' '}
                   <span
-                    className="font-bold"
-                    style={{
-                      color:
-                        pullRequest.votes.score > 0
-                          ? '#10b981'
-                          : pullRequest.votes.score < 0
-                            ? '#ef4444'
-                            : colors.text.primary,
-                    }}
+                    className={cn(
+                      'font-bold',
+                      pullRequest.votes.score > 0
+                        ? 'text-emerald-500'
+                        : pullRequest.votes.score < 0
+                          ? 'text-red-500'
+                          : 'text-text-primary'
+                    )}
                   >
                     {pullRequest.votes.score > 0 ? '+' : ''}
                     {pullRequest.votes.score}
@@ -775,30 +712,25 @@ export default function SubmitRequestDetailPage() {
 
               {/* Approvals Card */}
               <div className="overflow-hidden rounded-xl border border-black/5 bg-white/80 p-5 shadow-sm">
-                <h3
-                  className="mb-4 font-mono text-xs font-medium tracking-wider uppercase"
-                  style={{ color: colors.text.secondaryOpacity65 }}
-                >
+                <h3 className="text-text-secondary-65 mb-4 font-mono text-xs font-medium tracking-wider uppercase">
                   Approvals
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between font-mono text-sm">
-                    <span style={{ color: colors.text.secondaryOpacity65 }}>Required</span>
-                    <span className="font-medium" style={{ color: colors.text.primary }}>
+                    <span className="text-text-secondary-65">Required</span>
+                    <span className="text-text-primary font-medium">
                       {pullRequest.approvalsStatus.required}
                     </span>
                   </div>
                   <div className="flex items-center justify-between font-mono text-sm">
-                    <span style={{ color: colors.text.secondaryOpacity65 }}>Received</span>
+                    <span className="text-text-secondary-65">Received</span>
                     <span
-                      className="font-medium"
-                      style={{
-                        color:
-                          pullRequest.approvalsStatus.received >=
-                          pullRequest.approvalsStatus.required
-                            ? '#10b981'
-                            : colors.text.primary,
-                      }}
+                      className={cn(
+                        'font-medium',
+                        pullRequest.approvalsStatus.received >= pullRequest.approvalsStatus.required
+                          ? 'text-emerald-500'
+                          : 'text-text-primary'
+                      )}
                     >
                       {pullRequest.approvalsStatus.received}
                     </span>
@@ -817,39 +749,26 @@ export default function SubmitRequestDetailPage() {
                         )}%`,
                       }}
                       transition={{ duration: 0.5, ease: 'easeOut' }}
-                      className="h-full rounded-full"
-                      style={{
-                        backgroundColor:
-                          pullRequest.approvalsStatus.received >=
-                          pullRequest.approvalsStatus.required
-                            ? '#10b981'
-                            : colors.brand.blue,
-                      }}
+                      className={cn(
+                        'h-full rounded-full',
+                        pullRequest.approvalsStatus.received >= pullRequest.approvalsStatus.required
+                          ? 'bg-emerald-500'
+                          : 'bg-brand-blue'
+                      )}
                     />
                   </div>
 
                   {/* Approvers */}
                   {pullRequest.approvalsStatus.approvers.length > 0 && (
                     <div className="pt-2">
-                      <span
-                        className="font-mono text-xs"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
-                        Approved by:
-                      </span>
+                      <span className="text-text-secondary-65 font-mono text-xs">Approved by:</span>
                       <div className="mt-2 flex -space-x-2">
                         {pullRequest.approvalsStatus.approvers.map((_, idx) => (
                           <Avatar key={idx} className="h-7 w-7 ring-2 ring-white">
                             <AvatarImage
                               src={`https://api.dicebear.com/7.x/avataaars/svg?seed=approver${idx}`}
                             />
-                            <AvatarFallback
-                              className="text-[10px]"
-                              style={{
-                                backgroundColor: `${colors.brand.pink[500]}20`,
-                                color: colors.brand.pink[500],
-                              }}
-                            >
+                            <AvatarFallback className="bg-brand-pink-500/20 text-brand-pink-500 text-[10px]">
                               A
                             </AvatarFallback>
                           </Avatar>
@@ -872,10 +791,7 @@ export default function SubmitRequestDetailPage() {
 
               {/* Labels Card */}
               <div className="overflow-hidden rounded-xl border border-black/5 bg-white/80 p-5 shadow-sm">
-                <h3
-                  className="mb-4 font-mono text-xs font-medium tracking-wider uppercase"
-                  style={{ color: colors.text.secondaryOpacity65 }}
-                >
+                <h3 className="text-text-secondary-65 mb-4 font-mono text-xs font-medium tracking-wider uppercase">
                   Labels
                 </h3>
                 {pullRequest.labels.length > 0 ? (
@@ -884,20 +800,14 @@ export default function SubmitRequestDetailPage() {
                       <Badge
                         key={label}
                         variant="outline"
-                        className="border-black/10 font-mono text-xs"
-                        style={{ color: colors.text.secondaryOpacity75 }}
+                        className="text-text-secondary-75 border-black/10 font-mono text-xs"
                       >
                         {label.replace('_', ' ')}
                       </Badge>
                     ))}
                   </div>
                 ) : (
-                  <p
-                    className="font-mono text-sm"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
-                    No labels
-                  </p>
+                  <p className="text-text-secondary-65 font-mono text-sm">No labels</p>
                 )}
                 <Button
                   variant="ghost"
@@ -911,24 +821,21 @@ export default function SubmitRequestDetailPage() {
 
               {/* Target Info */}
               <div className="overflow-hidden rounded-xl border border-black/5 bg-white/80 p-5 shadow-sm">
-                <h3
-                  className="mb-4 font-mono text-xs font-medium tracking-wider uppercase"
-                  style={{ color: colors.text.secondaryOpacity65 }}
-                >
+                <h3 className="text-text-secondary-65 mb-4 font-mono text-xs font-medium tracking-wider uppercase">
                   Target
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 font-mono text-sm">
-                    <GitBranch className="h-4 w-4" style={{ color: colors.brand.blue }} />
-                    <span style={{ color: colors.text.secondaryOpacity65 }}>Story:</span>
-                    <span className="font-medium" style={{ color: colors.text.primary }}>
+                    <GitBranch className="text-brand-blue h-4 w-4" />
+                    <span className="text-text-secondary-65">Story:</span>
+                    <span className="text-text-primary font-medium">
                       {pullRequest.story?.title}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 font-mono text-sm">
-                    <FileText className="h-4 w-4" style={{ color: colors.brand.pink[500] }} />
-                    <span style={{ color: colors.text.secondaryOpacity65 }}>Chapter:</span>
-                    <span className="font-medium" style={{ color: colors.text.primary }}>
+                    <FileText className="text-brand-pink-500 h-4 w-4" />
+                    <span className="text-text-secondary-65">Chapter:</span>
+                    <span className="text-text-primary font-medium">
                       {pullRequest.chapter?.title}
                     </span>
                   </div>
@@ -937,46 +844,32 @@ export default function SubmitRequestDetailPage() {
 
               {/* Stats Card */}
               <div className="overflow-hidden rounded-xl border border-black/5 bg-white/80 p-5 shadow-sm">
-                <h3
-                  className="mb-4 font-mono text-xs font-medium tracking-wider uppercase"
-                  style={{ color: colors.text.secondaryOpacity65 }}
-                >
+                <h3 className="text-text-secondary-65 mb-4 font-mono text-xs font-medium tracking-wider uppercase">
                   Statistics
                 </h3>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between font-mono text-sm">
-                    <span
-                      className="flex items-center gap-2"
-                      style={{ color: colors.text.secondaryOpacity65 }}
-                    >
+                    <span className="text-text-secondary-65 flex items-center gap-2">
                       <Eye className="h-4 w-4" />
                       Views
                     </span>
-                    <span className="font-medium" style={{ color: colors.text.primary }}>
-                      {pullRequest.stats.views}
-                    </span>
+                    <span className="text-text-primary font-medium">{pullRequest.stats.views}</span>
                   </div>
                   <div className="flex items-center justify-between font-mono text-sm">
-                    <span
-                      className="flex items-center gap-2"
-                      style={{ color: colors.text.secondaryOpacity65 }}
-                    >
+                    <span className="text-text-secondary-65 flex items-center gap-2">
                       <MessageSquare className="h-4 w-4" />
                       Comments
                     </span>
-                    <span className="font-medium" style={{ color: colors.text.primary }}>
+                    <span className="text-text-primary font-medium">
                       {pullRequest.commentCount}
                     </span>
                   </div>
                   <div className="flex items-center justify-between font-mono text-sm">
-                    <span
-                      className="flex items-center gap-2"
-                      style={{ color: colors.text.secondaryOpacity65 }}
-                    >
+                    <span className="text-text-secondary-65 flex items-center gap-2">
                       <CheckCircle className="h-4 w-4" />
                       Reviews
                     </span>
-                    <span className="font-medium" style={{ color: colors.text.primary }}>
+                    <span className="text-text-primary font-medium">
                       {pullRequest.stats.reviewsReceived}
                     </span>
                   </div>
@@ -988,8 +881,7 @@ export default function SubmitRequestDetailPage() {
                 <div className="space-y-2">
                   {pullRequest.approvalsStatus.canMerge && (
                     <Button
-                      className="w-full gap-2 font-mono text-sm text-white"
-                      style={{ backgroundColor: colors.brand.pink[500] }}
+                      className="bg-brand-pink-500 w-full gap-2 font-mono text-sm text-white"
                       onClick={() => setIsMergeDialogOpen(true)}
                     >
                       <GitMerge className="h-4 w-4" />
@@ -1017,21 +909,12 @@ export default function SubmitRequestDetailPage() {
 
               {/* Merged Info */}
               {pullRequest.status === 'MERGED' && pullRequest.mergedAt && (
-                <div
-                  className="rounded-xl p-4"
-                  style={{ backgroundColor: `${colors.brand.pink[500]}10` }}
-                >
-                  <div
-                    className="flex items-center gap-2 font-mono text-sm"
-                    style={{ color: colors.brand.pink[500] }}
-                  >
+                <div className="bg-brand-pink-500/10 rounded-xl p-4">
+                  <div className="text-brand-pink-500 flex items-center gap-2 font-mono text-sm">
                     <GitMerge className="h-4 w-4" />
                     <span className="font-medium">Merged</span>
                   </div>
-                  <p
-                    className="mt-1 font-mono text-xs"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <p className="text-text-secondary-65 mt-1 font-mono text-xs">
                     {format(new Date(pullRequest.mergedAt), 'PPp')}
                   </p>
                 </div>
@@ -1048,10 +931,7 @@ export default function SubmitRequestDetailPage() {
                       </span>
                     </div>
                     {pullRequest.closeReason && (
-                      <p
-                        className="mt-1 font-mono text-xs"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
+                      <p className="text-text-secondary-65 mt-1 font-mono text-xs">
                         {pullRequest.closeReason}
                       </p>
                     )}
@@ -1110,27 +990,15 @@ interface CommentCardProps {
 function CommentCard({ comment }: CommentCardProps) {
   const [showReplies, setShowReplies] = useState(true);
 
-  const typeColors: Record<string, { bg: string; text: string; border: string }> = {
-    APPROVAL: { bg: '#10b98115', text: '#10b981', border: '#10b98130' },
-    REQUEST_CHANGES: {
-      bg: `${colors.brand.orange}15`,
-      text: colors.brand.orange,
-      border: `${colors.brand.orange}30`,
-    },
-    SUGGESTION: {
-      bg: `${colors.brand.blue}15`,
-      text: colors.brand.blue,
-      border: `${colors.brand.blue}30`,
-    },
-    QUESTION: {
-      bg: `${colors.brand.pink[500]}15`,
-      text: colors.brand.pink[500],
-      border: `${colors.brand.pink[500]}30`,
-    },
-    GENERAL: { bg: '#64748b15', text: '#64748b', border: '#64748b30' },
+  const typeColorClasses: Record<string, string> = {
+    APPROVAL: 'bg-emerald-500/15 text-emerald-500 border-emerald-500/30',
+    REQUEST_CHANGES: 'bg-brand-orange/15 text-brand-orange border-brand-orange/30',
+    SUGGESTION: 'bg-brand-blue/15 text-brand-blue border-brand-blue/30',
+    QUESTION: 'bg-brand-pink-500/15 text-brand-pink-500 border-brand-pink-500/30',
+    GENERAL: 'bg-slate-500/15 text-slate-500 border-slate-500/30',
   };
 
-  const typeStyle = typeColors[comment.commentType] || typeColors.GENERAL;
+  const typeClasses = typeColorClasses[comment.commentType] || typeColorClasses.GENERAL;
 
   return (
     <motion.div
@@ -1143,57 +1011,32 @@ function CommentCard({ comment }: CommentCardProps) {
       <div className="flex items-center gap-3 border-b border-black/5 px-5 py-4">
         <Avatar className="h-8 w-8 ring-2 ring-white">
           <AvatarImage src={comment.user?.avatar} />
-          <AvatarFallback
-            style={{ backgroundColor: `${colors.brand.blue}20`, color: colors.brand.blue }}
-          >
+          <AvatarFallback className="bg-brand-blue/20 text-brand-blue">
             {comment.user?.displayName?.charAt(0) || 'U'}
           </AvatarFallback>
         </Avatar>
         <div className="flex-1">
-          <span className="font-medium" style={{ color: colors.text.primary }}>
-            {comment.user?.displayName}
-          </span>
-          <span
-            className="ml-2 font-mono text-sm"
-            style={{ color: colors.text.secondaryOpacity65 }}
-          >
+          <span className="text-text-primary font-medium">{comment.user?.displayName}</span>
+          <span className="text-text-secondary-65 ml-2 font-mono text-sm">
             {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
           </span>
           {comment.isEdited && (
-            <span
-              className="ml-2 font-mono text-xs"
-              style={{ color: colors.text.secondaryOpacity65 }}
-            >
-              (edited)
-            </span>
+            <span className="text-text-secondary-65 ml-2 font-mono text-xs">(edited)</span>
           )}
         </div>
-        <Badge
-          variant="outline"
-          className="font-mono text-xs"
-          style={{
-            backgroundColor: typeStyle.bg,
-            color: typeStyle.text,
-            borderColor: typeStyle.border,
-          }}
-        >
+        <Badge variant="outline" className={cn('font-mono text-xs', typeClasses)}>
           {comment.commentType.replace('_', ' ')}
         </Badge>
       </div>
 
       {/* Content */}
       <div className="p-5">
-        <p className="leading-relaxed" style={{ color: colors.text.secondaryOpacity75 }}>
-          {comment.content}
-        </p>
+        <p className="text-text-secondary-75 leading-relaxed">{comment.content}</p>
 
         {/* Suggestion Block */}
         {comment.suggestion && comment.suggestion.suggestedText && (
           <div className="mt-4 overflow-hidden rounded-lg border border-black/10">
-            <div
-              className="bg-black/5 px-4 py-2 font-mono text-xs font-medium"
-              style={{ color: colors.text.secondaryOpacity75 }}
-            >
+            <div className="text-text-secondary-75 bg-black/5 px-4 py-2 font-mono text-xs font-medium">
               Suggested Change
             </div>
             <div className="space-y-1 p-4 font-mono text-sm">
@@ -1215,8 +1058,7 @@ function CommentCard({ comment }: CommentCardProps) {
         <div className="border-t border-black/5">
           <button
             onClick={() => setShowReplies(!showReplies)}
-            className="flex w-full items-center gap-2 px-5 py-3 font-mono text-xs transition-colors hover:bg-black/5"
-            style={{ color: colors.text.secondaryOpacity65 }}
+            className="text-text-secondary-65 flex w-full items-center gap-2 px-5 py-3 font-mono text-xs transition-colors hover:bg-black/5"
           >
             {showReplies ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
             {comment.replies.length} {comment.replies.length === 1 ? 'reply' : 'replies'}
@@ -1236,34 +1078,20 @@ function CommentCard({ comment }: CommentCardProps) {
                     <div key={reply._id} className="flex gap-3">
                       <Avatar className="h-6 w-6 ring-1 ring-white">
                         <AvatarImage src={reply.user?.avatar} />
-                        <AvatarFallback
-                          className="text-[10px]"
-                          style={{
-                            backgroundColor: `${colors.brand.pink[500]}20`,
-                            color: colors.brand.pink[500],
-                          }}
-                        >
+                        <AvatarFallback className="bg-brand-pink-500/20 text-brand-pink-500 text-[10px]">
                           {reply.user?.displayName?.charAt(0) || 'U'}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="font-mono text-sm">
-                          <span className="font-medium" style={{ color: colors.text.primary }}>
+                          <span className="text-text-primary font-medium">
                             {reply.user?.displayName}
                           </span>
-                          <span
-                            className="ml-2 text-xs"
-                            style={{ color: colors.text.secondaryOpacity65 }}
-                          >
+                          <span className="text-text-secondary-65 ml-2 text-xs">
                             {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true })}
                           </span>
                         </div>
-                        <p
-                          className="mt-1 text-sm"
-                          style={{ color: colors.text.secondaryOpacity75 }}
-                        >
-                          {reply.content}
-                        </p>
+                        <p className="text-text-secondary-75 mt-1 text-sm">{reply.content}</p>
                       </div>
                     </div>
                   ))}
@@ -1284,73 +1112,66 @@ interface ReviewCardProps {
 }
 
 function ReviewCard({ review }: ReviewCardProps) {
-  const statusConfig: Record<string, { bg: string; border: string; text: string }> = {
-    APPROVED: { bg: '#10b98110', border: '#10b98130', text: '#10b981' },
+  const statusClasses: Record<string, { card: string; badge: string }> = {
+    APPROVED: {
+      card: 'bg-emerald-500/10 border-emerald-500/30',
+      badge: 'border-emerald-500/30 text-emerald-500',
+    },
     CHANGES_REQUESTED: {
-      bg: `${colors.brand.orange}10`,
-      border: `${colors.brand.orange}30`,
-      text: colors.brand.orange,
+      card: 'bg-brand-orange/10 border-brand-orange/30',
+      badge: 'border-brand-orange/30 text-brand-orange',
     },
-    PENDING_REVIEW: { bg: '#64748b10', border: '#64748b30', text: '#64748b' },
+    PENDING_REVIEW: {
+      card: 'bg-slate-500/10 border-slate-500/30',
+      badge: 'border-slate-500/30 text-slate-500',
+    },
     IN_REVIEW: {
-      bg: `${colors.brand.blue}10`,
-      border: `${colors.brand.blue}30`,
-      text: colors.brand.blue,
+      card: 'bg-brand-blue/10 border-brand-blue/30',
+      badge: 'border-brand-blue/30 text-brand-blue',
     },
-    NEEDS_WORK: { bg: '#ef444410', border: '#ef444430', text: '#ef4444' },
-    DRAFT: { bg: '#64748b10', border: '#64748b30', text: '#64748b' },
+    NEEDS_WORK: {
+      card: 'bg-red-500/10 border-red-500/30',
+      badge: 'border-red-500/30 text-red-500',
+    },
+    DRAFT: {
+      card: 'bg-slate-500/10 border-slate-500/30',
+      badge: 'border-slate-500/30 text-slate-500',
+    },
   };
 
-  const config = statusConfig[review.reviewStatus] || statusConfig.PENDING_REVIEW;
+  const config = statusClasses[review.reviewStatus] || statusClasses.PENDING_REVIEW;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="overflow-hidden rounded-xl border p-5"
-      style={{ backgroundColor: config.bg, borderColor: config.border }}
+      className={cn('overflow-hidden rounded-xl border p-5', config.card)}
     >
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10 ring-2 ring-white">
             <AvatarImage src={review.reviewer?.avatar} />
-            <AvatarFallback
-              style={{
-                backgroundColor: `${colors.brand.pink[500]}20`,
-                color: colors.brand.pink[500],
-              }}
-            >
+            <AvatarFallback className="bg-brand-pink-500/20 text-brand-pink-500">
               {review.reviewer?.displayName?.charAt(0) || 'R'}
             </AvatarFallback>
           </Avatar>
           <div>
-            <span className="font-medium" style={{ color: colors.text.primary }}>
-              {review.reviewer?.displayName}
-            </span>
-            <span
-              className="ml-2 font-mono text-sm"
-              style={{ color: colors.text.secondaryOpacity65 }}
-            >
+            <span className="text-text-primary font-medium">{review.reviewer?.displayName}</span>
+            <span className="text-text-secondary-65 ml-2 font-mono text-sm">
               {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
             </span>
           </div>
         </div>
-        <Badge
-          variant="outline"
-          className="font-mono text-xs"
-          style={{ borderColor: config.border, color: config.text }}
-        >
+        <Badge variant="outline" className={cn('font-mono text-xs', config.badge)}>
           {review.reviewStatus.replace('_', ' ')}
         </Badge>
       </div>
 
       {/* Summary */}
       {review.summary && (
-        <p className="mt-4 leading-relaxed" style={{ color: colors.text.secondaryOpacity75 }}>
-          {review.summary}
-        </p>
+        <p className="text-text-secondary-75 mt-4 leading-relaxed">{review.summary}</p>
       )}
 
       {/* Feedback */}
@@ -1358,12 +1179,7 @@ function ReviewCard({ review }: ReviewCardProps) {
         <div className="mt-4 space-y-2">
           {review.feedback.map((fb, idx) => (
             <div key={idx} className="flex items-center justify-between rounded-lg bg-white/60 p-3">
-              <span
-                className="font-mono text-sm font-medium"
-                style={{ color: colors.text.primary }}
-              >
-                {fb.section}
-              </span>
+              <span className="text-text-primary font-mono text-sm font-medium">{fb.section}</span>
               {fb.rating && (
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -1385,9 +1201,7 @@ function ReviewCard({ review }: ReviewCardProps) {
       {/* Overall Rating */}
       {review.overallRating && (
         <div className="mt-4 flex items-center gap-3 border-t border-black/10 pt-4">
-          <span className="font-mono text-sm" style={{ color: colors.text.secondaryOpacity65 }}>
-            Overall:
-          </span>
+          <span className="text-text-secondary-65 font-mono text-sm">Overall:</span>
           <div className="flex">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
@@ -1399,9 +1213,7 @@ function ReviewCard({ review }: ReviewCardProps) {
               />
             ))}
           </div>
-          <span className="font-mono font-medium" style={{ color: colors.text.primary }}>
-            {review.overallRating}/5
-          </span>
+          <span className="text-text-primary font-mono font-medium">{review.overallRating}/5</span>
         </div>
       )}
     </motion.div>

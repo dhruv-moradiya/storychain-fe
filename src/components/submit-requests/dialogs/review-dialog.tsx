@@ -12,7 +12,6 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
-import { colors } from '@/constants';
 import {
   Star,
   ChevronRight,
@@ -53,28 +52,32 @@ const REVIEW_DECISIONS: {
   label: string;
   description: string;
   icon: React.ElementType;
-  color: string;
+  colorClass: string;
+  bgClass: string;
 }[] = [
   {
     value: 'APPROVED',
     label: 'Approve',
     description: 'This request is ready to be merged',
     icon: Check,
-    color: '#10b981',
+    colorClass: 'text-[#10b981]',
+    bgClass: 'bg-[#10b981]',
   },
   {
     value: 'CHANGES_REQUESTED',
     label: 'Request Changes',
     description: 'Changes need to be made before merging',
     icon: AlertCircle,
-    color: colors.brand.orange,
+    colorClass: 'text-brand-orange',
+    bgClass: 'bg-brand-orange',
   },
   {
     value: 'IN_REVIEW',
     label: 'Comment Only',
     description: 'Leave feedback without approving or requesting changes',
     icon: MessageSquare,
-    color: colors.brand.blue,
+    colorClass: 'text-brand-blue',
+    bgClass: 'bg-brand-blue',
   },
 ];
 
@@ -184,30 +187,15 @@ export function ReviewDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="border-black/10 bg-white sm:max-w-[550px]">
         <DialogHeader>
-          <DialogTitle
-            className="flex items-center gap-2 font-serif"
-            style={{ color: colors.text.primary }}
-          >
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-lg"
-              style={{ backgroundColor: `${colors.brand.blue}15` }}
-            >
-              <ThumbsUp className="h-4 w-4" style={{ color: colors.brand.blue }} />
+          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
+            <div className="bg-brand-blue/15 flex h-8 w-8 items-center justify-center rounded-lg">
+              <ThumbsUp className="text-brand-blue h-4 w-4" />
             </div>
             Submit Review
           </DialogTitle>
-          <DialogDescription
-            className="font-mono text-sm"
-            style={{ color: colors.text.secondaryOpacity70 }}
-          >
+          <DialogDescription className="text-text-secondary-70 font-mono text-sm">
             Reviewing:{' '}
-            <span
-              className="rounded px-1.5 py-0.5 font-medium"
-              style={{
-                backgroundColor: `${colors.brand.pink[500]}15`,
-                color: colors.brand.pink[500],
-              }}
-            >
+            <span className="bg-brand-pink-500/15 text-brand-pink-500 rounded px-1.5 py-0.5 font-medium">
               {prTitle}
             </span>
           </DialogDescription>
@@ -220,21 +208,19 @@ export function ReviewDialog({
               <div
                 className={cn(
                   'flex h-8 w-8 items-center justify-center rounded-full font-mono text-xs font-medium transition-all',
-                  idx <= currentStep ? 'text-white' : 'bg-black/5'
+                  idx <= currentStep
+                    ? 'bg-brand-blue text-white'
+                    : 'text-text-secondary-65 bg-black/5'
                 )}
-                style={{
-                  backgroundColor: idx <= currentStep ? colors.brand.blue : undefined,
-                  color: idx > currentStep ? colors.text.secondaryOpacity65 : undefined,
-                }}
               >
                 {idx < currentStep ? <Check className="h-4 w-4" /> : idx + 1}
               </div>
               {idx < STEPS.length - 1 && (
                 <div
-                  className="mx-2 h-px w-12 transition-colors"
-                  style={{
-                    backgroundColor: idx < currentStep ? colors.brand.blue : 'rgba(0,0,0,0.1)',
-                  }}
+                  className={cn(
+                    'mx-2 h-px w-12 transition-colors',
+                    idx < currentStep ? 'bg-brand-blue' : 'bg-black/10'
+                  )}
                 />
               )}
             </div>
@@ -254,7 +240,7 @@ export function ReviewDialog({
                 transition={{ duration: 0.15 }}
                 className="space-y-3"
               >
-                <p className="font-mono text-sm" style={{ color: colors.text.secondaryOpacity65 }}>
+                <p className="text-text-secondary-65 font-mono text-sm">
                   Choose your review decision
                 </p>
                 {REVIEW_DECISIONS.map((decision) => {
@@ -275,26 +261,27 @@ export function ReviewDialog({
                       )}
                     >
                       <div
-                        className="flex h-11 w-11 items-center justify-center rounded-xl"
-                        style={{ backgroundColor: `${decision.color}15` }}
+                        className={cn(
+                          'flex h-11 w-11 items-center justify-center rounded-xl',
+                          decision.value === 'APPROVED' ? 'bg-[#10b981]/15' : '',
+                          decision.value === 'CHANGES_REQUESTED' ? 'bg-brand-orange/15' : '',
+                          decision.value === 'IN_REVIEW' ? 'bg-brand-blue/15' : ''
+                        )}
                       >
-                        <DecisionIcon className="h-5 w-5" style={{ color: decision.color }} />
+                        <DecisionIcon className={cn('h-5 w-5', decision.colorClass)} />
                       </div>
                       <div className="flex-1">
-                        <p className="font-medium" style={{ color: colors.text.primary }}>
-                          {decision.label}
-                        </p>
-                        <p
-                          className="font-mono text-sm"
-                          style={{ color: colors.text.secondaryOpacity65 }}
-                        >
+                        <p className="text-text-primary font-medium">{decision.label}</p>
+                        <p className="text-text-secondary-65 font-mono text-sm">
                           {decision.description}
                         </p>
                       </div>
                       {isSelected && (
                         <div
-                          className="flex h-6 w-6 items-center justify-center rounded-full"
-                          style={{ backgroundColor: decision.color }}
+                          className={cn(
+                            'flex h-6 w-6 items-center justify-center rounded-full',
+                            decision.bgClass
+                          )}
                         >
                           <Check className="h-3.5 w-3.5 text-white" />
                         </div>
@@ -315,7 +302,7 @@ export function ReviewDialog({
                 transition={{ duration: 0.15 }}
                 className="space-y-4"
               >
-                <p className="font-mono text-sm" style={{ color: colors.text.secondaryOpacity65 }}>
+                <p className="text-text-secondary-65 font-mono text-sm">
                   Rate each aspect (optional)
                 </p>
                 <div className="space-y-3">
@@ -325,9 +312,7 @@ export function ReviewDialog({
                       className="rounded-xl border border-black/5 bg-black/[0.02] p-4"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-medium" style={{ color: colors.text.primary }}>
-                          {section.label}
-                        </span>
+                        <span className="text-text-primary font-medium">{section.label}</span>
                         <StarRating
                           value={formData.feedback[idx]?.rating || 0}
                           onChange={(rating) => updateFeedback(idx, { rating })}
@@ -370,15 +355,8 @@ export function ReviewDialog({
                 <div className="rounded-xl border border-black/5 bg-black/[0.02] p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label className="font-medium" style={{ color: colors.text.primary }}>
-                        Overall Rating
-                      </Label>
-                      <p
-                        className="font-mono text-xs"
-                        style={{ color: colors.text.secondaryOpacity65 }}
-                      >
-                        Required
-                      </p>
+                      <Label className="text-text-primary font-medium">Overall Rating</Label>
+                      <p className="text-text-secondary-65 font-mono text-xs">Required</p>
                     </div>
                     <StarRating
                       value={formData.overallRating}
@@ -391,10 +369,7 @@ export function ReviewDialog({
 
                 {/* Summary Text */}
                 <div className="space-y-2">
-                  <Label
-                    className="font-mono text-xs tracking-wider uppercase"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
                     Review Summary
                   </Label>
                   <Textarea
@@ -408,31 +383,27 @@ export function ReviewDialog({
 
                 {/* Review Preview */}
                 <div className="rounded-xl border border-black/5 bg-black/[0.02] p-4">
-                  <p
-                    className="font-mono text-xs font-medium tracking-wider uppercase"
-                    style={{ color: colors.text.secondaryOpacity65 }}
-                  >
+                  <p className="text-text-secondary-65 font-mono text-xs font-medium tracking-wider uppercase">
                     Preview
                   </p>
                   <div className="mt-3 space-y-2">
                     <div className="flex items-center justify-between font-mono text-sm">
-                      <span style={{ color: colors.text.secondaryOpacity65 }}>Decision</span>
+                      <span className="text-text-secondary-65">Decision</span>
                       <span
-                        className="font-medium"
-                        style={{
-                          color:
-                            formData.reviewStatus === 'APPROVED'
-                              ? '#10b981'
-                              : formData.reviewStatus === 'CHANGES_REQUESTED'
-                                ? colors.brand.orange
-                                : colors.brand.blue,
-                        }}
+                        className={cn(
+                          'font-medium',
+                          formData.reviewStatus === 'APPROVED'
+                            ? 'text-[#10b981]'
+                            : formData.reviewStatus === 'CHANGES_REQUESTED'
+                              ? 'text-brand-orange'
+                              : 'text-brand-blue'
+                        )}
                       >
                         {REVIEW_DECISIONS.find((d) => d.value === formData.reviewStatus)?.label}
                       </span>
                     </div>
                     <div className="flex items-center justify-between font-mono text-sm">
-                      <span style={{ color: colors.text.secondaryOpacity65 }}>Rating</span>
+                      <span className="text-text-secondary-65">Rating</span>
                       <div className="flex items-center gap-1">
                         {[1, 2, 3, 4, 5].map((star) => (
                           <Star
@@ -469,8 +440,7 @@ export function ReviewDialog({
             <Button
               onClick={handleNext}
               disabled={!canProceed()}
-              className="gap-1 font-mono text-white"
-              style={{ backgroundColor: colors.brand.blue }}
+              className="bg-brand-blue hover:bg-brand-blue-alt gap-1 font-mono text-white"
             >
               Next
               <ChevronRight className="h-4 w-4" />
@@ -479,8 +449,7 @@ export function ReviewDialog({
             <Button
               onClick={handleSubmit}
               disabled={!canProceed()}
-              className="gap-2 font-mono text-white"
-              style={{ backgroundColor: colors.brand.pink[500] }}
+              className="bg-brand-pink-500 hover:bg-brand-pink-400 gap-2 font-mono text-white"
             >
               <Send className="h-4 w-4" />
               Submit Review

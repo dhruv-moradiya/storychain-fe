@@ -13,7 +13,6 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { colors } from '@/constants';
 import {
   MessageSquare,
   Lightbulb,
@@ -43,43 +42,43 @@ const COMMENT_TYPES: {
   value: PRCommentType;
   label: string;
   icon: React.ElementType;
-  color: string;
-  bgColor: string;
+  colorClass: string;
+  bgClass: string;
 }[] = [
   {
     value: 'GENERAL',
     label: 'General',
     icon: MessageSquare,
-    color: colors.brand.blue,
-    bgColor: `${colors.brand.blue}15`,
+    colorClass: 'text-brand-blue',
+    bgClass: 'bg-brand-blue/15',
   },
   {
     value: 'SUGGESTION',
     label: 'Suggestion',
     icon: Lightbulb,
-    color: colors.brand.orange,
-    bgColor: `${colors.brand.orange}15`,
+    colorClass: 'text-brand-orange',
+    bgClass: 'bg-brand-orange/15',
   },
   {
     value: 'QUESTION',
     label: 'Question',
     icon: HelpCircle,
-    color: '#8b5cf6',
-    bgColor: 'rgba(139, 92, 246, 0.1)',
+    colorClass: 'text-[#8b5cf6]',
+    bgClass: 'bg-[#8b5cf6]/10',
   },
   {
     value: 'APPROVAL',
     label: 'Approval',
     icon: ThumbsUp,
-    color: '#10b981',
-    bgColor: 'rgba(16, 185, 129, 0.1)',
+    colorClass: 'text-[#10b981]',
+    bgClass: 'bg-[#10b981]/10',
   },
   {
     value: 'REQUEST_CHANGES',
     label: 'Changes',
     icon: AlertCircle,
-    color: colors.brand.pink[500],
-    bgColor: `${colors.brand.pink[500]}15`,
+    colorClass: 'text-brand-pink-500',
+    bgClass: 'bg-brand-pink-500/15',
   },
 ];
 
@@ -128,22 +127,13 @@ export function CommentDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="border-black/10 bg-white sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle
-            className="flex items-center gap-2 font-serif"
-            style={{ color: colors.text.primary }}
-          >
-            <div
-              className="flex h-8 w-8 items-center justify-center rounded-lg"
-              style={{ backgroundColor: `${colors.brand.blue}15` }}
-            >
-              <MessageSquare className="h-4 w-4" style={{ color: colors.brand.blue }} />
+          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
+            <div className="bg-brand-blue/15 flex h-8 w-8 items-center justify-center rounded-lg">
+              <MessageSquare className="text-brand-blue h-4 w-4" />
             </div>
             {replyTo ? 'Reply to Comment' : 'Add Comment'}
           </DialogTitle>
-          <DialogDescription
-            className="font-mono text-sm"
-            style={{ color: colors.text.secondaryOpacity70 }}
-          >
+          <DialogDescription className="text-text-secondary-70 font-mono text-sm">
             Share your feedback on this submission
           </DialogDescription>
         </DialogHeader>
@@ -151,10 +141,7 @@ export function CommentDialog({
         <div className="space-y-4 py-4">
           {/* Comment Type Selection */}
           <div className="space-y-2">
-            <Label
-              className="font-mono text-xs tracking-wider uppercase"
-              style={{ color: colors.text.secondaryOpacity65 }}
-            >
+            <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
               Type
             </Label>
             <div className="flex gap-2">
@@ -174,16 +161,18 @@ export function CommentDialog({
                     )}
                   >
                     <div
-                      className="flex h-8 w-8 items-center justify-center rounded-lg"
-                      style={{ backgroundColor: type.bgColor }}
+                      className={cn(
+                        'flex h-8 w-8 items-center justify-center rounded-lg',
+                        type.bgClass
+                      )}
                     >
-                      <TypeIcon className="h-4 w-4" style={{ color: type.color }} />
+                      <TypeIcon className={cn('h-4 w-4', type.colorClass)} />
                     </div>
                     <span
-                      className="font-mono text-xs"
-                      style={{
-                        color: isSelected ? colors.text.primary : colors.text.secondaryOpacity65,
-                      }}
+                      className={cn(
+                        'font-mono text-xs',
+                        isSelected ? 'text-text-primary' : 'text-text-secondary-65'
+                      )}
                     >
                       {type.label}
                     </span>
@@ -204,9 +193,7 @@ export function CommentDialog({
                 className="space-y-3 overflow-hidden"
               >
                 <div className="rounded-xl border border-black/5 bg-black/[0.02] p-4">
-                  <Label className="font-mono text-xs" style={{ color: colors.brand.pink[500] }}>
-                    Original Text
-                  </Label>
+                  <Label className="text-brand-pink-500 font-mono text-xs">Original Text</Label>
                   <Input
                     placeholder="Enter the original text..."
                     value={formData.suggestion?.originalText || ''}
@@ -215,15 +202,10 @@ export function CommentDialog({
                   />
 
                   <div className="my-3 flex justify-center">
-                    <ArrowDown
-                      className="h-4 w-4"
-                      style={{ color: colors.text.secondaryOpacity65 }}
-                    />
+                    <ArrowDown className="text-text-secondary-65 h-4 w-4" />
                   </div>
 
-                  <Label className="font-mono text-xs" style={{ color: '#10b981' }}>
-                    Suggested Text
-                  </Label>
+                  <Label className="font-mono text-xs text-[#10b981]">Suggested Text</Label>
                   <Input
                     placeholder="Enter your suggestion..."
                     value={formData.suggestion?.suggestedText || ''}
@@ -238,10 +220,10 @@ export function CommentDialog({
           {/* Comment Content */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <Label className="font-medium" style={{ color: colors.text.primary }}>
+              <Label className="text-text-primary font-medium">
                 {formData.commentType === 'SUGGESTION' ? 'Explanation' : 'Comment'}
               </Label>
-              <span className="font-mono text-xs" style={{ color: colors.text.secondaryOpacity65 }}>
+              <span className="text-text-secondary-65 font-mono text-xs">
                 {formData.content.length} chars
               </span>
             </div>
@@ -272,8 +254,15 @@ export function CommentDialog({
           <Button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="gap-2 font-mono text-white"
-            style={{ backgroundColor: selectedType?.color || colors.brand.blue }}
+            className={cn(
+              'gap-2 font-mono text-white',
+              selectedType?.value === 'GENERAL' && 'bg-brand-blue hover:bg-brand-blue-alt',
+              selectedType?.value === 'SUGGESTION' && 'bg-brand-orange hover:bg-brand-orange-alt',
+              selectedType?.value === 'QUESTION' && 'bg-[#8b5cf6] hover:bg-[#7c3aed]',
+              selectedType?.value === 'APPROVAL' && 'bg-[#10b981] hover:bg-[#059669]',
+              selectedType?.value === 'REQUEST_CHANGES' &&
+                'bg-brand-pink-500 hover:bg-brand-pink-400'
+            )}
           >
             <Send className="h-4 w-4" />
             Post Comment
