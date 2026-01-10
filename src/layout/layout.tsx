@@ -10,7 +10,7 @@ const Layout = () => {
   return (
     <div className="flex min-h-screen flex-col">
       {!isHomePage && <Navbar />}
-      <main className="flex-1">
+      <main className="bg-bg-cream flex-1">
         <Outlet />
       </main>
     </div>

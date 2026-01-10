@@ -12,6 +12,8 @@ const ChapterRead = lazyRoute(() => import('./pages/chapter-read'), 'chapter');
 const Profile = lazyRoute(() => import('./pages/profile'), 'profile');
 const Reports = lazyRoute(() => import('./pages/reports'), 'dashboard');
 const Appeals = lazyRoute(() => import('./pages/appeals'), 'dashboard');
+const SubmitRequests = lazyRoute(() => import('./pages/submit-requests'));
+const SubmitRequestDetail = lazyRoute(() => import('./pages/submit-request-detail'));
 const SignUp = lazyRoute(() => import('./pages/sign-up'), 'auth');
 const SignIn = lazyRoute(() => import('./pages/sign-in'), 'auth');
 
@@ -68,6 +70,15 @@ export const router = createBrowserRouter([
       {
         path: 'appeals',
         element: <Appeals />,
+      },
+      // Submit Requests (PR-like system)
+      {
+        path: 'submit-requests',
+        element: <SubmitRequests />,
+      },
+      {
+        path: 'submit-requests/:id',
+        element: <SubmitRequestDetail />,
       },
     ],
   },
