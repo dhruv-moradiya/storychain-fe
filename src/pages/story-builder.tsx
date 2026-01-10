@@ -60,11 +60,13 @@ const StoryBuilder = () => {
   });
 
   useEffect(() => {
-    if (selectedDraft) {
-      setEditorContent(selectedDraft.content ?? '');
+    if (selectedDraft && editor) {
+      const content = selectedDraft.content ?? '';
+      setEditorContent(content);
       setTitle(selectedDraft.title ?? '');
+      editor.commands.setContent(content);
     }
-  }, [selectedDraft, autoSaveId]);
+  }, [selectedDraft, autoSaveId, editor]);
 
   if (!editor) return null;
 

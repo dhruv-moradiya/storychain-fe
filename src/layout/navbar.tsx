@@ -7,8 +7,9 @@ import {
 import { useClerk, useUser } from '@clerk/clerk-react';
 import { Link, useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
-import { exploreItems } from '@/mock-data/navbar';
 import { cn } from '@/lib/utils';
+import { Compass, LayoutDashboard } from 'lucide-react';
+import { NavItem } from '@/components/common';
 
 export default function Navbar() {
   const { signOut } = useClerk();
@@ -18,90 +19,69 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        'bg-muted/40 z-40 w-full border-b backdrop-blur-md',
-        !isSignedIn && 'sticky top-0'
+        'sticky top-0 z-40 w-full',
+        'border-border/50 border-b',
+        'bg-bg-cream/70 backdrop-blur-md'
       )}
     >
-      <div className="mx-auto flex h-14 items-center justify-between px-4">
-        {/* LEFT — Brand + Links */}
-        <div className="flex items-center gap-6">
-          <Link to="/" className="text-base font-semibold tracking-tight">
-            StoryChain
-          </Link>
+      <div className="mx-auto flex h-14 items-center justify-between px-6">
+        {/* LEFT */}
+        <Link to="/" className="flex items-center gap-2.5">
+          <span className="h-3 w-3 rounded-full bg-pink-500 shadow-[0_0_12px_rgba(236,72,153,0.7)]" />
+          <span className="text-[18px] font-semibold tracking-tight">StoryChain</span>
+        </Link>
 
-          {isSignedIn && (
-            <ul className="text-muted-foreground hidden items-center gap-5 text-sm md:flex">
-              <li
-                onClick={() => navigate('/dashboard')}
-                className="hover:text-foreground cursor-pointer transition"
-              >
-                Dashboard
-              </li>
+        {isSignedIn && (
+          <ul className="hidden items-center gap-2 md:flex">
+            <NavItem to="/dashboard" label="Dashboard" icon={<LayoutDashboard size={16} />} />
 
-              {/* Explore Dropdown */}
-              <DropdownMenu>
-                <DropdownMenuTrigger className="hover:text-foreground transition">
-                  Explore
-                </DropdownMenuTrigger>
+            <NavItem to="/explore" label="Explore" icon={<Compass size={16} />} />
+          </ul>
+        )}
 
-                <DropdownMenuContent className="w-72 rounded-md p-2">
-                  {exploreItems.map((item) => (
-                    <DropdownMenuItem
-                      key={item.to}
-                      onClick={() => navigate(item.to)}
-                      className="hover:bg-muted cursor-pointer rounded-md px-3 py-2"
-                    >
-                      <div className="flex items-start gap-3">
-                        <item.icon className="text-muted-foreground h-4 w-4" />
-                        <div>
-                          <p className="text-sm font-medium">{item.title}</p>
-                          <p className="text-muted-foreground line-clamp-2 text-xs">
-                            {item.description}
-                          </p>
-                        </div>
-                      </div>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </ul>
-          )}
-        </div>
-
-        {/* RIGHT — Profile / Sign in */}
+        {/* RIGHT */}
         {isSignedIn ? (
-          <>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <motion.div
-                  whileTap={{ scale: 0.96 }}
-                  className="bg-muted mr-1 h-8 w-8 cursor-pointer rounded-full border"
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <motion.div
+                whileTap={{ scale: 0.96 }}
+                className={cn(
+                  'relative h-8 w-8 cursor-pointer overflow-hidden rounded-full',
+                  'border-border/50 bg-muted/60 border backdrop-blur-sm'
+                )}
+              >
+                <img
+                  src="https://i.pinimg.com/736x/4c/ab/77/4cab77de6b83b7e3149ce03867194ea5.jpg"
+                  alt="Profile Pic"
                 />
-              </DropdownMenuTrigger>
+              </motion.div>
+            </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="end" className="bg-background w-56 rounded-lg border p-1">
-                <DropdownMenuItem className="cursor-default select-none">
-                  <div className="flex flex-col">
-                    <span className="font-medium">{user.fullName || 'Your Profile'}</span>
-                    <span className="text-muted-foreground text-xs">
-                      {user.primaryEmailAddress?.emailAddress}
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+            <DropdownMenuContent
+              align="end"
+              className="bg-background/80 w-56 rounded-xl border p-1 shadow-xl backdrop-blur-xl"
+            >
+              <DropdownMenuItem className="cursor-default select-none">
+                <div className="flex flex-col">
+                  <span className="font-medium">{user.fullName || 'Your Profile'}</span>
+                  <span className="text-muted-foreground text-xs">
+                    {user.primaryEmailAddress?.emailAddress}
+                  </span>
+                </div>
+              </DropdownMenuItem>
 
-                <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/profile')}>Profile</DropdownMenuItem>
 
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>Settings</DropdownMenuItem>
 
-                <DropdownMenuItem
-                  onClick={() => signOut({ redirectUrl: '/sign-in' })}
-                  className="text-red-500"
-                >
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </>
+              <DropdownMenuItem
+                onClick={() => signOut({ redirectUrl: '/sign-in' })}
+                className="text-red-500 focus:text-red-500"
+              >
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ) : (
           <Link
             to="/sign-in"

@@ -1,11 +1,13 @@
 @import 'tailwindcss';
+@import './styles/fonts.css';
 
 @plugin 'tailwind-scrollbar-hide';
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
-
 :root {
+  /* ===========================================
+     Base Theme Colors (shadcn/ui)
+     =========================================== */
   --background: oklch(0.9824 0.006 43.3365);
   --foreground: oklch(0.396 0.0075 351.1515);
   --card: oklch(1 0 0);
@@ -25,11 +27,15 @@
   --border: oklch(0.903 0.0262 29.4262);
   --input: oklch(0.903 0.0262 29.4262);
   --ring: oklch(0.7116 0.1812 22.8389);
+
+  /* Chart Colors */
   --chart-1: oklch(0.7116 0.1812 22.8389);
   --chart-2: oklch(0.8803 0.1348 86.0616);
   --chart-3: oklch(0.7775 0.1595 166.5719);
   --chart-4: oklch(0.5923 0.112 227.9733);
   --chart-5: oklch(0.6476 0.2042 11.0701);
+
+  /* Sidebar Colors */
   --sidebar: oklch(0.9824 0.006 43.3365);
   --sidebar-foreground: oklch(0.396 0.0075 351.1515);
   --sidebar-primary: oklch(0.7116 0.1812 22.8389);
@@ -38,10 +44,97 @@
   --sidebar-accent-foreground: oklch(0.6126 0.1377 18.6372);
   --sidebar-border: oklch(0.903 0.0262 29.4262);
   --sidebar-ring: oklch(0.7116 0.1812 22.8389);
+
+  /* ===========================================
+     StoryChain Color Palette
+     =========================================== */
+
+  /* Hero Gradient Colors */
+  --hero-gradient-from: #8da5f3;
+  --hero-gradient-via1: #b597e6;
+  --hero-gradient-via2: #e8a5c9;
+  --hero-gradient-via3: #f3b8a2;
+  --hero-gradient-to: #fff8e7;
+  --hero-overlay-white10: rgba(255, 255, 255, 0.1);
+  --hero-overlay-purple5: rgba(168, 85, 247, 0.05);
+
+  /* Background Colors */
+  --bg-cream: #fff6ea;
+  --bg-cream-light: #fff7eb;
+  --bg-cream-blend: #fff5e6;
+  --bg-dark: #0b0b10;
+
+  /* Text Colors */
+  --text-primary: #23255f;
+  --text-secondary: #2a2d66;
+  --text-tertiary: #1b1d4e;
+  --text-light: #f5f5f7;
+  --text-dark-accent: #f6c36a;
+  --text-secondary-75: rgba(42, 45, 102, 0.75);
+  --text-secondary-70: rgba(42, 45, 102, 0.7);
+  --text-secondary-65: rgba(42, 45, 102, 0.65);
+
+  /* Brand Colors */
+  --brand-pink-400: #f472b6;
+  --brand-pink-500: #ec4899;
+  --brand-pink-600: #db2777;
+  --brand-pink-shadow25: rgba(236, 72, 153, 0.25);
+  --brand-pink-shadow35: rgba(236, 72, 153, 0.35);
+  --brand-pink-ring30: rgba(236, 72, 153, 0.3);
+  --brand-blue: #6b7cff;
+  --brand-blue-alt: #5a6cff;
+  --brand-orange: #ff9f68;
+
+  /* Cream Opacity Variants */
+  --cream-95: rgba(255, 246, 234, 0.95);
+  --cream-90: rgba(255, 246, 234, 0.9);
+  --cream-85: rgba(255, 246, 234, 0.85);
+  --cream-80: rgba(255, 246, 234, 0.8);
+  --cream-75: rgba(255, 246, 234, 0.75);
+  --cream-70: rgba(255, 246, 234, 0.7);
+  --cream-60: rgba(255, 246, 234, 0.6);
+  --cream-50: rgba(255, 246, 234, 0.5);
+  --cream-40: rgba(255, 246, 234, 0.4);
+  --cream-30: rgba(255, 246, 234, 0.3);
+  --cream-20: rgba(255, 246, 234, 0.2);
+  --cream-blend-60: rgba(255, 245, 230, 0.6);
+  --cream-blend-50: rgba(255, 245, 230, 0.5);
+
+  /* Dark Opacity Variants */
+  --dark-95: rgba(11, 11, 16, 0.95);
+  --dark-90: rgba(11, 11, 16, 0.9);
+  --dark-75: rgba(11, 11, 16, 0.75);
+  --dark-70: rgba(11, 11, 16, 0.7);
+  --dark-60: rgba(11, 11, 16, 0.6);
+  --dark-50: rgba(11, 11, 16, 0.5);
+  --dark-40: rgba(11, 11, 16, 0.4);
+
+  /* White Opacity Variants */
+  --white-95: rgba(255, 255, 255, 0.95);
+  --white-75: rgba(255, 255, 255, 0.75);
+  --white-60: rgba(255, 255, 255, 0.6);
+  --white-50: rgba(255, 255, 255, 0.5);
+  --white-40: rgba(255, 255, 255, 0.4);
+  --white-5: rgba(255, 255, 255, 0.05);
+  --white-4: rgba(255, 255, 255, 0.04);
+
+  /* ===========================================
+     Typography
+     =========================================== */
   --font-sans: Inter;
   --font-serif: Lora;
   --font-mono: Fira Code;
+
+  /* ===========================================
+     Layout & Spacing
+     =========================================== */
   --radius: 0.75rem;
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  /* ===========================================
+     Shadows
+     =========================================== */
   --shadow-x: 0px;
   --shadow-y: 8px;
   --shadow-blur: 24px;
@@ -66,199 +159,13 @@
     0px 8px 24px -8px hsl(0 25.4545% 78.4314% / 0.08),
     0px 8px 10px -9px hsl(0 25.4545% 78.4314% / 0.08);
   --shadow-2xl: 0px 8px 24px -8px hsl(0 25.4545% 78.4314% / 0.2);
-  --tracking-normal: 0em;
-  --spacing: 0.25rem;
 }
 
-.dark {
-  --background: oklch(0.1918 0.014 34.4061);
-  --foreground: oklch(0.9138 0.0117 37.4182);
-  --card: oklch(0.2486 0.0245 31.5638);
-  --card-foreground: oklch(0.9138 0.0117 37.4182);
-  --popover: oklch(0.2486 0.0245 31.5638);
-  --popover-foreground: oklch(0.9138 0.0117 37.4182);
-  --primary: oklch(0.7563 0.146 21.105);
-  --primary-foreground: oklch(0.1918 0.014 34.4061);
-  --secondary: oklch(0.9061 0.1102 87.5851);
-  --secondary-foreground: oklch(0.1918 0.014 34.4061);
-  --muted: oklch(0.2947 0.0248 30.6859);
-  --muted-foreground: oklch(0.6764 0.0196 30.313);
-  --accent: oklch(0.3529 0.0371 29.2085);
-  --accent-foreground: oklch(0.8689 0.0702 18.5989);
-  --destructive: oklch(0.6248 0.1939 24.7189);
-  --destructive-foreground: oklch(0.1918 0.014 34.4061);
-  --border: oklch(0.3529 0.0371 29.2085);
-  --input: oklch(0.3529 0.0371 29.2085);
-  --ring: oklch(0.7563 0.146 21.105);
-  --chart-1: oklch(0.7563 0.146 21.105);
-  --chart-2: oklch(0.9061 0.1102 87.5851);
-  --chart-3: oklch(0.8119 0.1492 170.6875);
-  --chart-4: oklch(0.7617 0.1214 220.2892);
-  --chart-5: oklch(0.7052 0.167 6.5149);
-  --sidebar: oklch(0.1918 0.014 34.4061);
-  --sidebar-foreground: oklch(0.9138 0.0117 37.4182);
-  --sidebar-primary: oklch(0.7563 0.146 21.105);
-  --sidebar-primary-foreground: oklch(0.1918 0.014 34.4061);
-  --sidebar-accent: oklch(0.3529 0.0371 29.2085);
-  --sidebar-accent-foreground: oklch(0.8689 0.0702 18.5989);
-  --sidebar-border: oklch(0.3529 0.0371 29.2085);
-  --sidebar-ring: oklch(0.7563 0.146 21.105);
-  --font-sans: Inter;
-  --font-serif: Lora;
-  --font-mono: Fira Code;
-  --radius: 0.75rem;
-  --shadow-x: 0px;
-  --shadow-y: 8px;
-  --shadow-blur: 24px;
-  --shadow-spread: -8px;
-  --shadow-opacity: 0.15;
-  --shadow-color: #000000;
-  --shadow-2xs: 0px 8px 24px -8px hsl(0 0% 0% / 0.07);
-  --shadow-xs: 0px 8px 24px -8px hsl(0 0% 0% / 0.07);
-  --shadow-sm: 0px 8px 24px -8px hsl(0 0% 0% / 0.15), 0px 1px 2px -9px hsl(0 0% 0% / 0.15);
-  --shadow: 0px 8px 24px -8px hsl(0 0% 0% / 0.15), 0px 1px 2px -9px hsl(0 0% 0% / 0.15);
-  --shadow-md: 0px 8px 24px -8px hsl(0 0% 0% / 0.15), 0px 2px 4px -9px hsl(0 0% 0% / 0.15);
-  --shadow-lg: 0px 8px 24px -8px hsl(0 0% 0% / 0.15), 0px 4px 6px -9px hsl(0 0% 0% / 0.15);
-  --shadow-xl: 0px 8px 24px -8px hsl(0 0% 0% / 0.15), 0px 8px 10px -9px hsl(0 0% 0% / 0.15);
-  --shadow-2xl: 0px 8px 24px -8px hsl(0 0% 0% / 0.38);
-}
-
-@font-face {
-  font-family: 'Yellowtail';
-  src: url('/src/assets/fonts/Yellowtail/Yellowtail-Regular.woff');
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Playfair';
-  src: url('/src/assets/fonts/Palyfair/Playfair9pt-ExtraBold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Playfair';
-  src: url('/src/assets/fonts/Palyfair/Playfair9pt-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Playfair';
-  src: url('/src/assets/fonts/Palyfair/Playfair9pt-Bold.woff') format('woff');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Playfair';
-  src: url('/src/assets/fonts/Palyfair/Playfair9pt-Regular.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Playfair';
-  src: url('/src/assets/fonts/Palyfair/Playfair9pt-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LibreBaskerville';
-  src: url('/src/assets/fonts/LibreBaskerville/LibreBaskerville-Bold.woff') format('woff');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LibreBaskerville';
-  src: url('/src/assets/fonts/LibreBaskerville/LibreBaskerville-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LibreBaskerville';
-  src: url('/src/assets/fonts/LibreBaskerville/LibreBaskerville-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'LibreBaskerville';
-  src: url('/src/assets/fonts/LibreBaskerville/LibreBaskerville-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IBMPlexMono';
-  src: url('/src/assets/fonts/IBMPlexMono/IBMPlexMono-Thin.woff') format('woff');
-  font-weight: 100;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IBMPlexMono';
-  src: url('/src/assets/fonts/IBMPlexMono/IBMPlexMono-ExtraLight.woff') format('woff');
-  font-weight: 200;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IBMPlexMono';
-  src: url('/src/assets/fonts/IBMPlexMono/IBMPlexMono-Light.woff') format('woff');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IBMPlexMono';
-  src: url('/src/assets/fonts/IBMPlexMono/IBMPlexMono-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IBMPlexMono';
-  src: url('/src/assets/fonts/IBMPlexMono/IBMPlexMono-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IBMPlexMono';
-  src: url('/src/assets/fonts/IBMPlexMono/IBMPlexMono-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'IBMPlexMono';
-  src: url('/src/assets/fonts/IBMPlexMono/IBMPlexMono-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
+/* ===========================================
+   Tailwind Theme Configuration
+   =========================================== */
 @theme inline {
+  /* Base Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -292,6 +199,76 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* StoryChain Hero Gradient Colors */
+  --color-hero-gradient-from: var(--hero-gradient-from);
+  --color-hero-gradient-via1: var(--hero-gradient-via1);
+  --color-hero-gradient-via2: var(--hero-gradient-via2);
+  --color-hero-gradient-via3: var(--hero-gradient-via3);
+  --color-hero-gradient-to: var(--hero-gradient-to);
+  --color-hero-overlay-white10: var(--hero-overlay-white10);
+  --color-hero-overlay-purple5: var(--hero-overlay-purple5);
+
+  /* StoryChain Background Colors */
+  --color-bg-cream: var(--bg-cream);
+  --color-bg-cream-light: var(--bg-cream-light);
+  --color-bg-cream-blend: var(--bg-cream-blend);
+  --color-bg-dark: var(--bg-dark);
+
+  /* StoryChain Text Colors */
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-light: var(--text-light);
+  --color-text-dark-accent: var(--text-dark-accent);
+  --color-text-secondary-75: var(--text-secondary-75);
+  --color-text-secondary-70: var(--text-secondary-70);
+  --color-text-secondary-65: var(--text-secondary-65);
+
+  /* StoryChain Brand Colors */
+  --color-brand-pink-400: var(--brand-pink-400);
+  --color-brand-pink-500: var(--brand-pink-500);
+  --color-brand-pink-600: var(--brand-pink-600);
+  --color-brand-pink-shadow25: var(--brand-pink-shadow25);
+  --color-brand-pink-shadow35: var(--brand-pink-shadow35);
+  --color-brand-pink-ring30: var(--brand-pink-ring30);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-blue-alt: var(--brand-blue-alt);
+  --color-brand-orange: var(--brand-orange);
+
+  /* StoryChain Cream Opacity Variants */
+  --color-cream-95: var(--cream-95);
+  --color-cream-90: var(--cream-90);
+  --color-cream-85: var(--cream-85);
+  --color-cream-80: var(--cream-80);
+  --color-cream-75: var(--cream-75);
+  --color-cream-70: var(--cream-70);
+  --color-cream-60: var(--cream-60);
+  --color-cream-50: var(--cream-50);
+  --color-cream-40: var(--cream-40);
+  --color-cream-30: var(--cream-30);
+  --color-cream-20: var(--cream-20);
+  --color-cream-blend-60: var(--cream-blend-60);
+  --color-cream-blend-50: var(--cream-blend-50);
+
+  /* StoryChain Dark Opacity Variants */
+  --color-dark-95: var(--dark-95);
+  --color-dark-90: var(--dark-90);
+  --color-dark-75: var(--dark-75);
+  --color-dark-70: var(--dark-70);
+  --color-dark-60: var(--dark-60);
+  --color-dark-50: var(--dark-50);
+  --color-dark-40: var(--dark-40);
+
+  /* StoryChain White Opacity Variants */
+  --color-white-95: var(--white-95);
+  --color-white-75: var(--white-75);
+  --color-white-60: var(--white-60);
+  --color-white-50: var(--white-50);
+  --color-white-40: var(--white-40);
+  --color-white-5: var(--white-5);
+  --color-white-4: var(--white-4);
+
+  /* Fonts */
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
@@ -300,11 +277,13 @@
   --font-libreBaskerville: 'LibreBaskerville', serif;
   --font-mono: 'IBMPlexMono', monospace;
 
+  /* Border Radius */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
+  /* Shadows */
   --shadow-2xs: var(--shadow-2xs);
   --shadow-xs: var(--shadow-xs);
   --shadow-sm: var(--shadow-sm);
@@ -315,46 +294,38 @@
   --shadow-2xl: var(--shadow-2xl);
 }
 
+/* ===========================================
+   Base Styles
+   =========================================== */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   * {
     scrollbar-width: thin;
     scrollbar-color: theme(--color-muted-foreground) theme(--color-sidebar);
   }
-}
 
-@utility scrollbar {
-  /* Firefox support */
-  scrollbar-width: thin;
-  scrollbar-color: var(--chart-5) var(--background);
-
-  /* Webkit browsers */
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: var(--background);
-    border-radius: 100px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgb(var(--chart-5) / 0.1);
-    border-radius: 100px;
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-libreBaskerville;
   }
 }
 
+/* ===========================================
+   Custom Utilities
+   =========================================== */
 @utility scrollbar {
-  /* Firefox support */
   scrollbar-width: thin;
   scrollbar-color: var(--muted) var(--background);
 
-  /* Webkit browsers */
   &::-webkit-scrollbar {
     width: 8px;
   }
@@ -370,12 +341,15 @@
   }
 }
 
-/* Minimal toolbar container */
+/* ===========================================
+   Component Styles
+   =========================================== */
+
+/* Notion-style Toolbar */
 .notion-toolbar {
   @apply bg-background/70 flex items-center gap-1 rounded-xl border px-2 py-1 shadow-sm backdrop-blur supports-[backdrop-filter]:backdrop-blur-md;
 }
 
-/* Icon button (Notion style) */
 .notion-btn {
   @apply hover:bg-muted/40 text-muted-foreground flex h-8 w-8 items-center justify-center rounded-md transition;
 }
@@ -384,20 +358,20 @@
   @apply bg-muted text-foreground;
 }
 
-/* Dropdown trigger */
 .notion-trigger {
   @apply bg-background hover:bg-muted/20 flex h-8 items-center gap-1 rounded-md border px-2 text-sm;
 }
 
-/* Bubble menu */
 .notion-bubble {
   @apply bg-background/95 flex items-center gap-1 rounded-xl border px-2 py-1 shadow-md backdrop-blur-md;
 }
 
+/* Toast Styles */
 .error-toast {
   @apply rounded-md bg-gradient-to-r from-red-100 to-red-600 p-4 text-white shadow-md;
 }
 
+/* React Flow */
 .react-flow__controls-button {
   background-color: var(--background) !important;
   border: none !important;
@@ -412,6 +386,7 @@
   font-weight: 700;
 }
 
+/* ProseMirror Editor */
 .ProseMirror:focus {
   outline: none !important;
   box-shadow: none !important;

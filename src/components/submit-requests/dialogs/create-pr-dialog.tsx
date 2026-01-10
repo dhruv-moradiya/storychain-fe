@@ -1,0 +1,542 @@
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { cn } from '@/lib/utils';
+import {
+  GitPullRequest,
+  Plus,
+  FileEdit,
+  Trash2,
+  ChevronRight,
+  ChevronLeft,
+  Check,
+  BookOpen,
+  AlertTriangle,
+} from 'lucide-react';
+import type { PRType, PRLabel } from '@/type/pull-request.type';
+
+interface CreatePRDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSubmit?: (data: PRFormData) => void;
+  storyId?: string;
+  storyTitle?: string;
+}
+
+interface PRFormData {
+  title: string;
+  description: string;
+  prType: PRType;
+  chapterId: string;
+  parentChapterId: string;
+  proposedContent: string;
+  labels: PRLabel[];
+  isDraft: boolean;
+  autoApproveEnabled: boolean;
+}
+
+const STEPS = ['Type', 'Details', 'Content', 'Review'];
+
+const PR_TYPES: {
+  value: PRType;
+  label: string;
+  description: string;
+  icon: React.ElementType;
+  colorClass: string;
+  bgClass: string;
+}[] = [
+  {
+    value: 'NEW_CHAPTER',
+    label: 'New Chapter',
+    description: 'Add a new chapter to the story',
+    icon: Plus,
+    colorClass: 'text-[#10b981]',
+    bgClass: 'bg-[#10b981]/15',
+  },
+  {
+    value: 'EDIT_CHAPTER',
+    label: 'Edit Chapter',
+    description: 'Propose changes to an existing chapter',
+    icon: FileEdit,
+    colorClass: 'text-brand-blue',
+    bgClass: 'bg-brand-blue/15',
+  },
+  {
+    value: 'DELETE_CHAPTER',
+    label: 'Delete Chapter',
+    description: 'Request removal of a chapter',
+    icon: Trash2,
+    colorClass: 'text-[#ef4444]',
+    bgClass: 'bg-[#ef4444]/15',
+  },
+];
+
+const LABELS: { value: PRLabel; label: string }[] = [
+  { value: 'NEEDS_REVIEW', label: 'Needs Review' },
+  { value: 'QUALITY_ISSUE', label: 'Quality Issue' },
+  { value: 'GRAMMAR', label: 'Grammar' },
+  { value: 'PLOT_HOLE', label: 'Plot Hole' },
+  { value: 'GOOD_FIRST_PR', label: 'Good First PR' },
+];
+
+const MOCK_CHAPTERS = [
+  { id: 'ch-1', title: 'Chapter 1: The Beginning' },
+  { id: 'ch-2', title: 'Chapter 2: Rising Action' },
+  { id: 'ch-3', title: 'Chapter 3: The Conflict' },
+  { id: 'ch-4', title: 'Chapter 4: Resolution' },
+  { id: 'ch-5', title: 'Chapter 5: Epilogue' },
+];
+
+export function CreatePRDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  storyTitle = 'The Story',
+}: CreatePRDialogProps) {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [formData, setFormData] = useState<PRFormData>({
+    title: '',
+    description: '',
+    prType: 'NEW_CHAPTER',
+    chapterId: '',
+    parentChapterId: '',
+    proposedContent: '',
+    labels: [],
+    isDraft: false,
+    autoApproveEnabled: true,
+  });
+
+  const updateFormData = (updates: Partial<PRFormData>) => {
+    setFormData((prev) => ({ ...prev, ...updates }));
+  };
+
+  const handleNext = () => {
+    if (currentStep < STEPS.length - 1) {
+      setCurrentStep((prev) => prev + 1);
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep((prev) => prev - 1);
+    }
+  };
+
+  const handleSubmit = () => {
+    onSubmit?.(formData);
+    onOpenChange(false);
+    setCurrentStep(0);
+    setFormData({
+      title: '',
+      description: '',
+      prType: 'NEW_CHAPTER',
+      chapterId: '',
+      parentChapterId: '',
+      proposedContent: '',
+      labels: [],
+      isDraft: false,
+      autoApproveEnabled: true,
+    });
+  };
+
+  const canProceed = () => {
+    switch (currentStep) {
+      case 0:
+        return !!formData.prType;
+      case 1:
+        return !!formData.title && !!formData.chapterId;
+      case 2:
+        return formData.prType === 'DELETE_CHAPTER' || !!formData.proposedContent;
+      case 3:
+        return true;
+      default:
+        return false;
+    }
+  };
+
+  const toggleLabel = (label: PRLabel) => {
+    setFormData((prev) => ({
+      ...prev,
+      labels: prev.labels.includes(label)
+        ? prev.labels.filter((l) => l !== label)
+        : [...prev.labels, label],
+    }));
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="border-black/10 bg-white sm:max-w-[600px]">
+        <DialogHeader>
+          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
+            <div className="bg-brand-pink-500/15 flex h-8 w-8 items-center justify-center rounded-lg">
+              <GitPullRequest className="text-brand-pink-500 h-4 w-4" />
+            </div>
+            Create Submit Request
+          </DialogTitle>
+          <DialogDescription className="text-text-secondary-70 font-mono text-sm">
+            Submit a change request for{' '}
+            <span className="bg-brand-blue/15 text-brand-blue rounded px-1.5 py-0.5 font-medium">
+              {storyTitle}
+            </span>
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* Step Indicator */}
+        <div className="flex items-center justify-center gap-2 py-3">
+          {STEPS.map((step, idx) => (
+            <div key={step} className="flex items-center">
+              <div
+                className={cn(
+                  'flex h-8 w-8 items-center justify-center rounded-full font-mono text-xs font-medium transition-all',
+                  idx <= currentStep
+                    ? 'bg-brand-pink-500 text-white'
+                    : 'text-text-secondary-65 bg-black/5'
+                )}
+              >
+                {idx < currentStep ? <Check className="h-4 w-4" /> : idx + 1}
+              </div>
+              {idx < STEPS.length - 1 && (
+                <div
+                  className={cn(
+                    'mx-2 h-px w-8 transition-colors',
+                    idx < currentStep ? 'bg-brand-pink-500' : 'bg-black/10'
+                  )}
+                />
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Step Content */}
+        <div className="min-h-[300px] py-4">
+          <AnimatePresence mode="wait">
+            {/* Step 1: Type */}
+            {currentStep === 0 && (
+              <motion.div
+                key="type"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.15 }}
+                className="space-y-3"
+              >
+                <p className="text-text-secondary-65 font-mono text-sm">
+                  Select the type of change
+                </p>
+                {PR_TYPES.map((type) => {
+                  const TypeIcon = type.icon;
+                  const isSelected = formData.prType === type.value;
+
+                  return (
+                    <button
+                      key={type.value}
+                      onClick={() => updateFormData({ prType: type.value })}
+                      className={cn(
+                        'flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all',
+                        isSelected
+                          ? 'border-black/20 bg-white shadow-sm'
+                          : 'border-black/5 hover:border-black/15 hover:bg-black/[0.02]'
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          'flex h-11 w-11 items-center justify-center rounded-xl',
+                          type.bgClass
+                        )}
+                      >
+                        <TypeIcon className={cn('h-5 w-5', type.colorClass)} />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-text-primary font-medium">{type.label}</p>
+                        <p className="text-text-secondary-65 font-mono text-sm">
+                          {type.description}
+                        </p>
+                      </div>
+                      {isSelected && (
+                        <div className="bg-brand-pink-500 flex h-6 w-6 items-center justify-center rounded-full">
+                          <Check className="h-3.5 w-3.5 text-white" />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </motion.div>
+            )}
+
+            {/* Step 2: Details */}
+            {currentStep === 1 && (
+              <motion.div
+                key="details"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.15 }}
+                className="space-y-5"
+              >
+                <div className="space-y-2">
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
+                    Title
+                  </Label>
+                  <Input
+                    placeholder="e.g., Add new backstory chapter"
+                    value={formData.title}
+                    onChange={(e) => updateFormData({ title: e.target.value })}
+                    className="border-black/10 bg-white/50 font-mono focus:border-[#6b7cff] focus:ring-[#6b7cff]/20"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
+                    Description
+                  </Label>
+                  <Textarea
+                    placeholder="Describe the changes you're proposing..."
+                    value={formData.description}
+                    onChange={(e) => updateFormData({ description: e.target.value })}
+                    rows={3}
+                    className="border-black/10 bg-white/50 focus:border-[#6b7cff] focus:ring-[#6b7cff]/20"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
+                    {formData.prType === 'NEW_CHAPTER' ? 'Insert After' : 'Target Chapter'}
+                  </Label>
+                  <Select
+                    value={formData.chapterId}
+                    onValueChange={(value) =>
+                      updateFormData({ chapterId: value, parentChapterId: value })
+                    }
+                  >
+                    <SelectTrigger className="border-black/10 bg-white/50 font-mono">
+                      <SelectValue placeholder="Select chapter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {formData.prType === 'NEW_CHAPTER' && (
+                        <SelectItem value="root">
+                          <span className="flex items-center gap-2 font-mono">
+                            <BookOpen className="text-brand-blue h-3.5 w-3.5" />
+                            Story Introduction
+                          </span>
+                        </SelectItem>
+                      )}
+                      {MOCK_CHAPTERS.map((chapter) => (
+                        <SelectItem key={chapter.id} value={chapter.id} className="font-mono">
+                          {chapter.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Step 3: Content */}
+            {currentStep === 2 && (
+              <motion.div
+                key="content"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.15 }}
+                className="space-y-4"
+              >
+                {formData.prType === 'DELETE_CHAPTER' ? (
+                  <div className="rounded-xl border border-red-200 bg-red-50/50 p-5">
+                    <div className="flex gap-4">
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-100">
+                        <AlertTriangle className="h-5 w-5 text-red-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-red-700">Deletion Request</p>
+                        <p className="mt-1 font-mono text-sm text-red-600/70">
+                          You're requesting to delete this chapter. Please provide a clear reason in
+                          the description field.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
+                        {formData.prType === 'NEW_CHAPTER' ? 'Chapter Content' : 'Proposed Changes'}
+                      </Label>
+                      <span className="text-text-secondary-65 font-mono text-xs">
+                        {formData.proposedContent.length} characters
+                      </span>
+                    </div>
+                    <Textarea
+                      placeholder={
+                        formData.prType === 'NEW_CHAPTER'
+                          ? 'Write your chapter content here...'
+                          : 'Enter the modified content...'
+                      }
+                      value={formData.proposedContent}
+                      onChange={(e) => updateFormData({ proposedContent: e.target.value })}
+                      rows={12}
+                      className="border-black/10 bg-white/50 font-mono text-sm focus:border-[#6b7cff] focus:ring-[#6b7cff]/20"
+                    />
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+            {/* Step 4: Review */}
+            {currentStep === 3 && (
+              <motion.div
+                key="review"
+                initial={{ opacity: 0, x: 10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.15 }}
+                className="space-y-5"
+              >
+                {/* Labels */}
+                <div className="space-y-3">
+                  <Label className="text-text-secondary-65 font-mono text-xs tracking-wider uppercase">
+                    Labels
+                  </Label>
+                  <div className="flex flex-wrap gap-2">
+                    {LABELS.map((label) => {
+                      const isSelected = formData.labels.includes(label.value);
+                      return (
+                        <button
+                          key={label.value}
+                          onClick={() => toggleLabel(label.value)}
+                          className={cn(
+                            'rounded-full border px-3 py-1.5 font-mono text-xs transition-all',
+                            isSelected
+                              ? 'bg-brand-blue border-transparent text-white'
+                              : 'text-text-secondary-75 border-black/10 hover:border-black/20'
+                          )}
+                        >
+                          {label.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Settings */}
+                <div className="space-y-4 rounded-xl border border-black/5 bg-black/[0.02] p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-text-primary font-medium">Create as draft</p>
+                      <p className="text-text-secondary-65 font-mono text-xs">
+                        Won't be reviewed until marked ready
+                      </p>
+                    </div>
+                    <Switch
+                      checked={formData.isDraft}
+                      onCheckedChange={(checked) => updateFormData({ isDraft: checked })}
+                    />
+                  </div>
+                  <div className="h-px bg-black/5" />
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-text-primary font-medium">Community auto-approval</p>
+                      <p className="text-text-secondary-65 font-mono text-xs">
+                        Auto-approve when vote threshold is reached
+                      </p>
+                    </div>
+                    <Switch
+                      checked={formData.autoApproveEnabled}
+                      onCheckedChange={(checked) => updateFormData({ autoApproveEnabled: checked })}
+                    />
+                  </div>
+                </div>
+
+                {/* Summary */}
+                <div className="rounded-xl border border-black/5 bg-black/[0.02] p-4">
+                  <p className="text-text-secondary-65 font-mono text-xs font-medium tracking-wider uppercase">
+                    Summary
+                  </p>
+                  <div className="mt-3 space-y-2">
+                    <div className="flex items-center justify-between font-mono text-sm">
+                      <span className="text-text-secondary-65">Type</span>
+                      <span className="text-text-primary">
+                        {PR_TYPES.find((t) => t.value === formData.prType)?.label}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between font-mono text-sm">
+                      <span className="text-text-secondary-65">Title</span>
+                      <span className="text-text-primary max-w-[200px] truncate">
+                        {formData.title}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between font-mono text-sm">
+                      <span className="text-text-secondary-65">Status</span>
+                      <Badge
+                        className={cn(
+                          'border-none font-mono text-xs',
+                          formData.isDraft
+                            ? 'bg-brand-orange/15 text-brand-orange'
+                            : 'bg-brand-pink-500/15 text-brand-pink-500'
+                        )}
+                      >
+                        {formData.isDraft ? 'Draft' : 'Ready'}
+                      </Badge>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        <DialogFooter className="gap-2 sm:gap-0">
+          {currentStep > 0 && (
+            <Button
+              variant="outline"
+              onClick={handleBack}
+              className="gap-1 border-black/10 font-mono hover:bg-black/5"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Back
+            </Button>
+          )}
+          {currentStep < STEPS.length - 1 ? (
+            <Button
+              onClick={handleNext}
+              disabled={!canProceed()}
+              className="bg-brand-blue hover:bg-brand-blue-alt gap-1 font-mono text-white"
+            >
+              Next
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button
+              onClick={handleSubmit}
+              disabled={!canProceed()}
+              className="bg-brand-pink-500 hover:bg-brand-pink-400 gap-2 font-mono text-white"
+            >
+              <GitPullRequest className="h-4 w-4" />
+              {formData.isDraft ? 'Create Draft' : 'Submit Request'}
+            </Button>
+          )}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
