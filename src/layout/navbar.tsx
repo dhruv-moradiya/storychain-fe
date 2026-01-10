@@ -8,7 +8,7 @@ import { useClerk, useUser } from '@clerk/clerk-react';
 import { Link, useNavigate } from 'react-router';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Compass, LayoutDashboard } from 'lucide-react';
+import { Compass, Feather, LayoutDashboard } from 'lucide-react';
 import { NavItem } from '@/components/common';
 
 export default function Navbar() {
@@ -34,8 +34,8 @@ export default function Navbar() {
         {isSignedIn && (
           <ul className="hidden items-center gap-2 md:flex">
             <NavItem to="/dashboard" label="Dashboard" icon={<LayoutDashboard size={16} />} />
-
             <NavItem to="/explore" label="Explore" icon={<Compass size={16} />} />
+            <NavItem to="/" label="Builder" icon={<Feather size={16} />} />
           </ul>
         )}
 

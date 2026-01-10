@@ -4,12 +4,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from 'react-router';
 import { ClerkProvider } from '@clerk/clerk-react';
-import { Toaster } from 'sonner';
 
 import { router } from './App';
 import { ErrorBoundary } from './components/error-boundary';
 import { PageSkeleton } from './components/skeletons/page-skeleton';
 import './index.css';
+import { ToastProvider } from './components/common/toast';
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -45,12 +45,13 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary fallback={<RootErrorFallback />}>
       <QueryClientProvider client={queryClient}>
-        <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-          <Suspense fallback={<PageSkeleton />}>
-            <RouterProvider router={router} />
-          </Suspense>
-          <Toaster richColors />
-        </ClerkProvider>
+        <ToastProvider>
+          <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+            <Suspense fallback={<PageSkeleton />}>
+              <RouterProvider router={router} />
+            </Suspense>
+          </ClerkProvider>
+        </ToastProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </ErrorBoundary>

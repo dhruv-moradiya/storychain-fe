@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, X, ChevronUp, ChevronDown, Trash2, ArrowLeft } from 'lucide-react';
+import { FileText, X, ChevronUp, ChevronDown, Trash2, ArrowLeft, NotebookPen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -44,11 +44,11 @@ const DraftItem = ({ draft, onContinue }: { draft: IChapterAutoSave; onContinue:
           <Trash2 className="h-3.5 w-3.5" />
         </Button>
         <Button
-          size="sm"
+          size="icon"
           className="bg-brand-pink-500 hover:bg-brand-pink-600 h-7 px-3 font-mono text-[10px] text-white"
           onClick={handleContinue}
         >
-          Continue
+          <NotebookPen />
         </Button>
       </div>
     </motion.div>

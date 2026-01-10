@@ -6,7 +6,7 @@ import { NotificationType, type INotification } from '@/type/notification.type';
 import { Button } from '@/components/ui/button';
 import { useAcceptInvitation, useDeclineInvitation } from '@/hooks/story/story.mutations';
 import { useState } from 'react';
-import { toast } from 'sonner';
+import toast from '@/components/common/toast';
 
 interface Props {
   notification: INotification;

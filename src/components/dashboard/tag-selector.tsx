@@ -5,6 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Separator } from '@/components/ui/separator';
 import { Search, Tag } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { BadgeGroup } from '../common/badge';
 
 interface TagSelectorProps {
   allTags: string[];
@@ -25,6 +26,16 @@ export default function TagSelector({ allTags = [], value = [], onChange }: TagS
     onChange?.(updated);
   };
 
+  const badgeGroup = value.map((tag) => {
+    return {
+      label: tag,
+      icon: Tag,
+      size: 'sm' as const,
+      className: '!bg-transparent',
+      iconClassName: 'size-3',
+    };
+  });
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -37,15 +48,7 @@ export default function TagSelector({ allTags = [], value = [], onChange }: TagS
           <div className="hover:bg-primary/10 text-muted-foreground hover:border-primary flex w-full cursor-pointer items-center gap-1 rounded-lg p-1 transition-colors">
             {value.length > 0 ? (
               <div className="flex flex-wrap items-center gap-2">
-                {value.map((tag) => (
-                  <div
-                    key={tag}
-                    className="text-muted-foreground flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] uppercase"
-                  >
-                    <Tag className="size-3" />
-                    {tag}
-                  </div>
-                ))}
+                {<BadgeGroup badges={badgeGroup} />}
               </div>
             ) : (
               <span className="text-xs font-medium uppercase">Add Tags</span>

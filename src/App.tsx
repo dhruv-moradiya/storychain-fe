@@ -2,6 +2,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { ProtectedRoute } from '@/components/protected-route';
 import { lazyRoute } from '@/lib/lazy-route';
 import { createBrowserRouter } from 'react-router';
+import NotFound from './components/common/not-found';
 
 // Lazy pages
 const Home = lazyRoute(() => import('./pages/home'), 'page');
@@ -91,5 +92,10 @@ export const router = createBrowserRouter([
   {
     path: '/sign-in',
     element: <SignIn />,
+  },
+
+  {
+    path: '/*',
+    element: <NotFound />,
   },
 ]);

@@ -235,6 +235,87 @@
   --color-brand-blue-alt: var(--brand-blue-alt);
   --color-brand-orange: var(--brand-orange);
 
+  /* Badge Colors */
+  --color-badge-success: #10b981;
+  --color-badge-success-bg: rgba(16, 185, 129, 0.08);
+  --color-badge-success-border: rgba(16, 185, 129, 0.19);
+  --color-badge-warning: #f59e0b;
+  --color-badge-warning-bg: rgba(245, 158, 11, 0.08);
+  --color-badge-warning-border: rgba(245, 158, 11, 0.19);
+  --color-badge-error: #ef4444;
+  --color-badge-error-bg: rgba(239, 68, 68, 0.08);
+  --color-badge-error-border: rgba(239, 68, 68, 0.19);
+  --color-badge-info: #3b82f6;
+  --color-badge-info-bg: rgba(59, 130, 246, 0.08);
+  --color-badge-info-border: rgba(59, 130, 246, 0.19);
+  --color-badge-gray: #64748b;
+  --color-badge-gray-bg: rgba(100, 116, 139, 0.08);
+  --color-badge-gray-border: rgba(100, 116, 139, 0.19);
+  --color-badge-slate: #475569;
+  --color-badge-slate-bg: rgba(71, 85, 105, 0.08);
+  --color-badge-slate-border: rgba(71, 85, 105, 0.19);
+  --color-badge-purple: #8b5cf6;
+  --color-badge-purple-bg: rgba(139, 92, 246, 0.08);
+  --color-badge-purple-border: rgba(139, 92, 246, 0.19);
+  --color-badge-cyan: #06b6d4;
+  --color-badge-cyan-bg: rgba(6, 182, 212, 0.08);
+  --color-badge-cyan-border: rgba(6, 182, 212, 0.19);
+  --color-badge-emerald: #10b981;
+  --color-badge-emerald-bg: rgba(16, 185, 129, 0.08);
+  --color-badge-emerald-border: rgba(16, 185, 129, 0.19);
+  --color-badge-amber: #f59e0b;
+  --color-badge-amber-bg: rgba(245, 158, 11, 0.08);
+  --color-badge-amber-border: rgba(245, 158, 11, 0.19);
+  --color-badge-rose: #f43663;
+  --color-badge-rose-bg: rgba(244, 54, 99, 0.08);
+  --color-badge-rose-border: rgba(244, 54, 99, 0.19);
+  --color-badge-indigo: #6366f1;
+  --color-badge-indigo-bg: rgba(99, 102, 241, 0.08);
+  --color-badge-indigo-border: rgba(99, 102, 241, 0.19);
+  --color-badge-pink-bg: rgba(236, 72, 153, 0.08);
+  --color-badge-pink-border: rgba(236, 72, 153, 0.19);
+  --color-badge-blue-bg: rgba(107, 124, 255, 0.08);
+  --color-badge-blue-border: rgba(107, 124, 255, 0.19);
+  --color-badge-orange-bg: rgba(255, 159, 104, 0.08);
+  --color-badge-orange-border: rgba(255, 159, 104, 0.19);
+
+  /* Toast Colors */
+  --toast-success-bg: rgba(255, 252, 248, 0.95);
+  --toast-success-border: rgba(16, 185, 129, 0.25);
+  --toast-success-text: #065f46;
+  --toast-success-icon: #10b981;
+  --toast-success-icon-bg: rgba(16, 185, 129, 0.12);
+
+  --toast-error-bg: rgba(255, 252, 248, 0.95);
+  --toast-error-border: rgba(239, 68, 68, 0.25);
+  --toast-error-text: #991b1b;
+  --toast-error-icon: #ef4444;
+  --toast-error-icon-bg: rgba(239, 68, 68, 0.12);
+
+  --toast-warning-bg: rgba(255, 252, 248, 0.95);
+  --toast-warning-border: rgba(245, 158, 11, 0.25);
+  --toast-warning-text: #92400e;
+  --toast-warning-icon: #f59e0b;
+  --toast-warning-icon-bg: rgba(245, 158, 11, 0.12);
+
+  --toast-info-bg: rgba(255, 252, 248, 0.95);
+  --toast-info-border: rgba(59, 130, 246, 0.25);
+  --toast-info-text: #1e40af;
+  --toast-info-icon: #3b82f6;
+  --toast-info-icon-bg: rgba(59, 130, 246, 0.12);
+
+  --toast-default-bg: rgba(255, 252, 248, 0.95);
+  --toast-default-border: rgba(42, 45, 102, 0.15);
+  --toast-default-text: var(--text-primary);
+  --toast-default-icon: var(--brand-pink-500);
+  --toast-default-icon-bg: rgba(236, 72, 153, 0.12);
+
+  --toast-loading-bg: rgba(255, 252, 248, 0.95);
+  --toast-loading-border: rgba(107, 124, 255, 0.25);
+  --toast-loading-text: var(--text-secondary);
+  --toast-loading-icon: var(--brand-blue);
+  --toast-loading-icon-bg: rgba(107, 124, 255, 0.12);
+
   /* StoryChain Cream Opacity Variants */
   --color-cream-95: var(--cream-95);
   --color-cream-90: var(--cream-90);

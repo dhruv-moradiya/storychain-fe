@@ -1,3 +1,4 @@
+import { textBadge } from '@/components/common/badge';
 import TagSelector from '@/components/dashboard/tag-selector';
 import type { IStory } from '@/type/story.type';
 import { formatDistance } from 'date-fns';
@@ -33,7 +34,7 @@ const StoryCard = ({ story }: StoryCardProps) => {
         </div>
 
         {/* STATUS + TITLE */}
-        <div className="mb-3 flex flex-col gap-1">
+        <div className="mb-3 flex flex-col gap-2">
           <span className="text-muted-foreground flex items-center gap-1 text-[11px]">
             <FileEdit size={12} />
             {story.status}
@@ -45,9 +46,10 @@ const StoryCard = ({ story }: StoryCardProps) => {
         <div className="mt-auto">
           <div className="mb-2 flex items-center gap-2 text-xs">
             <span className="text-muted-foreground font-medium">Rating:</span>
-            <span className="bg-muted rounded px-2 py-0.5 text-[10px]">
-              {story.settings.contentRating}
-            </span>
+            {textBadge(story.settings.contentRating, 'gray', {
+              shape: 'square',
+              className: 'rounded-[4px]',
+            })}
           </div>
 
           <TagSelector
