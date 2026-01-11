@@ -30,7 +30,6 @@ import { useGetStoryBySlug, useGetStoryTree } from '@/hooks/story/story.queries'
 import useChapterEdge from '@/hooks/useChapterEdge';
 import { useChapterFlowLayout } from '@/hooks/useChapterFlowLayout';
 import useChapterNode from '@/hooks/useChapterNode';
-import type { IChapterEdge } from '@/type/story-canvas.type';
 import StoryTreeEmpty from './story-tree/components/story-tree-empty';
 import StoryTreeLoading from './story-tree/components/story-tree-loading';
 
@@ -77,9 +76,7 @@ const StoryTree = () => {
 
   const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(
     () =>
-      chapters.length
-        ? layout(rawNodes, rawEdges as IChapterEdge[])
-        : { nodes: EMPTY_ARRAY, edges: EMPTY_ARRAY },
+      chapters.length ? layout(rawNodes, rawEdges) : { nodes: EMPTY_ARRAY, edges: EMPTY_ARRAY },
     [chapters.length, rawNodes, rawEdges, layout]
   );
 
@@ -130,7 +127,7 @@ const StoryTree = () => {
             ...connection,
             animated: true,
             type: 'chapterEdge',
-            style: { stroke: 'lightgray', strokeWidth: 2 },
+            style: { stroke: '#6b7cff', strokeWidth: 2, strokeLinecap: 'round' },
           },
           eds
         )
@@ -198,9 +195,9 @@ const StoryTree = () => {
               connectionLineType={ConnectionLineType.SmoothStep}
               fitView
               fitViewOptions={{ padding: 50 }}
-              className="h-full w-full"
+              className="bg-bg-cream h-full w-full"
             >
-              <Background gap={30} />
+              <Background gap={40} size={1.5} color="rgba(0, 0, 0, 0.04)" />
             </ReactFlow>
           </ResizablePanel>
 
@@ -211,7 +208,7 @@ const StoryTree = () => {
                 defaultSize={25}
                 minSize={20}
                 maxSize={40}
-                className="border-muted m-1 rounded-2xl border shadow-lg"
+                className="border-border/50 bg-bg-cream m-1 rounded-2xl border"
               >
                 {openPanel === 'comments' && <CommentsPanel onClose={() => setOpenPanel(null)} />}
                 {openPanel === 'setting' && (

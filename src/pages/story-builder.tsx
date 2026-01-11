@@ -74,7 +74,7 @@ const StoryBuilder = () => {
   const charCount = editor.getText().length;
 
   return (
-    <div className="flex min-h-screen w-full flex-col">
+    <div className="bg-bg-cream flex min-h-screen w-full flex-col">
       <DraftRecoveryBanner />
       <BuilderHeader
         title={title}

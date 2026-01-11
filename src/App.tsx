@@ -11,6 +11,7 @@ const Story = lazyRoute(() => import('./pages/stories'), 'story');
 const StoryBuilder = lazyRoute(() => import('./pages/story-builder'), 'storyBuilder');
 const ChapterRead = lazyRoute(() => import('./pages/chapter-read'), 'chapter');
 const Profile = lazyRoute(() => import('./pages/profile'), 'profile');
+const UserProfile = lazyRoute(() => import('./pages/user-profile'), 'profile');
 const Reports = lazyRoute(() => import('./pages/reports'), 'dashboard');
 const Appeals = lazyRoute(() => import('./pages/appeals'), 'dashboard');
 const SubmitRequests = lazyRoute(() => import('./pages/submit-requests'));
@@ -63,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: 'profile',
         element: <Profile />,
+      },
+      {
+        path: 'profile/:userId',
+        element: <UserProfile />,
       },
       {
         path: 'reports',

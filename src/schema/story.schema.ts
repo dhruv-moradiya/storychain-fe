@@ -24,8 +24,13 @@ export const StoryFormSchema = z.object({
     'HORROR',
     'THRILLER',
     'ADVENTURE',
+    'ACTION',
     'DRAMA',
     'COMEDY',
+    'SUPERNATURAL',
+    'HISTORICAL',
+    'SLICE_OF_LIFE',
+    'DARK_FANTASY',
     'OTHER',
   ]),
 

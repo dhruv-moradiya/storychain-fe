@@ -1,17 +1,20 @@
 import { useCallback } from 'react';
 import dagre from '@dagrejs/dagre/dist/dagre.min.js';
-import type { Position } from '@xyflow/react';
-import type { IChapterEdge, IChapterNodeType } from '@/type/story-canvas.type';
+import type { Node, Position, Edge } from '@xyflow/react';
+import {
+  nodeWidth,
+  nodeHeight,
+  addNodePlaceholderWidth,
+  addNodePlaceholderHeight,
+} from '@/type/story-canvas.type';
 
 type LayoutDirection = 'TB' | 'LR';
-const nodeWidth = 288;
-const nodeHeight = 175;
 
 const dagreGraph = new dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
 export function useChapterFlowLayout() {
   const layout = useCallback(
-    (nodes: IChapterNodeType[], edges: IChapterEdge[], direction: LayoutDirection = 'TB') => {
+    <N extends Node, E extends Edge>(nodes: N[], edges: E[], direction: LayoutDirection = 'TB') => {
       const isHorizontal = direction === 'LR';
 
       // ✅ Set graph config ONCE
@@ -24,11 +27,12 @@ export function useChapterFlowLayout() {
         marginy: 60,
       });
 
-      // Register nodes
+      // Register nodes with appropriate dimensions
       nodes.forEach((node) => {
+        const isPlaceholder = node.type === 'addNodePlaceholder';
         dagreGraph.setNode(node.id, {
-          width: nodeWidth,
-          height: nodeHeight,
+          width: isPlaceholder ? addNodePlaceholderWidth : nodeWidth,
+          height: isPlaceholder ? addNodePlaceholderHeight : nodeHeight,
         });
       });
 
@@ -39,16 +43,19 @@ export function useChapterFlowLayout() {
 
       dagre.layout(dagreGraph);
 
-      const layoutedNodes: IChapterNodeType[] = nodes.map((node) => {
+      const layoutedNodes: N[] = nodes.map((node) => {
         const { x, y } = dagreGraph.node(node.id);
+        const isPlaceholder = node.type === 'addNodePlaceholder';
+        const width = isPlaceholder ? addNodePlaceholderWidth : nodeWidth;
+        const height = isPlaceholder ? addNodePlaceholderHeight : nodeHeight;
 
         return {
           ...node,
           sourcePosition: (isHorizontal ? 'right' : 'bottom') as Position,
           targetPosition: (isHorizontal ? 'left' : 'top') as Position,
           position: {
-            x: x - nodeWidth / 2,
-            y: y - nodeHeight / 2,
+            x: x - width / 2,
+            y: y - height / 2,
           },
         };
       });

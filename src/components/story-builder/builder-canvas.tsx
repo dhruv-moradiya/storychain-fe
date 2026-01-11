@@ -12,13 +12,14 @@ interface BuilderCanvasProps {
  */
 function BuilderCanvas({ editor }: BuilderCanvasProps) {
   return (
-    <div className="flex flex-1 justify-center px-2 py-4 sm:px-4 sm:py-6">
+    <div className="bg-bg-cream flex flex-1 justify-center px-2 py-4 sm:px-4 sm:py-6">
       <div className="w-full max-w-[816px]">
         <EditorContent
           editor={editor}
           className={cn(
-            'editor-content bg-background w-full rounded-md border shadow-sm',
-            'prose prose-gray dark:prose-invert text-foreground min-h-[60vh] p-4 font-mono text-sm text-[13px] leading-relaxed font-medium focus:outline-none sm:min-h-[70vh] sm:p-8 lg:min-h-[11in] lg:p-12'
+            'editor-content border-border/50 w-full rounded-lg border bg-white shadow-sm',
+            'prose prose-gray text-text-primary min-h-[60vh] p-4 font-mono text-sm leading-relaxed focus:outline-none sm:min-h-[70vh] sm:p-8 lg:min-h-[11in] lg:p-12',
+            'prose-headings:text-text-primary prose-p:text-text-secondary prose-strong:text-text-primary'
           )}
         />
       </div>

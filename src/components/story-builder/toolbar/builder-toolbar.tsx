@@ -74,8 +74,8 @@ function BuilderToolbar({ editor }: BuilderToolbarProps) {
   const currentHeadingLabel = editorState.currentHeading?.label || 'Paragraph';
 
   return (
-    <div className="bg-muted/30 w-full border-b">
-      <div className="mx-auto flex max-w-[1100px] flex-wrap items-center gap-1 px-3 py-1.5">
+    <div className="border-border/50 bg-cream-90 w-full border-b">
+      <div className="scrollbar-hide mx-auto flex max-w-[1100px] flex-wrap items-center gap-1 overflow-x-auto px-3 py-1.5">
         {/* History Tools */}
         <ButtonGroup>
           <Button

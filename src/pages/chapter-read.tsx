@@ -6,7 +6,6 @@ import {
   Bookmark,
   BookmarkCheck,
   ThumbsUp,
-  ThumbsDown,
   MessageSquare,
   MoreHorizontal,
   Edit,
@@ -135,9 +134,9 @@ export default function ChapterReadPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen">
+      <div className="bg-bg-cream min-h-screen">
         {/* Top Navigation Bar */}
-        <header className="bg-background/80 sticky top-0 z-10 border-b backdrop-blur-md">
+        <header className="border-border/50 bg-bg-cream sticky top-0 z-10 border-b">
           <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
             {/* Left - Back Button */}
             <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="gap-2">
@@ -216,66 +215,64 @@ export default function ChapterReadPage() {
         <main className="mx-auto max-w-2xl px-6 py-12 sm:px-8 lg:py-16">
           <ChapterReader chapter={chapter} variant="full" />
 
-          {/* Action Bar - minimal floating style */}
-          <div className="mt-16 flex flex-wrap items-center justify-center gap-3 py-6">
-            {/* Voting */}
-            <div className="bg-background/80 flex items-center gap-1.5 rounded-full border px-2 py-1.5 shadow-sm backdrop-blur-sm">
-              <Button
-                variant={userVote === 'up' ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => handleVote('up')}
-                className={cn(
-                  'h-8 gap-1.5 rounded-full px-3',
-                  userVote === 'up' && 'bg-primary/90'
-                )}
-              >
-                <ThumbsUp className={cn('h-3.5 w-3.5', userVote === 'up' && 'fill-current')} />
-                <span className="text-sm">
-                  {(chapter.stats?.likes || 0) + (userVote === 'up' ? 1 : 0)}
-                </span>
-              </Button>
+          {/* Minimal Action Bar */}
+          <div className="mt-12 flex items-center justify-center gap-4">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleVote('up')}
+              className={cn(
+                'h-9 gap-2 rounded-full px-4',
+                userVote === 'up' && 'bg-brand-pink-500/10 text-brand-pink-500'
+              )}
+            >
+              <ThumbsUp className={cn('h-4 w-4', userVote === 'up' && 'fill-current')} />
+              <span>{(chapter.stats?.likes || 0) + (userVote === 'up' ? 1 : 0)}</span>
+            </Button>
 
-              <Button
-                variant={userVote === 'down' ? 'destructive' : 'ghost'}
-                size="sm"
-                onClick={() => handleVote('down')}
-                className="h-8 rounded-full px-3"
-              >
-                <ThumbsDown className={cn('h-3.5 w-3.5', userVote === 'down' && 'fill-current')} />
-              </Button>
-            </div>
+            <Button variant="ghost" size="sm" className="h-9 gap-2 rounded-full px-4">
+              <MessageSquare className="h-4 w-4" />
+              <span>{chapter.stats?.comments || 0}</span>
+            </Button>
 
-            <div className="bg-background/80 flex items-center gap-1.5 rounded-full border px-2 py-1.5 shadow-sm backdrop-blur-sm">
-              <Button variant="ghost" size="sm" className="h-8 gap-1.5 rounded-full px-3">
-                <MessageSquare className="h-3.5 w-3.5" />
-                <span className="text-sm">{chapter.stats?.comments || 0}</span>
-              </Button>
-            </div>
-
-            {/* Branch Button */}
-            <Button onClick={handleBranch} className="h-9 gap-2 rounded-full px-5 shadow-sm">
-              <GitBranch className="h-3.5 w-3.5" />
+            <Button
+              onClick={handleBranch}
+              className="bg-brand-pink-500 hover:bg-brand-pink-600 h-9 gap-2 rounded-full px-5 text-white"
+            >
+              <GitBranch className="h-4 w-4" />
               Write a Branch
             </Button>
           </div>
 
-          {/* Navigation to Next/Previous Chapters */}
-          {chapter.parentChapter && (
-            <div className="border-border/30 mt-8 border-t pt-8">
+          {/* Chapter Navigation - Previous & Next */}
+          <div className="mt-12 grid grid-cols-2 gap-4">
+            {chapter.parentChapter ? (
               <Button
                 variant="ghost"
-                className="border-border/50 bg-muted/20 hover:bg-muted/40 flex h-auto w-full flex-col items-start gap-1 rounded-xl border p-5 text-left transition-colors"
+                className="border-border/50 hover:border-brand-pink-500/30 flex h-auto flex-col items-start gap-1 rounded-xl border p-4 text-left transition-colors"
                 onClick={() => navigate(`/stories/${storyId}/chapter/${chapter.parentChapter?.id}`)}
               >
-                <span className="text-muted-foreground/70 text-xs font-medium tracking-wider uppercase">
-                  Previous Chapter
-                </span>
-                <span className="text-foreground font-serif text-base font-medium">
+                <span className="text-text-secondary-65 text-xs">← Previous</span>
+                <span className="text-text-primary line-clamp-1 font-medium">
                   {chapter.parentChapter.title}
                 </span>
               </Button>
-            </div>
-          )}
+            ) : (
+              <div />
+            )}
+
+            {/* Next chapter placeholder - would come from API */}
+            <Button
+              variant="ghost"
+              className="border-border/50 hover:border-brand-pink-500/30 flex h-auto flex-col items-end gap-1 rounded-xl border p-4 text-right transition-colors"
+              onClick={() => navigate(`/stories/${storyId}/chapter/next`)}
+            >
+              <span className="text-text-secondary-65 text-xs">Next →</span>
+              <span className="text-text-primary line-clamp-1 font-medium">
+                Chapter 6: Into the Deep
+              </span>
+            </Button>
+          </div>
         </main>
       </div>
     </TooltipProvider>

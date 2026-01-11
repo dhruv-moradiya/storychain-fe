@@ -1,5 +1,8 @@
 import CustomCardNode from '@/components/nodes/custom-card-node';
 import { CustomEdge } from '@/components/nodes/custom-edge';
+import AddNodePlaceholder, {
+  type AddNodePlaceholderData,
+} from '@/components/nodes/add-node-placeholder';
 import type { Edge, EdgeProps, Node, NodeProps } from '@xyflow/react';
 
 export interface IChapterNode {
@@ -65,8 +68,14 @@ export type IChapterEdgeProps = EdgeProps<IChapterEdge>;
 export const nodeWidth = 288;
 export const nodeHeight = 175;
 
+export const addNodePlaceholderWidth = 200;
+export const addNodePlaceholderHeight = 160;
+
+export type IAddNodePlaceholderType = Node<AddNodePlaceholderData, 'addNodePlaceholder'>;
+
 export const nodeTypes = {
   chapterNode: CustomCardNode,
+  addNodePlaceholder: AddNodePlaceholder,
 };
 
 export const edgeTypes = {

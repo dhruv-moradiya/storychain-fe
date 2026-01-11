@@ -9,6 +9,7 @@ import SubmitRequestSection from '@/components/stories/sections/submit-reuqest-s
 import { StoryTabs } from '@/components/stories/stories-tabs';
 import { Navigate, Route, Routes } from 'react-router';
 import SettingSection from '@/components/stories/sections/setting-section';
+import HistorySection from '../components/stories/sections/history-section';
 
 export default function Story() {
   return (
@@ -31,11 +32,11 @@ export default function Story() {
           <Route path="collaborators" element={<CollaboratorSection />} />
           <Route path="tree" element={<StoryTree />} />
           <Route path="settings" element={<SettingSection />} />
+          <Route path="history" element={<HistorySection />} />
           {/* <Route path="versions" element={<VersionsSection />} />
           <Route path="comments" element={<CommentsSection />} />
           <Route path="collaborators" element={<CollaboratorsSection />} />
           <Route path="votes" element={<VotesSection />} />
-          <Route path="history" element={<HistorySection />} />
           <Route path="settings" element={<SettingsSection />} /> */}
         </Routes>
       </div>

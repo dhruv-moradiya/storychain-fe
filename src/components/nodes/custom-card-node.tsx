@@ -1,120 +1,160 @@
 import type { IChapterNodeProps } from '@/type/story-canvas.type';
 import { Handle, Position } from '@xyflow/react';
-import { Clock, Heart, MessageCircle, Plus, Star, ThumbsDown, ThumbsUp, Users } from 'lucide-react';
-import { useNavigate, useParams } from 'react-router';
+import {
+  Clock,
+  Eye,
+  Flag,
+  GitBranch,
+  Heart,
+  MessageCircle,
+  Sparkles,
+  BookOpen,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
+// Static preview excerpts for chapters
+const CHAPTER_EXCERPTS = [
+  'The door creaked open, revealing shadows that danced in the flickering candlelight...',
+  'She never expected to find the letter hidden beneath the old oak tree...',
+  'Time seemed to stop as their eyes met across the crowded marketplace...',
+  'The ancient map held secrets that would change everything they knew...',
+  'In the silence of the night, a single melody echoed through the halls...',
+  'What they discovered in the ruins would rewrite history itself...',
+];
 
 const CustomCardNode = ({ id, data, selected }: IChapterNodeProps) => {
-  const params = useParams();
-  const navigate = useNavigate();
-  const chapterLabel = `Ch. ${data.depth + 1}`;
-  const timeAgo = new Date(data.createdAt).toLocaleDateString();
+  const chapterNum = data.depth + 1;
+  const excerpt = CHAPTER_EXCERPTS[data.depth % CHAPTER_EXCERPTS.length];
+  const readTime = Math.max(2, Math.floor(chapterNum * 1.5 + 2));
+  const isPopular = data.stats.reads > 500 || data.votes.upvotes > 50;
+
+  const formatNumber = (num: number): string => {
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
+    return num.toString();
+  };
+
+  const formatTimeAgo = (date: Date): string => {
+    const now = new Date();
+    const then = new Date(date);
+    const diffMs = now.getTime() - then.getTime();
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays}d ago`;
+    return `${Math.floor(diffDays / 7)}w ago`;
+  };
 
   return (
     <div
-      className={`border-border bg-background group relative flex w-72 flex-col rounded-xl border-2 p-3 backdrop-blur-xs transition-all duration-200 ${
-        selected ? '!border-primary shadow-lg' : 'hover:shadow-sm'
-      }`}
+      className={cn(
+        'group bg-bg-cream relative w-[280px] rounded-xl transition-all duration-300',
+        'border shadow-sm',
+        selected
+          ? 'border-brand-pink-500 shadow-brand-pink-500/10 shadow-md'
+          : 'border-brand-pink-500/20 hover:border-brand-pink-500/40 hover:shadow-md'
+      )}
     >
-      {/* Top Handle */}
+      {/* Handles */}
       <Handle
         type="target"
         position={Position.Top}
-        className="!bg-primary !h-0.5 !w-3 !rounded-[3px] !border-none"
+        className="!border-bg-cream !bg-brand-pink-500 !-top-1.5 !h-2.5 !w-2.5 !rounded-full !border-2"
       />
-
-      {/* Bottom Handle */}
       <Handle
         type="source"
         position={Position.Bottom}
-        className="!bg-primary relative !h-0.5 !w-3 !rounded-[3px] !border-none"
-        onClick={() => {
-          // Here data._id is parentChapterId cause used as to add new child chapter
-          navigate(`/stories/${params.slug}/builder?mode=new&parent=${data._id}`);
-        }}
-      >
-        <span className="absolute -top-1 left-1/2 -translate-x-1/2 opacity-0 transition group-hover:opacity-100">
-          <Plus size={16} className="bg-primary rounded-full p-1 text-white" />
-        </span>
-      </Handle>
+        className="!border-bg-cream !bg-brand-pink-500 !-bottom-1.5 !h-2.5 !w-2.5 !rounded-full !border-2"
+      />
 
-      {/* Favorite */}
-      <button className="hover:bg-accent text-muted-foreground absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-lg transition hover:text-yellow-500">
-        <Star size={16} />
-      </button>
-
-      {/* Author */}
-      <div className="mt-2 flex items-center gap-3">
-        <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-md border">
-          {data.author.avatarUrl ? (
-            <img
-              src={data.author.avatarUrl}
-              alt={data.author.username}
-              className="h-full w-full rounded-md object-cover"
-            />
-          ) : (
-            <span className="text-sm font-semibold">
-              {data.author.username.charAt(0).toUpperCase()}
-            </span>
-          )}
-        </div>
-
-        <div>
-          <p className="text-sm font-medium">{data.author.username}</p>
-          <p className="text-muted-foreground text-xs">{timeAgo}</p>
-        </div>
-      </div>
-
-      {/* Chapter */}
-      <div className="mt-3">
-        <div className="flex items-center gap-2">
-          <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-[10px] font-medium">
-            {chapterLabel}
-          </span>
-          <h3 className="truncate text-sm font-semibold">{data.title}</h3>
-        </div>
-
-        <div className="text-muted-foreground mt-2 flex items-center justify-between text-xs">
-          <div className="flex gap-3">
-            <span className="flex items-center gap-1">
-              <Users size={14} className="text-primary" />
-              {data.stats.reads}
-            </span>
-            <span className="flex items-center gap-1">
-              <Clock size={14} className="text-secondary" />
-              {Math.max(1, Math.round(data.title.split(' ').length / 200))} min
-            </span>
+      {/* Card Content */}
+      <div className="relative z-10 p-3.5">
+        {/* Header Row */}
+        <div className="flex items-center justify-between">
+          {/* Chapter Badge */}
+          <div className="flex items-center gap-2">
+            <div className="bg-brand-blue/8 flex items-center gap-1.5 rounded-full px-2 py-0.5">
+              <BookOpen className="text-brand-blue h-3 w-3" />
+              <span className="text-brand-blue text-[10px] font-semibold">
+                Chapter {chapterNum}
+              </span>
+            </div>
+            {isPopular && (
+              <div className="from-brand-orange/15 to-brand-pink-500/15 flex items-center gap-0.5 rounded-full bg-gradient-to-r px-1.5 py-0.5">
+                <Sparkles className="text-brand-orange h-2.5 w-2.5" />
+              </div>
+            )}
           </div>
 
-          <button className="bg-primary/10 text-primary hover:bg-primary/20 rounded-md px-3 py-1 text-xs font-medium">
-            Read
-          </button>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="mt-3 flex justify-between">
-        <div className="flex gap-1">
-          <button
-            onClick={() => data.onCommentClick(id)}
-            className="hover:bg-accent flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs transition"
-          >
-            <MessageCircle size={14} />
-            {data.stats.comments}
-          </button>
-
-          <button className="hover:bg-accent flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs transition">
-            <Heart size={14} />
-            {data.votes.upvotes}
-          </button>
+          {/* Status Badges */}
+          <div className="flex items-center gap-1.5">
+            {data.stats.childBranches > 0 && (
+              <div className="bg-badge-purple/8 text-badge-purple flex items-center gap-0.5 rounded-full px-1.5 py-0.5">
+                <GitBranch className="h-2.5 w-2.5" />
+                <span className="text-[9px] font-medium">{data.stats.childBranches}</span>
+              </div>
+            )}
+            {data.isEnding && (
+              <div className="bg-badge-success/10 text-badge-success flex items-center gap-0.5 rounded-full px-1.5 py-0.5">
+                <Flag className="h-2.5 w-2.5" />
+                <span className="text-[9px] font-semibold">End</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="flex gap-1">
-          <button className="hover:bg-accent flex h-8 w-8 items-center justify-center rounded-lg text-green-600">
-            <ThumbsUp size={14} />
-          </button>
-          <button className="hover:bg-accent text-destructive flex h-8 w-8 items-center justify-center rounded-lg">
-            <ThumbsDown size={14} />
-          </button>
+        {/* Title */}
+        <h3 className="font-libreBaskerville text-text-primary mt-2.5 line-clamp-1 text-[14px] leading-snug font-semibold">
+          {data.title}
+        </h3>
+
+        {/* Excerpt */}
+        <p className="text-text-secondary-65 mt-1.5 line-clamp-2 font-serif text-[11px] leading-relaxed italic">
+          "{excerpt}"
+        </p>
+
+        {/* Divider */}
+        <div className="bg-border/50 my-3 h-px" />
+
+        {/* Footer Row */}
+        <div className="flex items-center justify-between">
+          {/* Author */}
+          <div className="flex items-center gap-2">
+            <Avatar className="h-6 w-6 ring-1 ring-black/5">
+              <AvatarImage src={data.author.avatarUrl} alt={data.author.username} />
+              <AvatarFallback className="from-brand-blue/20 to-brand-pink-500/20 text-text-primary bg-gradient-to-br text-[9px] font-semibold">
+                {data.author.username.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col">
+              <span className="text-text-primary text-[11px] font-medium">
+                {data.author.username}
+              </span>
+              <span className="text-text-secondary-65 flex items-center gap-1 text-[9px]">
+                <Clock className="h-2.5 w-2.5" />
+                {formatTimeAgo(data.createdAt)} · {readTime} min
+              </span>
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="flex items-center gap-2.5">
+            <div className="text-text-secondary-65 hover:text-brand-blue flex items-center gap-1 transition-colors">
+              <Eye className="h-3.5 w-3.5" />
+              <span className="text-[10px] font-medium">{formatNumber(data.stats.reads)}</span>
+            </div>
+            <button
+              onClick={() => data.onCommentClick(id)}
+              className="text-text-secondary-65 hover:text-brand-pink-500 flex items-center gap-1 transition-colors"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              <span className="text-[10px] font-medium">{formatNumber(data.stats.comments)}</span>
+            </button>
+            <div className="text-text-secondary-65 flex items-center gap-1 transition-colors hover:text-red-500">
+              <Heart className="h-3.5 w-3.5" />
+              <span className="text-[10px] font-medium">{formatNumber(data.votes.upvotes)}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

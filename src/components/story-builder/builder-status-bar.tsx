@@ -22,14 +22,14 @@ function BuilderStatusBar({ wordCount, charCount }: BuilderStatusBarProps) {
 
   return (
     <TooltipProvider>
-      <div className="bg-muted/30 border-t">
-        <div className="mx-auto flex max-w-[1100px] items-center justify-between px-4 py-2">
+      <div className="border-border/50 bg-cream-90 border-t">
+        <div className="mx-auto flex max-w-[1100px] items-center justify-between px-3 py-2 sm:px-4">
           {/* Left Section - Stats */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {/* Word Count */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="text-muted-foreground flex cursor-default items-center gap-1.5 text-xs">
+                <div className="text-text-secondary-65 flex cursor-default items-center gap-1 text-xs sm:gap-1.5">
                   <FileText className="h-3.5 w-3.5" />
                   <span className="font-medium">{wordCount.toLocaleString()}</span>
                   <span className="hidden sm:inline">words</span>
@@ -40,12 +40,12 @@ function BuilderStatusBar({ wordCount, charCount }: BuilderStatusBarProps) {
               </TooltipContent>
             </Tooltip>
 
-            <span className="text-muted-foreground/40">•</span>
+            <span className="text-text-secondary-65/40">•</span>
 
             {/* Character Count */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="text-muted-foreground flex cursor-default items-center gap-1.5 text-xs">
+                <div className="text-text-secondary-65 flex cursor-default items-center gap-1 text-xs sm:gap-1.5">
                   <Type className="h-3.5 w-3.5" />
                   <span className="font-medium">{charCount.toLocaleString()}</span>
                   <span className="hidden sm:inline">characters</span>
@@ -56,12 +56,12 @@ function BuilderStatusBar({ wordCount, charCount }: BuilderStatusBarProps) {
               </TooltipContent>
             </Tooltip>
 
-            <span className="text-muted-foreground/40">•</span>
+            <span className="text-text-secondary-65/40 hidden sm:inline">•</span>
 
             {/* Read Time */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="text-muted-foreground flex cursor-default items-center gap-1.5 text-xs">
+                <div className="text-text-secondary-65 hidden cursor-default items-center gap-1.5 text-xs sm:flex">
                   <Clock className="h-3.5 w-3.5" />
                   <span className="font-medium">{readTime}</span>
                   <span className="hidden sm:inline">read</span>
@@ -75,9 +75,10 @@ function BuilderStatusBar({ wordCount, charCount }: BuilderStatusBarProps) {
 
           {/* Right Section - Last Saved */}
           <div className="flex items-center gap-1.5">
-            <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
-              <Check className="h-3.5 w-3.5 text-green-500" />
-              <span>Saved just now</span>
+            <div className="text-text-secondary-65 flex items-center gap-1.5 text-xs">
+              <Check className="text-badge-success h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Saved just now</span>
+              <span className="sm:hidden">Saved</span>
             </div>
           </div>
         </div>

@@ -16,12 +16,31 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-import { CheckCircle, Clock, MinusCircle, Reply, ShieldCheck, User, XCircle } from 'lucide-react';
+import {
+  CheckCircle,
+  Clock,
+  Crown,
+  Eye,
+  Handshake,
+  MoreHorizontal,
+  PenTool,
+  Shield,
+  XCircle,
+} from 'lucide-react';
 
-import { cn, fadeIn } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { createBadge } from '@/components/common/badge';
+import type { BadgeColorKey } from '@/components/common/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface ICollaboratorTableProps {
   data: IStoryCollaboratorWithUser[];
@@ -29,6 +48,26 @@ interface ICollaboratorTableProps {
 }
 
 const columnHelper = createColumnHelper<IStoryCollaboratorWithUser>();
+
+// Role configuration with icons and colors
+const ROLE_CONFIG: Record<string, { icon: typeof Crown; color: BadgeColorKey; label: string }> = {
+  OWNER: { icon: Crown, color: 'amber', label: 'Owner' },
+  CO_AUTHOR: { icon: PenTool, color: 'purple', label: 'Co-Author' },
+  MODERATOR: { icon: Shield, color: 'blue', label: 'Moderator' },
+  REVIEWER: { icon: Eye, color: 'cyan', label: 'Reviewer' },
+  CONTRIBUTOR: { icon: Handshake, color: 'gray', label: 'Contributor' },
+};
+
+// Status configuration
+const STATUS_CONFIG: Record<
+  string,
+  { icon: typeof CheckCircle; color: BadgeColorKey; label: string }
+> = {
+  ACCEPTED: { icon: CheckCircle, color: 'success', label: 'Accepted' },
+  PENDING: { icon: Clock, color: 'warning', label: 'Pending' },
+  DECLINED: { icon: XCircle, color: 'error', label: 'Declined' },
+  REMOVED: { icon: XCircle, color: 'gray', label: 'Removed' },
+};
 
 const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
   const filteredData = useMemo(() => {
@@ -41,32 +80,43 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
       // ========== USER INFO ==============
       columnHelper.display({
         id: 'user',
-        header: 'User',
+        header: 'Collaborator',
         cell: ({ row }) => {
           const collaborator = row.original;
+          const roleConfig = ROLE_CONFIG[collaborator.role];
 
           return (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex cursor-pointer items-center gap-3">
-                    <div className="bg-muted text-muted-foreground flex h-9 w-9 items-center justify-center rounded-full">
-                      <User size={16} />
-                    </div>
+            <div className="flex items-center gap-3">
+              <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
+                <AvatarImage src={collaborator.user.avatarUrl} alt={collaborator.user.username} />
+                <AvatarFallback className="bg-brand-blue/10 text-brand-blue font-medium">
+                  {collaborator.user.username.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
 
-                    <div className="flex flex-col leading-snug">
-                      <span className="text-sm font-medium capitalize">
-                        {collaborator.user.username}
-                      </span>
-                    </div>
-                  </div>
-                </TooltipTrigger>
-
-                <TooltipContent className="text-xs">
-                  <p className="capitalize">User ID: {collaborator.user.username}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2">
+                  <span className="text-text-primary text-sm font-semibold">
+                    @{collaborator.user.username}
+                  </span>
+                  {roleConfig && (
+                    <roleConfig.icon
+                      className={cn(
+                        'h-4 w-4',
+                        collaborator.role === 'OWNER' && 'text-amber-500',
+                        collaborator.role === 'CO_AUTHOR' && 'text-purple-500',
+                        collaborator.role === 'MODERATOR' && 'text-blue-500',
+                        collaborator.role === 'REVIEWER' && 'text-cyan-500',
+                        collaborator.role === 'CONTRIBUTOR' && 'text-gray-500'
+                      )}
+                    />
+                  )}
+                </div>
+                <span className="text-text-secondary-65 text-xs">
+                  Joined {formatDate(collaborator.invitedAt)}
+                </span>
+              </div>
+            </div>
           );
         },
       }),
@@ -76,25 +126,18 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
         header: 'Role',
         cell: (info) => {
           const value = info.getValue();
+          const config = ROLE_CONFIG[value];
 
-          const ROLE_STYLES: Record<string, string> = {
-            OWNER: 'bg-purple-500/15 text-purple-700 dark:text-purple-300 border-purple-600/30',
-            CO_AUTHOR: 'bg-blue-500/15 text-blue-700 dark:text-blue-300 border-blue-600/30',
-            MODERATOR: 'bg-amber-500/20 text-amber-700 dark:text-amber-300 border-amber-600/40',
-            REVIEWER: 'bg-green-500/15 text-green-700 dark:text-green-300 border-green-600/30',
-            CONTRIBUTOR: 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border-slate-600/30',
-          };
+          if (!config) return null;
 
-          return (
-            <span
-              className={cn(
-                'cursor-pointer rounded-full border px-2 py-0.5 text-[11px] font-medium shadow-sm',
-                ROLE_STYLES[value]
-              )}
-            >
-              {value.replace('_', ' ')}
-            </span>
-          );
+          return createBadge({
+            label: config.label,
+            icon: config.icon,
+            color: config.color,
+            size: 'sm',
+            shape: 'pill',
+            style: 'soft',
+          });
         },
       }),
 
@@ -103,90 +146,81 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
         header: 'Status',
         cell: (info) => {
           const status = info.getValue();
+          const config = STATUS_CONFIG[status];
 
-          const ICON =
-            status === 'ACCEPTED' ? (
-              <CheckCircle size={12} />
-            ) : status === 'PENDING' ? (
-              <Clock size={12} />
-            ) : status === 'DECLINED' ? (
-              <XCircle size={12} />
-            ) : (
-              <MinusCircle size={12} />
-            );
+          if (!config) return null;
 
-          const STATUS_STYLES: Record<string, string> = {
-            ACCEPTED: 'bg-green-500/15 text-green-700 dark:text-green-300 border-green-600/30',
-            PENDING: 'bg-yellow-500/15 text-yellow-700 dark:text-yellow-300 border-yellow-600/30',
-            DECLINED: 'bg-red-500/15 text-red-700 dark:text-red-300 border-red-600/30',
-            REMOVED: 'bg-slate-500/15 text-slate-700 dark:text-slate-300 border-slate-600/30',
-          };
+          return createBadge({
+            label: config.label,
+            icon: config.icon,
+            color: config.color,
+            size: 'sm',
+            shape: 'pill',
+            style: 'soft',
+          });
+        },
+      }),
+
+      // ========== CONTRIBUTIONS ==============
+      columnHelper.display({
+        id: 'contributions',
+        header: 'Contributions',
+        cell: () => {
+          // const collaborator = row.original;
+          // Mock contribution count - would come from API in real app
+          const contributions = Math.floor(Math.random() * 20);
+
+          return <span className="text-text-secondary-65 text-sm">{contributions} chapters</span>;
+        },
+      }),
+
+      // ========== LAST ACTIVE ==============
+      columnHelper.display({
+        id: 'lastActive',
+        header: 'Last Active',
+        cell: ({ row }) => {
+          const collaborator = row.original;
 
           return (
-            <span
-              className={cn(
-                'flex w-fit items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium shadow-sm',
-                STATUS_STYLES[status]
-              )}
-            >
-              {ICON}
-              {status}
+            <span className="text-text-secondary-65 text-sm">
+              {formatRelativeTime(collaborator.updatedAt ?? collaborator.invitedAt)}
             </span>
           );
         },
       }),
 
-      // ========== INVITED INFO ==============
+      // ========== ACTIONS ==============
       columnHelper.display({
-        id: 'invited',
-        header: 'Invited',
+        id: 'actions',
+        header: '',
         cell: ({ row }) => {
-          const col = row.original;
+          const collaborator = row.original;
+
+          // Don't show actions for owner
+          if (collaborator.role === 'OWNER') return null;
 
           return (
-            <div className="text-muted-foreground flex flex-col gap-1 text-xs leading-snug">
-              <span className="flex items-center gap-1">
-                <Reply size={12} />
-                {typeof col.invitedBy === 'object' && col.invitedBy
-                  ? col.invitedBy.username
-                  : 'System'}
-              </span>
-
-              <span className="flex items-center gap-1">
-                <Clock size={12} />
-                {formatDate(col.invitedAt)}
-              </span>
-            </div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-text-secondary-65 hover:text-text-primary h-8 w-8"
+                >
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem>Change Role</DropdownMenuItem>
+                <DropdownMenuItem>View Profile</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-destructive">
+                  Remove Collaborator
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           );
         },
-      }),
-
-      // ========== ACCEPTED ==============
-      columnHelper.display({
-        id: 'accepted',
-        header: 'Accepted',
-        cell: ({ row }) => {
-          const col = row.original;
-
-          if (!col.acceptedAt) return <span className="text-muted-foreground text-xs">—</span>;
-
-          return (
-            <span className="flex items-center gap-1 text-xs text-green-700">
-              <ShieldCheck size={12} />
-              {formatDate(col.acceptedAt)}
-            </span>
-          );
-        },
-      }),
-
-      // ========== UPDATED ==============
-      columnHelper.accessor('updatedAt', {
-        header: 'Updated',
-        cell: (info) => (
-          <span className="text-muted-foreground text-xs">
-            {formatDate(info.getValue() ?? new Date())}
-          </span>
-        ),
       }),
     ],
     []
@@ -199,13 +233,24 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
   });
 
   return (
-    <motion.div {...fadeIn(0.15)} className="overflow-hidden rounded-xl border shadow-sm">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm"
+    >
       <Table>
-        <TableHeader className="bg-muted/40">
+        <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow
+              key={headerGroup.id}
+              className="bg-cream-95 hover:bg-cream-95 border-b border-black/5"
+            >
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id} className="p-3 text-sm">
+                <TableHead
+                  key={header.id}
+                  className="text-text-secondary-65 px-4 py-3 text-xs font-semibold tracking-wider uppercase"
+                >
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
@@ -222,10 +267,10 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.15, delay: idx * 0.03 }}
-              className="hover:bg-muted/30 border-b"
+              className="group hover:bg-cream-95/50 border-b border-black/5 transition-colors"
             >
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className="p-3">
+                <TableCell key={cell.id} className="px-4 py-4">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
@@ -233,6 +278,14 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
           ))}
         </TableBody>
       </Table>
+
+      {filteredData.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <p className="text-text-secondary-65 text-sm">
+            No collaborators found matching "{search}"
+          </p>
+        </div>
+      )}
     </motion.div>
   );
 };
@@ -240,8 +293,27 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
 export default CollaboratorTable;
 
 /* ------------------------------
-   Date Formatter
+   Date Formatters
 ------------------------------ */
 function formatDate(date: Date) {
-  return new Date(date).toLocaleDateString();
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+function formatRelativeTime(date: Date) {
+  const now = new Date();
+  const then = new Date(date);
+  const diffMs = now.getTime() - then.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} min ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return formatDate(date);
 }

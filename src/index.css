@@ -2,6 +2,7 @@
 @import './styles/fonts.css';
 
 @plugin 'tailwind-scrollbar-hide';
+@plugin '@tailwindcss/typography';
 @import 'tw-animate-css';
 
 :root {

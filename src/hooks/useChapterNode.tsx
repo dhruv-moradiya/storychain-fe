@@ -1,4 +1,8 @@
-import type { IChapterNode, IChapterNodeType } from '@/type/story-canvas.type';
+import type {
+  IAddNodePlaceholderType,
+  IChapterNode,
+  IChapterNodeType,
+} from '@/type/story-canvas.type';
 
 function formatTimeAgo(date: Date): string {
   const diff = Date.now() - new Date(date).getTime();
@@ -19,10 +23,12 @@ function estimateReadTime(text: string): number {
 }
 
 const HORIZONTAL_GAP = 320;
-const VERTICAL_GAP = 140;
+const VERTICAL_GAP = 160;
 
-const useChapterNode = (chapters: IChapterNode[]): IChapterNodeType[] => {
-  const nodes: IChapterNodeType[] = [];
+type AllNodeTypes = IChapterNodeType | IAddNodePlaceholderType;
+
+const useChapterNode = (chapters: IChapterNode[]): AllNodeTypes[] => {
+  const nodes: AllNodeTypes[] = [];
   const yTracker = new Map<number, number>();
 
   const getNextY = (depth: number) => {
@@ -97,7 +103,25 @@ const useChapterNode = (chapters: IChapterNode[]): IChapterNodeType[] => {
         // ---------------------------------
         onCommentClick: () => {},
       },
-    });
+    } as IChapterNodeType);
+
+    // Add placeholder node for chapters without children (not endings)
+    if (node.children.length === 0 && !node.isEnding) {
+      const placeholderY = getNextY(node.depth + 1);
+      const placeholderId = `placeholder-${node._id}`;
+
+      nodes.push({
+        id: placeholderId,
+        type: 'addNodePlaceholder',
+        position: {
+          x: (node.depth + 1) * HORIZONTAL_GAP,
+          y: placeholderY,
+        },
+        data: {
+          parentChapterId: node._id,
+        },
+      } as IAddNodePlaceholderType);
+    }
 
     node.children.forEach(traverse);
   };

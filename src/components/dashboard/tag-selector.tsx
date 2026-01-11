@@ -1,20 +1,36 @@
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@/components/ui/input-group';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
-import { Search, Tag } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogClose,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Search, Tag, Plus, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { BadgeGroup } from '../common/badge';
+import { cn } from '@/lib/utils';
 
 interface TagSelectorProps {
   allTags: string[];
   value?: string[];
   onChange?: (tags: string[]) => void;
+  onCreateTag?: (tag: string) => void;
 }
 
-export default function TagSelector({ allTags = [], value = [], onChange }: TagSelectorProps) {
+export default function TagSelector({
+  allTags = [],
+  value = [],
+  onChange,
+  onCreateTag,
+}: TagSelectorProps) {
   const [search, setSearch] = useState('');
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [newTagName, setNewTagName] = useState('');
 
   const filteredTags = useMemo(() => {
     return allTags.filter((tag) => tag.toLowerCase().includes(search.toLowerCase()));
@@ -26,76 +42,174 @@ export default function TagSelector({ allTags = [], value = [], onChange }: TagS
     onChange?.(updated);
   };
 
-  const badgeGroup = value.map((tag) => {
-    return {
-      label: tag,
-      icon: Tag,
-      size: 'sm' as const,
-      className: '!bg-transparent',
-      iconClassName: 'size-3',
-    };
-  });
+  const handleCreateTag = () => {
+    if (newTagName.trim()) {
+      onCreateTag?.(newTagName.trim());
+      setNewTagName('');
+      setIsCreateModalOpen(false);
+    }
+  };
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="w-full justify-start p-0 hover:bg-transparent"
-          onClick={(e) => e.stopPropagation()}
+    <>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="w-full justify-start p-0 hover:bg-transparent"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="text-text-secondary-65 hover:bg-brand-pink-500/10 flex w-full cursor-pointer items-center gap-1 rounded-lg p-1 transition-colors">
+              {value.length > 0 ? (
+                <div className="flex flex-wrap items-center gap-1.5">
+                  {value.map((tag) => (
+                    <span
+                      key={tag}
+                      className="border-brand-pink-500/30 bg-brand-pink-500/10 text-brand-pink-500 inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium"
+                    >
+                      <Tag className="h-3 w-3" />
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <span className="flex items-center gap-1 text-xs font-medium uppercase">
+                  <Tag className="h-3 w-3" />
+                  Add Tags
+                </span>
+              )}
+            </div>
+          </Button>
+        </PopoverTrigger>
+
+        <PopoverContent
+          sideOffset={6}
+          className="border-border/50 bg-cream-95 w-64 rounded-xl border p-3 shadow-lg backdrop-blur-sm"
         >
-          <div className="hover:bg-primary/10 text-muted-foreground hover:border-primary flex w-full cursor-pointer items-center gap-1 rounded-lg p-1 transition-colors">
-            {value.length > 0 ? (
-              <div className="flex flex-wrap items-center gap-2">
-                {<BadgeGroup badges={badgeGroup} />}
-              </div>
+          <InputGroup className="border-border/50 overflow-hidden rounded-lg border bg-white/80">
+            <InputGroupInput
+              placeholder="Search tags..."
+              className="text-text-primary placeholder:text-text-secondary-65 text-sm"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <InputGroupAddon>
+              <Search className="text-text-secondary-65 size-4" />
+            </InputGroupAddon>
+          </InputGroup>
+
+          <ul className="scrollbar-thin mt-3 flex max-h-40 flex-col gap-1.5 overflow-auto pr-1">
+            {filteredTags.length > 0 ? (
+              filteredTags.map((tag) => {
+                const isSelected = value.includes(tag);
+                return (
+                  <li
+                    key={tag}
+                    className={cn(
+                      'flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all',
+                      isSelected
+                        ? 'border-brand-pink-500 bg-brand-pink-500/10 text-brand-pink-600 border-2 font-medium'
+                        : 'text-text-secondary hover:border-brand-pink-500/30 border-2 border-transparent bg-white/60 hover:bg-white/80'
+                    )}
+                    onClick={() => toggleTag(tag)}
+                  >
+                    <Tag
+                      className={cn(
+                        'h-3.5 w-3.5',
+                        isSelected ? 'text-brand-pink-500' : 'text-text-secondary-65'
+                      )}
+                    />
+                    <span className="flex-1">{tag}</span>
+                    {isSelected && (
+                      <X className="text-brand-pink-500 hover:text-brand-pink-600 h-3.5 w-3.5" />
+                    )}
+                  </li>
+                );
+              })
             ) : (
-              <span className="text-xs font-medium uppercase">Add Tags</span>
+              <li className="text-text-secondary-65 px-3 py-2 text-xs">No tags found</li>
+            )}
+          </ul>
+
+          <div className="border-border/50 mt-3 border-t pt-3">
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-brand-pink-500/40 bg-brand-pink-500/5 text-brand-pink-500 hover:border-brand-pink-500 hover:bg-brand-pink-500/10 w-full gap-1.5 rounded-lg border-dashed"
+              onClick={() => setIsCreateModalOpen(true)}
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Create new tag
+            </Button>
+          </div>
+        </PopoverContent>
+      </Popover>
+
+      {/* Create Tag Modal */}
+      <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
+        <DialogContent className="border-border/50 bg-cream-95 sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-text-primary flex items-center gap-2">
+              <div className="from-brand-pink-500/20 to-brand-orange/20 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br">
+                <Tag className="text-brand-pink-500 h-4 w-4" />
+              </div>
+              Create New Tag
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="tag-name" className="text-text-secondary text-sm font-medium">
+                Tag Name
+              </Label>
+              <Input
+                id="tag-name"
+                placeholder="Enter tag name..."
+                value={newTagName}
+                onChange={(e) => setNewTagName(e.target.value)}
+                className="border-border/50 text-text-primary placeholder:text-text-secondary-65 focus-visible:ring-brand-pink-500/30 bg-white/80"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleCreateTag();
+                  }
+                }}
+              />
+            </div>
+
+            {newTagName.trim() && (
+              <div className="space-y-2">
+                <Label className="text-text-secondary text-sm font-medium">Preview</Label>
+                <div className="flex items-center gap-2">
+                  <span className="border-brand-pink-500/30 bg-brand-pink-500/10 text-brand-pink-500 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-sm font-medium">
+                    <Tag className="h-3.5 w-3.5" />
+                    {newTagName.trim()}
+                  </span>
+                </div>
+              </div>
             )}
           </div>
-        </Button>
-      </PopoverTrigger>
 
-      <PopoverContent sideOffset={6} className="bg-background w-64 rounded-xl border p-3 shadow-md">
-        <InputGroup className="bg-muted/30 overflow-hidden rounded-md border">
-          <InputGroupInput
-            placeholder="Search tags..."
-            className="text-sm"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <InputGroupAddon>
-            <Search className="size-4 opacity-70" />
-          </InputGroupAddon>
-        </InputGroup>
-
-        <ul className="scrollbar-thin mt-3 flex max-h-40 flex-col gap-1 overflow-auto pr-1">
-          {filteredTags.length > 0 ? (
-            filteredTags.map((tag) => {
-              const checked = value.includes(tag);
-              return (
-                <li
-                  key={tag}
-                  className="hover:bg-accent hover:text-accent-foreground flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm transition"
-                  onClick={() => toggleTag(tag)}
-                >
-                  <Checkbox checked={checked} onCheckedChange={() => toggleTag(tag)} />
-                  <span>{tag}</span>
-                </li>
-              );
-            })
-          ) : (
-            <li className="text-muted-foreground px-3 py-2 text-xs">No tags found</li>
-          )}
-        </ul>
-
-        <Separator className="my-3" />
-
-        <Button variant="outline" size="sm" className="w-full rounded-md">
-          + Create new tag
-        </Button>
-      </PopoverContent>
-    </Popover>
+          <DialogFooter className="gap-2 sm:gap-0">
+            <DialogClose asChild>
+              <Button
+                variant="outline"
+                className="border-border text-text-secondary hover:bg-muted/50"
+              >
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button
+              onClick={handleCreateTag}
+              disabled={!newTagName.trim()}
+              className="bg-brand-pink-500 hover:bg-brand-pink-600 text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)] disabled:opacity-50"
+            >
+              <Plus className="mr-1.5 h-4 w-4" />
+              Create Tag
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

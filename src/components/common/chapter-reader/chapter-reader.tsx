@@ -1,9 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { formatDistanceToNow } from 'date-fns';
-import { BookOpen, Calendar, Clock, Eye, GitBranch, MessageSquare, ThumbsUp } from 'lucide-react';
+import { Clock, Eye, MessageSquare, ThumbsUp } from 'lucide-react';
 import { forwardRef } from 'react';
 
 export interface ChapterAuthor {
@@ -41,8 +39,6 @@ interface ChapterReaderProps {
   chapter: ChapterData;
   showHeader?: boolean;
   showStats?: boolean;
-  showAuthor?: boolean;
-  showBreadcrumb?: boolean;
   variant?: 'full' | 'compact' | 'preview';
   className?: string;
 }
@@ -57,18 +53,7 @@ function getWordCount(content: string): number {
 }
 
 const ChapterReader = forwardRef<HTMLDivElement, ChapterReaderProps>(
-  (
-    {
-      chapter,
-      showHeader = true,
-      showStats = true,
-      showAuthor = true,
-      showBreadcrumb = true,
-      variant = 'full',
-      className,
-    },
-    ref
-  ) => {
+  ({ chapter, showHeader = true, showStats = true, variant = 'full', className }, ref) => {
     const wordCount = chapter.wordCount || getWordCount(chapter.content);
     const readTime = chapter.readTime || calculateReadTime(wordCount);
 
@@ -77,173 +62,84 @@ const ChapterReader = forwardRef<HTMLDivElement, ChapterReaderProps>(
 
     return (
       <div ref={ref} className={cn('chapter-reader', className)}>
-        {/* Breadcrumb */}
-        {showBreadcrumb && chapter.storyTitle && !isCompact && (
-          <div className="text-muted-foreground mb-4 flex items-center gap-2 text-sm">
-            <BookOpen className="h-4 w-4" />
-            <span>{chapter.storyTitle}</span>
-            {chapter.chapterNumber && (
-              <>
-                <span>/</span>
-                <span>Chapter {chapter.chapterNumber}</span>
-              </>
-            )}
-          </div>
-        )}
-
-        {/* Header */}
+        {/* Header - Clean and minimal */}
         {showHeader && (
-          <header className={cn('mb-6', isCompact && 'mb-4')}>
+          <header className={cn('mb-10', isCompact && 'mb-4')}>
             {/* Title */}
             <h1
               className={cn(
-                'font-bold tracking-tight',
-                isCompact ? 'text-xl' : 'text-2xl sm:text-3xl lg:text-4xl'
+                'text-text-primary font-serif font-bold tracking-tight',
+                isCompact ? 'text-xl' : 'text-2xl sm:text-3xl'
               )}
             >
               {chapter.title}
             </h1>
 
-            {/* Meta Row */}
+            {/* Simple meta - just read time and author */}
             <div
               className={cn(
-                'text-muted-foreground mt-3 flex flex-wrap items-center gap-3 text-sm',
+                'text-text-secondary-65 mt-4 flex items-center gap-4 text-sm',
                 isCompact && 'mt-2'
               )}
             >
-              {/* Read Time */}
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
                 <span>{readTime} min read</span>
               </div>
-
-              {/* Word Count */}
-              <div className="flex items-center gap-1">
-                <span>{wordCount.toLocaleString()} words</span>
+              <span className="text-border">•</span>
+              <div className="flex items-center gap-2">
+                <Avatar className="h-6 w-6">
+                  <AvatarImage src={chapter.author.avatar} alt={chapter.author.name} />
+                  <AvatarFallback className="text-xs">
+                    {chapter.author.name
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <span>{chapter.author.name}</span>
               </div>
-
-              {/* Date */}
-              {chapter.createdAt && (
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>
-                    {formatDistanceToNow(new Date(chapter.createdAt), { addSuffix: true })}
-                  </span>
-                </div>
-              )}
-
-              {/* Status Badge */}
-              {chapter.status && chapter.status !== 'published' && (
-                <Badge
-                  variant={chapter.status === 'draft' ? 'secondary' : 'outline'}
-                  className="capitalize"
-                >
-                  {chapter.status}
-                </Badge>
-              )}
             </div>
-
-            {/* Parent Chapter (Branch) */}
-            {chapter.parentChapter && !isCompact && (
-              <div className="text-muted-foreground mt-2 flex items-center gap-2 text-sm">
-                <GitBranch className="h-4 w-4" />
-                <span>Branched from:</span>
-                <span className="text-foreground font-medium">{chapter.parentChapter.title}</span>
-              </div>
-            )}
-
-            {/* Tags */}
-            {chapter.tags && chapter.tags.length > 0 && !isCompact && (
-              <div className="mt-3 flex flex-wrap gap-2">
-                {chapter.tags.map((tag) => (
-                  <Badge key={tag} variant="outline" className="text-xs">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </header>
-        )}
-
-        {/* Author Section */}
-        {showAuthor && !isCompact && (
-          <>
-            <div className="mb-6 flex items-center gap-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={chapter.author.avatar} alt={chapter.author.name} />
-                <AvatarFallback>
-                  {chapter.author.name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')
-                    .toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-medium">{chapter.author.name}</p>
-                {chapter.author.username && (
-                  <p className="text-muted-foreground text-sm">@{chapter.author.username}</p>
-                )}
-              </div>
-            </div>
-            <Separator className="mb-6" />
-          </>
         )}
 
         {/* Content */}
         <article
           className={cn(
-            // Base typography
-            'prose prose-gray dark:prose-invert',
-            'mx-auto max-w-3xl',
+            // Base typography - optimized for reading
+            'prose prose-lg prose-gray dark:prose-invert',
+            'mx-auto max-w-none',
+
+            // Font settings for better readability
+            'prose-p:font-serif prose-p:text-[1.125rem] prose-p:leading-[1.9] prose-p:tracking-[0.01em]',
+            'prose-p:text-text-secondary prose-p:my-6',
 
             // Headings
-            'prose-headings:font-semibold prose-headings:tracking-tight',
-            'prose-h2:mt-10 prose-h2:mb-4',
-            'prose-h3:mt-8 prose-h3:mb-3',
-
-            // Paragraphs
-            'prose-p:leading-[1.75]',
-            'prose-p:my-5',
+            'prose-headings:font-semibold prose-headings:tracking-tight prose-headings:text-text-primary',
+            'prose-h2:mt-12 prose-h2:mb-5 prose-h2:text-xl',
+            'prose-h3:mt-10 prose-h3:mb-4',
 
             // Links
-            'prose-a:text-primary prose-a:font-medium',
+            'prose-a:text-brand-pink-500 prose-a:font-medium prose-a:no-underline',
             'hover:prose-a:underline',
 
             // Lists
-            'prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-2',
-            'prose-ol:list-decimal prose-ol:pl-6 prose-ol:space-y-2',
+            'prose-ul:list-disc prose-ul:pl-6 prose-ul:space-y-3',
+            'prose-ol:list-decimal prose-ol:pl-6 prose-ol:space-y-3',
+            'prose-li:font-serif prose-li:text-[1.125rem] prose-li:leading-[1.9]',
 
-            // Blockquotes
+            // Blockquotes - elegant style
             'prose-blockquote:border-l-4',
-            'prose-blockquote:border-l-primary/60',
-            'prose-blockquote:bg-muted/40',
-            'prose-blockquote:px-4 prose-blockquote:py-3',
-            'prose-blockquote:rounded-r-md',
+            'prose-blockquote:border-l-brand-pink-500/40',
+            'prose-blockquote:pl-6 prose-blockquote:py-1',
             'prose-blockquote:not-italic',
+            'prose-blockquote:font-serif prose-blockquote:text-text-secondary-65',
 
-            // Inline code
-            'prose-code:rounded-md',
-            'prose-code:bg-muted',
-            'prose-code:px-1.5 prose-code:py-0.5',
-            'prose-code:font-normal',
-            'prose-code:text-[0.9em]',
-            'prose-code:before:content-none prose-code:after:content-none',
-
-            // Code blocks
-            'prose-pre:bg-muted/60',
-            'prose-pre:border',
-            'prose-pre:rounded-lg',
-            'prose-pre:p-4',
-            'prose-pre:overflow-x-auto',
-
-            // Tables (optional but useful)
-            'prose-table:border prose-table:border-collapse',
-            'prose-th:border prose-td:border',
-            'prose-th:bg-muted',
+            'selection:bg-primary selection:text-muted',
 
             // Compact / preview
-            isCompact && 'prose-sm',
+            isCompact && 'prose-base prose-p:text-base prose-p:leading-[1.75] prose-p:my-4',
             isPreview && 'max-h-[65vh] overflow-y-auto pr-2'
           )}
           dangerouslySetInnerHTML={{ __html: chapter.content }}

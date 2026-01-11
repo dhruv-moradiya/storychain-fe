@@ -7,6 +7,7 @@ import { useDraftRecoveryBannerLogic } from '@/hooks/components/storyBuilder/use
 import { useSearchParams } from 'react-router';
 import { formatDistanceToNow } from 'date-fns';
 import type { IChapterAutoSave } from '@/type/chapterAutoSave';
+import { cn } from '@/lib/utils';
 
 // Inline Draft Item Component
 const DraftItem = ({ draft, onContinue }: { draft: IChapterAutoSave; onContinue: () => void }) => {
@@ -22,7 +23,7 @@ const DraftItem = ({ draft, onContinue }: { draft: IChapterAutoSave; onContinue:
     <motion.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      className="flex items-center gap-3 rounded-lg border border-black/5 bg-white/60 p-2.5 transition-colors hover:bg-white/80"
+      className="border-border/50 bg-cream-95 hover:bg-cream-90 flex items-center gap-3 rounded-lg border p-2.5 transition-colors"
     >
       <div className="bg-brand-orange/15 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg">
         <FileText className="text-brand-orange h-4 w-4" />
@@ -39,13 +40,13 @@ const DraftItem = ({ draft, onContinue }: { draft: IChapterAutoSave; onContinue:
         <Button
           variant="ghost"
           size="icon"
-          className="h-7 w-7 text-red-500 hover:bg-red-50 hover:text-red-600"
+          className="text-destructive hover:bg-destructive/10 hover:text-destructive h-7 w-7"
         >
           <Trash2 className="h-3.5 w-3.5" />
         </Button>
         <Button
           size="icon"
-          className="bg-brand-pink-500 hover:bg-brand-pink-600 h-7 px-3 font-mono text-[10px] text-white"
+          className="bg-brand-pink-500 hover:bg-brand-pink-600 h-7 px-3 font-mono text-[10px] text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
           onClick={handleContinue}
         >
           <NotebookPen />
@@ -56,7 +57,7 @@ const DraftItem = ({ draft, onContinue }: { draft: IChapterAutoSave; onContinue:
 };
 
 export const DraftRecoveryBanner = () => {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [showDraftList, setShowDraftList] = useState(false);
 
   // We don't need to open a dialog anymore, so we pass a dummy setter
@@ -80,26 +81,82 @@ export const DraftRecoveryBanner = () => {
     setIsExpanded(false);
   };
 
+  const handleToggleExpand = () => {
+    if (!showDraftList) {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
+  // Mobile collapsed state - shows only a small icon button
+  const MobileCollapsedButton = () => (
+    <motion.button
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={handleToggleExpand}
+      className={cn(
+        'flex h-12 w-12 items-center justify-center rounded-xl',
+        'from-brand-orange/20 to-brand-pink-500/20 bg-gradient-to-br',
+        'border-brand-orange/30 border shadow-lg backdrop-blur-sm',
+        'transition-all duration-200 hover:shadow-xl',
+        'hover:border-brand-pink-500/50'
+      )}
+    >
+      <div className="relative">
+        <FileText className="text-brand-orange h-5 w-5" />
+        {banner.count > 0 && (
+          <span className="bg-brand-pink-500 absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white">
+            {banner.count > 9 ? '9+' : banner.count}
+          </span>
+        )}
+      </div>
+    </motion.button>
+  );
+
   return (
-    <AnimatePresence>
+    <AnimatePresence mode="wait">
+      {/* Mobile View - Collapsed icon only (screens < md) */}
+      {!isExpanded && (
+        <motion.div
+          key="mobile-collapsed"
+          className="fixed right-4 bottom-4 z-50 md:hidden"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 20 }}
+        >
+          <MobileCollapsedButton />
+        </motion.div>
+      )}
+
+      {/* Full Banner - Desktop always, Mobile when expanded */}
       <motion.div
+        key="full-banner"
         initial={{ opacity: 0, y: 20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.95 }}
         transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-        className="fixed right-4 bottom-4 z-50 w-[340px] overflow-hidden rounded-xl border border-black/5 bg-white/90 shadow-lg backdrop-blur-sm"
+        className={cn(
+          'fixed right-4 bottom-4 z-50 overflow-hidden rounded-xl',
+          'border-border/50 bg-cream-95 border shadow-lg backdrop-blur-sm',
+          // Mobile: hidden when collapsed, shown when expanded
+          isExpanded ? 'block' : 'hidden md:block',
+          // Width adjustments
+          'w-[calc(100vw-2rem)] max-w-[340px] sm:w-[340px]'
+        )}
       >
         {/* Header - Always visible */}
         <div
-          className="bg-brand-orange/15 flex cursor-pointer items-center justify-between px-4 py-3"
-          onClick={() => !showDraftList && setIsExpanded(!isExpanded)}
+          className="from-brand-orange/15 to-brand-pink-500/10 flex cursor-pointer items-center justify-between bg-gradient-to-r px-4 py-3"
+          onClick={handleToggleExpand}
         >
           <div className="flex items-center gap-3">
             {showDraftList && (
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 hover:bg-black/5"
+                className="hover:bg-brand-orange/10 h-7 w-7"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleBackToSummary();
@@ -109,7 +166,7 @@ export const DraftRecoveryBanner = () => {
               </Button>
             )}
             {!showDraftList && (
-              <div className="bg-brand-orange/20 flex h-8 w-8 items-center justify-center rounded-lg">
+              <div className="from-brand-orange/25 to-brand-pink-500/15 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br">
                 <FileText className="text-brand-orange h-4 w-4" />
               </div>
             )}
@@ -128,7 +185,7 @@ export const DraftRecoveryBanner = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7 hover:bg-black/5"
+                className="hover:bg-brand-orange/10 h-7 w-7"
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsExpanded(!isExpanded);
@@ -144,7 +201,7 @@ export const DraftRecoveryBanner = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7 hover:bg-black/5"
+              className="hover:bg-destructive/10 h-7 w-7"
               onClick={(e) => {
                 e.stopPropagation();
                 actions.handleClose();
@@ -186,7 +243,7 @@ export const DraftRecoveryBanner = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-text-secondary-75 flex-1 border-black/10 font-mono text-xs hover:bg-black/5"
+                      className="border-border text-text-secondary-75 hover:bg-muted/50 flex-1 font-mono text-xs"
                       onClick={actions.handleDiscardLatest}
                     >
                       Discard
@@ -194,7 +251,7 @@ export const DraftRecoveryBanner = () => {
                   )}
                   <Button
                     size="sm"
-                    className="bg-brand-pink-500 hover:bg-brand-pink-600 flex-1 font-mono text-xs text-white"
+                    className="bg-brand-pink-500 hover:bg-brand-pink-600 flex-1 font-mono text-xs text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
                     onClick={handleViewDrafts}
                   >
                     {banner.count > 1 ? 'View All' : 'Continue'}
