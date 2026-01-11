@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { RouterProvider } from 'react-router';
 import { ClerkProvider } from '@clerk/clerk-react';
+import { Analytics } from '@vercel/analytics/react';
 
 import { router } from './App';
 import { ErrorBoundary } from './components/error-boundary';
@@ -53,6 +54,7 @@ createRoot(document.getElementById('root')!).render(
           </ClerkProvider>
         </ToastProvider>
         <ReactQueryDevtools initialIsOpen={false} />
+        <Analytics />
       </QueryClientProvider>
     </ErrorBoundary>
   </StrictMode>
