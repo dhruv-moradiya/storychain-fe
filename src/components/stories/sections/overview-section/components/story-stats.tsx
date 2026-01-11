@@ -21,25 +21,25 @@ interface StoryStatsProps {
 
 export function StoryStats({ description, stats, status }: StoryStatsProps) {
   return (
-    <div className="grid gap-6 md:grid-cols-2">
+    <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
       {/* About Section */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="border-border/50 space-y-4 rounded-xl border p-5"
+        className="border-border/50 space-y-3 rounded-xl border p-4 sm:space-y-4 sm:p-5"
       >
-        <h2 className="text-text-primary flex items-center gap-2 font-semibold">
-          <BookOpen size={18} className="text-brand-pink-500" />
+        <h2 className="text-text-primary flex items-center gap-2 text-sm font-semibold sm:text-base">
+          <BookOpen size={16} className="text-brand-pink-500 sm:h-[18px] sm:w-[18px]" />
           About This Story
         </h2>
 
         <div
-          className="text-text-secondary prose-p:font-serif prose-p:text-[1.125rem] prose-p:leading-[1.9] prose-p:tracking-[0.01em] prose prose-lg prose-gray dark:prose-invert text-sm leading-relaxed"
+          className="text-text-secondary font-serif text-[15px] leading-[1.75] tracking-[0.01em] sm:text-base sm:leading-[1.8]"
           dangerouslySetInnerHTML={{ __html: description }}
         />
 
-        <div className="text-text-secondary-65 space-y-2 pt-2 text-xs">
+        <div className="text-text-secondary-65 space-y-1.5 pt-2 text-xs sm:space-y-2">
           <div className="flex items-center gap-2">
             <Calendar size={14} className="text-brand-pink-500/70" />
             <span>Started: {stats.startedAt}</span>
@@ -60,14 +60,14 @@ export function StoryStats({ description, stats, status }: StoryStatsProps) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="border-border/50 space-y-4 rounded-xl border p-5"
+        className="border-border/50 space-y-3 rounded-xl border p-4 sm:space-y-4 sm:p-5"
       >
-        <h2 className="text-text-primary flex items-center gap-2 font-semibold">
-          <Star size={18} className="text-brand-orange" />
+        <h2 className="text-text-primary flex items-center gap-2 text-sm font-semibold sm:text-base">
+          <Star size={16} className="text-brand-orange sm:h-[18px] sm:w-[18px]" />
           Statistics
         </h2>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
           <StatCard
             icon={<BookOpen size={16} />}
             label="Chapters"
@@ -135,13 +135,16 @@ function StatCard({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ scale: 1.02 }}
-      className={cn('flex items-center justify-between rounded-lg border p-3', colorStyles[color])}
+      className={cn(
+        'flex items-center justify-between rounded-lg border p-2 sm:p-3',
+        colorStyles[color]
+      )}
     >
-      <div className="text-text-secondary-65 flex items-center gap-2 text-xs">
+      <div className="text-text-secondary-65 flex items-center gap-1.5 text-[11px] sm:gap-2 sm:text-xs">
         <span className={cn(colorStyles[color].split(' ')[0])}>{icon}</span>
         {label}
       </div>
-      <span className="text-text-primary text-sm font-bold">{value}</span>
+      <span className="text-text-primary text-xs font-bold sm:text-sm">{value}</span>
     </motion.div>
   );
 }

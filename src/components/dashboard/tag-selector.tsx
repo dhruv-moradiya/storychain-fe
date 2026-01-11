@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Search, Tag, Plus, X } from 'lucide-react';
+import { Search, Plus } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -62,22 +62,18 @@ export default function TagSelector({
           >
             <div className="text-text-secondary-65 hover:bg-brand-pink-500/10 flex w-full cursor-pointer items-center gap-1 rounded-lg p-1 transition-colors">
               {value.length > 0 ? (
-                <div className="flex flex-wrap items-center gap-1.5">
+                <div className="flex flex-wrap items-center gap-1">
                   {value.map((tag) => (
                     <span
                       key={tag}
-                      className="border-brand-pink-500/30 bg-brand-pink-500/10 text-brand-pink-500 inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium"
+                      className="border-brand-pink-500/40 bg-brand-pink-500/10 text-brand-pink-500 rounded-md border px-2 py-0.5 text-xs font-medium"
                     >
-                      <Tag className="h-3 w-3" />
                       {tag}
                     </span>
                   ))}
                 </div>
               ) : (
-                <span className="flex items-center gap-1 text-xs font-medium uppercase">
-                  <Tag className="h-3 w-3" />
-                  Add Tags
-                </span>
+                <span className="text-xs font-medium uppercase">Add Tags</span>
               )}
             </div>
           </Button>
@@ -85,9 +81,9 @@ export default function TagSelector({
 
         <PopoverContent
           sideOffset={6}
-          className="border-border/50 bg-cream-95 w-64 rounded-xl border p-3 shadow-lg backdrop-blur-sm"
+          className="border-border/30 bg-cream-95 w-64 rounded-xl border p-3 shadow-md"
         >
-          <InputGroup className="border-border/50 overflow-hidden rounded-lg border bg-white/80">
+          <InputGroup className="border-border/30 overflow-hidden rounded-lg border bg-white/80">
             <InputGroupInput
               placeholder="Search tags..."
               className="text-text-primary placeholder:text-text-secondary-65 text-sm"
@@ -99,7 +95,7 @@ export default function TagSelector({
             </InputGroupAddon>
           </InputGroup>
 
-          <ul className="scrollbar-thin mt-3 flex max-h-40 flex-col gap-1.5 overflow-auto pr-1">
+          <ul className="scrollbar-thin mt-3 flex max-h-40 flex-col gap-1 overflow-auto pr-1">
             {filteredTags.length > 0 ? (
               filteredTags.map((tag) => {
                 const isSelected = value.includes(tag);
@@ -107,23 +103,14 @@ export default function TagSelector({
                   <li
                     key={tag}
                     className={cn(
-                      'flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm transition-all',
+                      'cursor-pointer rounded-md px-3 py-1.5 text-sm transition-all',
                       isSelected
-                        ? 'border-brand-pink-500 bg-brand-pink-500/10 text-brand-pink-600 border-2 font-medium'
-                        : 'text-text-secondary hover:border-brand-pink-500/30 border-2 border-transparent bg-white/60 hover:bg-white/80'
+                        ? 'border-brand-pink-500 bg-brand-pink-500/10 text-brand-pink-600 border font-medium'
+                        : 'text-text-secondary hover:border-brand-pink-500/30 border border-transparent bg-white/60 hover:bg-white/80'
                     )}
                     onClick={() => toggleTag(tag)}
                   >
-                    <Tag
-                      className={cn(
-                        'h-3.5 w-3.5',
-                        isSelected ? 'text-brand-pink-500' : 'text-text-secondary-65'
-                      )}
-                    />
-                    <span className="flex-1">{tag}</span>
-                    {isSelected && (
-                      <X className="text-brand-pink-500 hover:text-brand-pink-600 h-3.5 w-3.5" />
-                    )}
+                    {tag}
                   </li>
                 );
               })
@@ -148,11 +135,11 @@ export default function TagSelector({
 
       {/* Create Tag Modal */}
       <Dialog open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen}>
-        <DialogContent className="border-border/50 bg-cream-95 sm:max-w-md">
+        <DialogContent className="border-border/30 bg-cream-95 sm:max-w-md">
           <DialogHeader>
             <DialogTitle className="text-text-primary flex items-center gap-2">
-              <div className="from-brand-pink-500/20 to-brand-orange/20 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br">
-                <Tag className="text-brand-pink-500 h-4 w-4" />
+              <div className="bg-brand-pink-500/15 flex h-8 w-8 items-center justify-center rounded-lg">
+                <Plus className="text-brand-pink-500 h-4 w-4" />
               </div>
               Create New Tag
             </DialogTitle>
@@ -168,7 +155,7 @@ export default function TagSelector({
                 placeholder="Enter tag name..."
                 value={newTagName}
                 onChange={(e) => setNewTagName(e.target.value)}
-                className="border-border/50 text-text-primary placeholder:text-text-secondary-65 focus-visible:ring-brand-pink-500/30 bg-white/80"
+                className="border-border/30 text-text-primary placeholder:text-text-secondary-65 focus-visible:ring-brand-pink-500/30 bg-white/80"
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     handleCreateTag();
@@ -181,8 +168,7 @@ export default function TagSelector({
               <div className="space-y-2">
                 <Label className="text-text-secondary text-sm font-medium">Preview</Label>
                 <div className="flex items-center gap-2">
-                  <span className="border-brand-pink-500/30 bg-brand-pink-500/10 text-brand-pink-500 inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-sm font-medium">
-                    <Tag className="h-3.5 w-3.5" />
+                  <span className="border-brand-pink-500/40 bg-brand-pink-500/10 text-brand-pink-500 rounded-md border px-2.5 py-1 text-sm font-medium">
                     {newTagName.trim()}
                   </span>
                 </div>

@@ -22,24 +22,29 @@ export const StoryTabs = () => {
   const tabs = [...baseTabs];
 
   return (
-    <div className="bg-muted/40 sticky top-0 z-50 flex w-full gap-6 px-4 pt-3 backdrop-blur-3xl">
-      {tabs.map((t) => {
-        const fullPath = `/stories/${slug}/${t.path}`;
-        const isActive = pathname.includes(t.key);
+    <div className="bg-bg-cream/80 border-border/30 sticky top-0 z-50 w-full border-b backdrop-blur-xl">
+      <div className="scrollbar-none -mx-1 flex gap-1 overflow-x-auto px-3 sm:gap-2 sm:px-4">
+        {tabs.map((t) => {
+          const fullPath = `/stories/${slug}/${t.path}`;
+          const isActive = pathname.includes(t.key);
 
-        return (
-          <Link
-            key={t.key}
-            to={fullPath}
-            className={cn(
-              'text-muted-foreground border-b-2 border-transparent pb-3 text-sm capitalize transition',
-              isActive && 'text-foreground border-primary'
-            )}
-          >
-            {t.label}
-          </Link>
-        );
-      })}
+          return (
+            <Link
+              key={t.key}
+              to={fullPath}
+              className={cn(
+                'text-text-secondary-65 hover:text-text-primary relative px-2 py-3 text-xs font-medium whitespace-nowrap transition-colors sm:px-3 sm:text-sm',
+                isActive && 'text-brand-pink-500'
+              )}
+            >
+              {t.label}
+              {isActive && (
+                <span className="bg-brand-pink-500 absolute right-2 bottom-0 left-2 h-0.5 rounded-full sm:right-3 sm:left-3" />
+              )}
+            </Link>
+          );
+        })}
+      </div>
     </div>
   );
 };

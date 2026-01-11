@@ -70,7 +70,7 @@ const OverviewSection = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="mx-auto max-w-3xl space-y-8 px-4 pb-14"
+      className="mx-auto w-full max-w-4xl space-y-6 px-3 pb-14 sm:space-y-8 sm:px-4"
     >
       {/* Hero Section */}
       <StoryHero

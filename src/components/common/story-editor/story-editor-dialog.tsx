@@ -14,8 +14,7 @@ import { Button } from '../../ui/button';
 
 import { StoryFormSchema, type TStoryFormValues } from '@/schema/story.schema';
 
-import { motion } from 'framer-motion';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Send } from 'lucide-react';
 import { StoryFormFields } from './story-form-fields';
 import { handleApiError } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
@@ -73,48 +72,50 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-background grid max-h-[90vh] min-w-[55vw] grid-rows-[auto_1fr_auto] overflow-hidden rounded-xl border p-0 shadow-2xl">
+      <DialogContent className="grid max-h-[90vh] grid-rows-[auto_1fr_auto] overflow-hidden border-black/10 bg-white sm:max-w-[600px]">
         {/* HEADER */}
-        <DialogHeader className="border-b px-4 py-4">
-          <div className="flex items-center gap-3">
-            <motion.div
-              animate={{ y: [-3, 3, -3], rotate: [-2, 2, -2] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="relative"
-            >
-              <div className="bg-primary/20 absolute inset-0 h-10 w-10 rounded-full blur-xl" />
-              <BookOpen className="text-primary relative size-6" />
-            </motion.div>
-
-            <div>
-              <DialogTitle className="text-lg font-semibold tracking-tight">
-                Start New Story
-              </DialogTitle>
-              <DialogDescription className="text-sm">
-                Enter all the details for your new story.
-              </DialogDescription>
+        <DialogHeader>
+          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
+            <div className="bg-brand-pink-500/15 flex h-8 w-8 items-center justify-center rounded-lg">
+              <BookOpen className="text-brand-pink-500 h-4 w-4" />
             </div>
-          </div>
+            Create New Story
+          </DialogTitle>
+          <DialogDescription className="text-text-secondary-65 font-mono text-sm">
+            Fill in the details to start your new story
+          </DialogDescription>
         </DialogHeader>
 
         {/* FORM */}
         <FormProvider {...methods}>
-          <form
-            id="story-form"
-            onSubmit={handleSubmit(onSubmit)}
-            className="overflow-y-auto px-4 py-4"
-          >
+          <form id="story-form" onSubmit={handleSubmit(onSubmit)} className="overflow-y-auto py-4">
             <StoryFormFields />
           </form>
         </FormProvider>
 
         {/* FOOTER */}
-        <DialogFooter className="bg-background/60 border-t p-4">
-          <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
+        <DialogFooter className="gap-2 sm:gap-0">
+          <Button
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            className="border-black/10 font-mono hover:bg-black/5"
+          >
             Cancel
           </Button>
-          <Button size="sm" type="submit" form="story-form" disabled={isPending}>
-            {!isPending ? 'Save as Draft' : <Spinner />}
+          <Button
+            type="submit"
+            form="story-form"
+            disabled={isPending}
+            className="bg-brand-pink-500 hover:bg-brand-pink-600 gap-2 font-mono text-white"
+          >
+            {!isPending ? (
+              <>
+                <Send className="h-4 w-4" />
+                Create Story
+              </>
+            ) : (
+              <Spinner />
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
