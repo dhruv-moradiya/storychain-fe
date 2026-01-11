@@ -1,4 +1,5 @@
 import { Outlet, useLocation } from 'react-router';
+import { Analytics } from '@vercel/analytics/react';
 import Navbar from './navbar';
 
 const Layout = () => {
@@ -12,6 +13,7 @@ const Layout = () => {
       {!isHomePage && <Navbar />}
       <main className="bg-bg-cream flex-1">
         <Outlet />
+        <Analytics />
       </main>
     </div>
   );

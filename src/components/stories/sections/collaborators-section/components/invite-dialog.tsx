@@ -237,7 +237,10 @@ function InviteDialog({ open, onOpenChange, slug }: InviteDialogProps) {
                     )}
                   >
                     <Avatar className="h-9 w-9 border border-white shadow-sm">
-                      <AvatarImage src={user.avatarUrl} alt={user.username} />
+                      <AvatarImage
+                        src="https://i.pinimg.com/1200x/ac/01/cc/ac01cc2a6b2fccf2b97bcb131c21b9a9.jpg"
+                        alt={user.username}
+                      />
                       <AvatarFallback className="bg-brand-blue/10 text-brand-blue text-sm font-medium">
                         {user.username.charAt(0).toUpperCase()}
                       </AvatarFallback>

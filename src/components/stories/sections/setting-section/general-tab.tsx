@@ -17,7 +17,7 @@ export function GeneralTab({ settings, onSettingUpdate }: SettingTabProps) {
           label="Content Rating"
           value={settings.contentRating}
         />
-        <ReadonlyRow icon={<Tag size={18} />} label="Status" value={settings.status || 'Ongoing'} />
+        <ReadonlyRow icon={<Tag size={18} />} label="Status" value={'Ongoing'} />
       </SettingCard>
 
       {/* Visibility */}

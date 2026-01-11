@@ -110,12 +110,7 @@ export function ChapterPreviewDialog({
             <TabsContent value="preview" className="mt-0 flex-1 overflow-hidden">
               <ScrollArea className="h-full">
                 <div className="mx-auto max-w-3xl px-6 py-8">
-                  <ChapterReader
-                    chapter={chapter}
-                    variant="preview"
-                    showStats={false}
-                    showBreadcrumb={false}
-                  />
+                  <ChapterReader chapter={chapter} variant="preview" showStats={false} />
                 </div>
               </ScrollArea>
             </TabsContent>
@@ -128,12 +123,7 @@ export function ChapterPreviewDialog({
           // Simple preview without tabs
           <ScrollArea className="flex-1">
             <div className="mx-auto max-w-3xl px-6 py-8">
-              <ChapterReader
-                chapter={chapter}
-                variant="preview"
-                showStats={false}
-                showBreadcrumb={false}
-              />
+              <ChapterReader chapter={chapter} variant="preview" showStats={false} />
             </div>
           </ScrollArea>
         )}

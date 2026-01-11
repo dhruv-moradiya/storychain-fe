@@ -221,7 +221,7 @@ const SettingSection = () => {
 
         <TabsContent value="danger" className="mt-0">
           <DangerTab
-            storyTitle={settings.title}
+            storyTitle={'Tide of the Azure Serpent'}
             onArchive={() => toast.info('Archive feature coming soon')}
             onTransferOwnership={() => toast.info('Transfer feature coming soon')}
             onDelete={() => toast.info('Delete feature coming soon')}
