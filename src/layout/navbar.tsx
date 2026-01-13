@@ -21,6 +21,8 @@ import {
   UserPlus,
   BookOpen,
   Star,
+  CoinsIcon,
+  HandHeart,
 } from 'lucide-react';
 import { NavItem } from '@/components/common';
 import { useState } from 'react';
@@ -161,6 +163,8 @@ export default function Navbar() {
             <NavItem to="/dashboard" label="Dashboard" icon={<LayoutDashboard size={16} />} />
             <NavItem to="/explore" label="Explore" icon={<Compass size={16} />} />
             <NavItem to="/" label="Builder" icon={<Feather size={16} />} />
+            <NavItem to="/pricing" label="Pricing" icon={<CoinsIcon size={16} />} />
+            <NavItem to="/how-to-use" label="How to use" icon={<HandHeart size={16} />} />
           </ul>
         )}
 

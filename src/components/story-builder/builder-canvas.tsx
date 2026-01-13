@@ -17,8 +17,8 @@ function BuilderCanvas({ editor }: BuilderCanvasProps) {
         <EditorContent
           editor={editor}
           className={cn(
-            'editor-content border-border/50 w-full rounded-xl border bg-white shadow-sm',
-            'prose prose-gray text-text-primary min-h-[60vh] p-5 font-serif text-base leading-[1.8] focus:outline-none sm:min-h-[70vh] sm:p-8 sm:text-[17px] lg:min-h-[11in] lg:p-12',
+            'border-border/50 w-full rounded-xl border bg-white/50 shadow-sm',
+            'prose prose-gray prose-max-w-none text-text-primary min-h-[60vh] max-w-none p-5 font-serif text-base leading-[1] focus:outline-none sm:min-h-[70vh] sm:p-8 sm:text-[17px] lg:min-h-[11in] lg:p-12',
             'prose-headings:text-text-primary prose-headings:font-serif prose-p:text-text-secondary prose-strong:text-text-primary'
           )}
         />

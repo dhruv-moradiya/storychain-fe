@@ -42,7 +42,7 @@ function UserProfileHeader({ user }: UserProfileHeaderProps) {
       </div>
 
       {/* Profile Section */}
-      <div className="relative mx-auto max-w-4xl px-4">
+      <div className="relative mx-auto mt-2.5 max-w-4xl px-4">
         <div className="flex flex-col items-center sm:flex-row sm:items-end sm:gap-6">
           {/* Avatar */}
           <motion.div

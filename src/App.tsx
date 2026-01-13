@@ -10,7 +10,6 @@ const Dashboard = lazyRoute(() => import('./pages/dashboard'), 'dashboard');
 const Story = lazyRoute(() => import('./pages/stories'), 'story');
 const StoryBuilder = lazyRoute(() => import('./pages/story-builder'), 'storyBuilder');
 const ChapterRead = lazyRoute(() => import('./pages/chapter-read'), 'chapter');
-const Profile = lazyRoute(() => import('./pages/profile'), 'profile');
 const UserProfile = lazyRoute(() => import('./pages/user-profile'), 'profile');
 const Reports = lazyRoute(() => import('./pages/reports'), 'dashboard');
 const Appeals = lazyRoute(() => import('./pages/appeals'), 'dashboard');
@@ -18,6 +17,46 @@ const SubmitRequests = lazyRoute(() => import('./pages/submit-requests'));
 const SubmitRequestDetail = lazyRoute(() => import('./pages/submit-request-detail'));
 const SignUp = lazyRoute(() => import('./pages/sign-up'), 'auth');
 const SignIn = lazyRoute(() => import('./pages/sign-in'), 'auth');
+const Pricing = lazyRoute(() => import('./pages/pricing'), 'page');
+const HowToUse = lazyRoute(() => import('./pages/how-to-use'), 'page');
+
+// Profile Layout and Sections
+const ProfileLayout = lazyRoute(() => import('./components/profile/profile-layout'), 'profile');
+const GeneralSection = lazyRoute(() => import('./components/profile/general-section'), 'profile');
+const StoriesSection = lazyRoute(() => import('./components/profile/stories-section'), 'profile');
+const BadgesSection = lazyRoute(() => import('./components/profile/badges-section'), 'profile');
+const FollowingSection = lazyRoute(
+  () => import('./components/profile/following-section'),
+  'profile'
+);
+const NotificationsSection = lazyRoute(
+  () => import('./components/profile/notifications-section'),
+  'profile'
+);
+const MyReportsSection = lazyRoute(
+  () => import('./components/profile/my-reports-section'),
+  'profile'
+);
+const SettingsSection = lazyRoute(() => import('./components/profile/settings-section'), 'profile');
+const SubscriptionSection = lazyRoute(
+  () => import('./components/profile/subscription-section'),
+  'profile'
+);
+const AdminSection = lazyRoute(() => import('./components/profile/admin-section'), 'profile');
+
+// Admin sub-sections
+const AdminUsers = lazyRoute(
+  () => import('./components/profile/admin-section/admin-users'),
+  'profile'
+);
+const AdminReports = lazyRoute(
+  () => import('./components/profile/admin-section/admin-reports'),
+  'profile'
+);
+const AdminRoles = lazyRoute(
+  () => import('./components/profile/admin-section/admin-roles'),
+  'profile'
+);
 
 const Layout = lazyRoute(() => import('./layout/layout'), 'page');
 
@@ -63,7 +102,59 @@ export const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: <Profile />,
+        element: <ProfileLayout />,
+        children: [
+          {
+            index: true,
+            element: <GeneralSection />,
+          },
+          {
+            path: 'stories',
+            element: <StoriesSection />,
+          },
+          {
+            path: 'badges',
+            element: <BadgesSection />,
+          },
+          {
+            path: 'following',
+            element: <FollowingSection />,
+          },
+          {
+            path: 'notifications',
+            element: <NotificationsSection />,
+          },
+          {
+            path: 'my-reports',
+            element: <MyReportsSection />,
+          },
+          {
+            path: 'settings',
+            element: <SettingsSection />,
+          },
+          {
+            path: 'subscription',
+            element: <SubscriptionSection />,
+          },
+          {
+            path: 'admin',
+            element: <AdminSection />,
+            children: [
+              {
+                index: true,
+                element: <AdminUsers />,
+              },
+              {
+                path: 'reports',
+                element: <AdminReports />,
+              },
+              {
+                path: 'roles',
+                element: <AdminRoles />,
+              },
+            ],
+          },
+        ],
       },
       {
         path: 'profile/:userId',
@@ -85,6 +176,14 @@ export const router = createBrowserRouter([
       {
         path: 'submit-requests/:id',
         element: <SubmitRequestDetail />,
+      },
+      {
+        path: 'pricing',
+        element: <Pricing />,
+      },
+      {
+        path: 'how-to-use',
+        element: <HowToUse />,
       },
     ],
   },

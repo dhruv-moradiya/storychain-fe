@@ -1,7 +1,6 @@
 import AppealDialog from '@/components/common/appeal-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -28,6 +27,7 @@ import {
   ExternalLink,
   Eye,
   FileText,
+  FileWarning,
   Flag,
   Info,
   MessageSquare,
@@ -236,77 +236,79 @@ export function MyReportsSection() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div>
-        <h1 className="text-lg font-semibold tracking-tight">My Reports & Appeals</h1>
-        <p className="text-muted-foreground text-sm">
-          Track the status of reports you've submitted and any ban appeals
-        </p>
+      <div className="flex items-center gap-3">
+        <div className="from-brand-pink-500/20 to-brand-orange/20 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br">
+          <FileWarning className="text-brand-pink-500 h-5 w-5" />
+        </div>
+        <div>
+          <h1 className="text-text-primary text-lg font-semibold tracking-tight">
+            My Reports & Appeals
+          </h1>
+          <p className="text-text-secondary-65 text-sm">
+            Track the status of reports you've submitted and any ban appeals
+          </p>
+        </div>
       </div>
 
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="bg-primary/10 rounded-xl p-3">
-                <Flag className="text-primary h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{stats.totalReports}</p>
-                <p className="text-muted-foreground text-sm">Total Reports</p>
-              </div>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="border-border/50 bg-cream-95 rounded-xl border p-4">
+          <div className="flex items-center gap-3">
+            <div className="bg-brand-pink-500/10 rounded-xl p-2.5">
+              <Flag className="text-brand-pink-500 h-5 w-5" />
             </div>
-          </CardContent>
-        </Card>
+            <div>
+              <p className="text-text-primary text-xl font-bold">{stats.totalReports}</p>
+              <p className="text-text-secondary-65 text-xs">Total Reports</p>
+            </div>
+          </div>
+        </div>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="rounded-xl bg-yellow-500/10 p-3">
-                <Clock className="h-6 w-6 text-yellow-500" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{stats.pendingReports}</p>
-                <p className="text-muted-foreground text-sm">Pending Reports</p>
-              </div>
+        <div className="border-border/50 bg-cream-95 rounded-xl border p-4">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-yellow-500/10 p-2.5">
+              <Clock className="h-5 w-5 text-yellow-500" />
             </div>
-          </CardContent>
-        </Card>
+            <div>
+              <p className="text-text-primary text-xl font-bold">{stats.pendingReports}</p>
+              <p className="text-text-secondary-65 text-xs">Pending</p>
+            </div>
+          </div>
+        </div>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="rounded-xl bg-green-500/10 p-3">
-                <CheckCircle className="h-6 w-6 text-green-500" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{stats.resolvedReports}</p>
-                <p className="text-muted-foreground text-sm">Resolved</p>
-              </div>
+        <div className="border-border/50 bg-cream-95 rounded-xl border p-4">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-green-500/10 p-2.5">
+              <CheckCircle className="h-5 w-5 text-green-500" />
             </div>
-          </CardContent>
-        </Card>
+            <div>
+              <p className="text-text-primary text-xl font-bold">{stats.resolvedReports}</p>
+              <p className="text-text-secondary-65 text-xs">Resolved</p>
+            </div>
+          </div>
+        </div>
 
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="rounded-xl bg-purple-500/10 p-3">
-                <Scale className="h-6 w-6 text-purple-500" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{stats.totalAppeals}</p>
-                <p className="text-muted-foreground text-sm">Appeals</p>
-              </div>
+        <div className="border-border/50 bg-cream-95 rounded-xl border p-4">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-purple-500/10 p-2.5">
+              <Scale className="h-5 w-5 text-purple-500" />
             </div>
-          </CardContent>
-        </Card>
+            <div>
+              <p className="text-text-primary text-xl font-bold">{stats.totalAppeals}</p>
+              <p className="text-text-secondary-65 text-xs">Appeals</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <Tabs defaultValue="reports">
-        <TabsList>
-          <TabsTrigger value="reports" className="gap-2">
+        <TabsList className="bg-muted/30">
+          <TabsTrigger
+            value="reports"
+            className="data-[state=active]:bg-brand-pink-500 gap-2 data-[state=active]:text-white"
+          >
             <Flag className="h-4 w-4" />
             My Reports
             {stats.pendingReports > 0 && (
@@ -315,7 +317,10 @@ export function MyReportsSection() {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="appeals" className="gap-2">
+          <TabsTrigger
+            value="appeals"
+            className="data-[state=active]:bg-brand-pink-500 gap-2 data-[state=active]:text-white"
+          >
             <Scale className="h-4 w-4" />
             My Appeals
             {stats.pendingAppeals > 0 && (
@@ -328,146 +333,140 @@ export function MyReportsSection() {
 
         {/* Reports Tab */}
         <TabsContent value="reports" className="mt-6">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-lg">Reports You've Submitted</CardTitle>
-                  <CardDescription>Track the status of content you've reported</CardDescription>
-                </div>
+          <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-text-primary text-base font-semibold">
+                  Reports You've Submitted
+                </h2>
+                <p className="text-text-secondary-65 text-sm">
+                  Track the status of content you've reported
+                </p>
+              </div>
+              <Select
+                value={reportFilter}
+                onValueChange={(v) => setReportFilter(v as ReportStatus | 'ALL')}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Filter by status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">All Reports</SelectItem>
+                  <SelectItem value="PENDING">Pending</SelectItem>
+                  <SelectItem value="REVIEWED">Under Review</SelectItem>
+                  <SelectItem value="RESOLVED">Resolved</SelectItem>
+                  <SelectItem value="DISMISSED">Dismissed</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <ScrollArea className="h-[400px] pr-4">
+              <div className="space-y-3">
+                {filteredReports.map((report) => (
+                  <ReportCard key={report.id} report={report} />
+                ))}
+                {filteredReports.length === 0 && (
+                  <EmptyState
+                    icon={Flag}
+                    title="No reports found"
+                    description={
+                      reportFilter === 'ALL'
+                        ? "You haven't submitted any reports yet"
+                        : `No reports with status "${reportStatusConfig[reportFilter as ReportStatus].label}"`
+                    }
+                  />
+                )}
+              </div>
+            </ScrollArea>
+          </div>
+        </TabsContent>
+
+        {/* Appeals Tab */}
+        <TabsContent value="appeals" className="mt-6">
+          <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-text-primary text-base font-semibold">Your Ban Appeals</h2>
+                <p className="text-text-secondary-65 text-sm">
+                  Track the status of appeals you've submitted
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
                 <Select
-                  value={reportFilter}
-                  onValueChange={(v) => setReportFilter(v as ReportStatus | 'ALL')}
+                  value={appealFilter}
+                  onValueChange={(v) => setAppealFilter(v as AppealStatus | 'ALL')}
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Filter by status" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ALL">All Reports</SelectItem>
+                    <SelectItem value="ALL">All Appeals</SelectItem>
                     <SelectItem value="PENDING">Pending</SelectItem>
-                    <SelectItem value="REVIEWED">Under Review</SelectItem>
-                    <SelectItem value="RESOLVED">Resolved</SelectItem>
-                    <SelectItem value="DISMISSED">Dismissed</SelectItem>
+                    <SelectItem value="UNDER_REVIEW">Under Review</SelectItem>
+                    <SelectItem value="APPROVED">Approved</SelectItem>
+                    <SelectItem value="REJECTED">Rejected</SelectItem>
                   </SelectContent>
                 </Select>
+                <AppealDialog
+                  trigger={
+                    <Button size="sm" className="gap-2">
+                      <Scale className="h-4 w-4" />
+                      New Appeal
+                    </Button>
+                  }
+                />
               </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px] pr-4">
-                <div className="space-y-3">
-                  {filteredReports.map((report) => (
-                    <ReportCard key={report.id} report={report} />
-                  ))}
-                  {filteredReports.length === 0 && (
-                    <EmptyState
-                      icon={Flag}
-                      title="No reports found"
-                      description={
-                        reportFilter === 'ALL'
-                          ? "You haven't submitted any reports yet"
-                          : `No reports with status "${reportStatusConfig[reportFilter as ReportStatus].label}"`
-                      }
-                    />
-                  )}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Appeals Tab */}
-        <TabsContent value="appeals" className="mt-6">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-lg">Your Ban Appeals</CardTitle>
-                  <CardDescription>Track the status of appeals you've submitted</CardDescription>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Select
-                    value={appealFilter}
-                    onValueChange={(v) => setAppealFilter(v as AppealStatus | 'ALL')}
-                  >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Filter by status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ALL">All Appeals</SelectItem>
-                      <SelectItem value="PENDING">Pending</SelectItem>
-                      <SelectItem value="UNDER_REVIEW">Under Review</SelectItem>
-                      <SelectItem value="APPROVED">Approved</SelectItem>
-                      <SelectItem value="REJECTED">Rejected</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <AppealDialog
-                    trigger={
-                      <Button size="sm" className="gap-2">
-                        <Scale className="h-4 w-4" />
-                        New Appeal
-                      </Button>
+            </div>
+            <ScrollArea className="h-[400px] pr-4">
+              <div className="space-y-3">
+                {filteredAppeals.map((appeal) => (
+                  <AppealCard key={appeal.id} appeal={appeal} />
+                ))}
+                {filteredAppeals.length === 0 && (
+                  <EmptyState
+                    icon={Scale}
+                    title="No appeals found"
+                    description={
+                      appealFilter === 'ALL'
+                        ? "You haven't submitted any appeals"
+                        : `No appeals with status "${appealStatusConfig[appealFilter as AppealStatus].label}"`
                     }
                   />
-                </div>
+                )}
               </div>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea className="h-[400px] pr-4">
-                <div className="space-y-3">
-                  {filteredAppeals.map((appeal) => (
-                    <AppealCard key={appeal.id} appeal={appeal} />
-                  ))}
-                  {filteredAppeals.length === 0 && (
-                    <EmptyState
-                      icon={Scale}
-                      title="No appeals found"
-                      description={
-                        appealFilter === 'ALL'
-                          ? "You haven't submitted any appeals"
-                          : `No appeals with status "${appealStatusConfig[appealFilter as AppealStatus].label}"`
-                      }
-                    />
-                  )}
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+            </ScrollArea>
+          </div>
 
           {/* Appeal Info */}
-          <Card className="mt-6">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Info className="h-5 w-5" />
-                About Appeals
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-muted-foreground space-y-4 text-sm">
-                <p>
-                  If you believe your account was banned unfairly, you can submit an appeal for
-                  review by our moderation team.
-                </p>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="bg-muted/50 rounded-lg p-3">
-                    <p className="text-foreground mb-1 font-medium">Response Time</p>
-                    <p>Appeals are typically reviewed within 48-72 hours.</p>
-                  </div>
-                  <div className="bg-muted/50 rounded-lg p-3">
-                    <p className="text-foreground mb-1 font-medium">One Appeal Per Ban</p>
-                    <p>You can only submit one appeal per ban. Make it count!</p>
-                  </div>
-                  <div className="bg-muted/50 rounded-lg p-3">
-                    <p className="text-foreground mb-1 font-medium">Provide Evidence</p>
-                    <p>Include any relevant context or evidence to support your case.</p>
-                  </div>
-                  <div className="bg-muted/50 rounded-lg p-3">
-                    <p className="text-foreground mb-1 font-medium">Final Decision</p>
-                    <p>The moderation team's decision after review is final.</p>
-                  </div>
+          <div className="border-border/50 bg-cream-95 mt-6 rounded-xl border p-5">
+            <div className="mb-4 flex items-center gap-2">
+              <Info className="text-brand-pink-500 h-5 w-5" />
+              <h2 className="text-text-primary text-base font-semibold">About Appeals</h2>
+            </div>
+            <div className="text-text-secondary-65 space-y-4 text-sm">
+              <p>
+                If you believe your account was banned unfairly, you can submit an appeal for review
+                by our moderation team.
+              </p>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="rounded-lg bg-white/50 p-3">
+                  <p className="text-text-primary mb-1 font-medium">Response Time</p>
+                  <p>Appeals are typically reviewed within 48-72 hours.</p>
+                </div>
+                <div className="rounded-lg bg-white/50 p-3">
+                  <p className="text-text-primary mb-1 font-medium">One Appeal Per Ban</p>
+                  <p>You can only submit one appeal per ban. Make it count!</p>
+                </div>
+                <div className="rounded-lg bg-white/50 p-3">
+                  <p className="text-text-primary mb-1 font-medium">Provide Evidence</p>
+                  <p>Include any relevant context or evidence to support your case.</p>
+                </div>
+                <div className="rounded-lg bg-white/50 p-3">
+                  <p className="text-text-primary mb-1 font-medium">Final Decision</p>
+                  <p>The moderation team's decision after review is final.</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
@@ -485,7 +484,7 @@ function ReportCard({ report }: ReportCardProps) {
   const TypeIcon = typeInfo.icon;
 
   return (
-    <div className="bg-card rounded-lg border p-4">
+    <div className="border-border/50 bg-cream-95/50 hover:border-brand-pink-500/30 hover:bg-cream-95 rounded-lg border p-4 transition-colors">
       <div className="mb-3 flex items-start justify-between">
         <div className="flex flex-wrap items-center gap-2">
           <Badge variant="outline" className="gap-1">
@@ -498,27 +497,27 @@ function ReportCard({ report }: ReportCardProps) {
             {statusInfo.label}
           </Badge>
         </div>
-        <span className="text-muted-foreground shrink-0 text-xs">
+        <span className="text-text-secondary-65 shrink-0 text-xs">
           {formatDistanceToNow(report.createdAt, { addSuffix: true })}
         </span>
       </div>
 
-      <p className="mb-1 flex items-center gap-2 text-sm font-medium">
+      <p className="text-text-primary mb-1 flex items-center gap-2 text-sm font-medium">
         {report.relatedTitle}
-        <ExternalLink className="text-muted-foreground h-3 w-3" />
+        <ExternalLink className="text-text-secondary-65 h-3 w-3" />
       </p>
-      <p className="text-muted-foreground mb-3 line-clamp-2 text-sm">{report.description}</p>
+      <p className="text-text-secondary-65 mb-3 line-clamp-2 text-sm">{report.description}</p>
 
       {/* Resolution (if any) */}
       {report.resolution && (
-        <div className="bg-muted/50 mt-3 rounded-lg p-3">
-          <p className="mb-1 flex items-center gap-1 text-xs font-medium">
+        <div className="mt-3 rounded-lg bg-white/50 p-3">
+          <p className="text-text-primary mb-1 flex items-center gap-1 text-xs font-medium">
             <CheckCircle className="h-3 w-3 text-green-500" />
             Resolution
           </p>
-          <p className="text-muted-foreground text-sm">{report.resolution}</p>
+          <p className="text-text-secondary-65 text-sm">{report.resolution}</p>
           {report.reviewedAt && (
-            <p className="text-muted-foreground mt-1 text-xs">
+            <p className="text-text-secondary-65 mt-1 text-xs">
               Reviewed {formatDistanceToNow(report.reviewedAt, { addSuffix: true })}
             </p>
           )}
@@ -554,7 +553,7 @@ function AppealCard({ appeal }: AppealCardProps) {
   const StatusIcon = statusInfo.icon;
 
   return (
-    <div className="bg-card rounded-lg border p-4">
+    <div className="border-border/50 bg-cream-95/50 hover:border-brand-pink-500/30 hover:bg-cream-95 rounded-lg border p-4 transition-colors">
       <div className="mb-3 flex items-start justify-between">
         <div className="flex items-center gap-2">
           <Badge variant="outline" className={cn('gap-1', statusInfo.color)}>
@@ -563,7 +562,7 @@ function AppealCard({ appeal }: AppealCardProps) {
           </Badge>
           <Badge variant="secondary">{appeal.appealReason.replace(/_/g, ' ')}</Badge>
         </div>
-        <span className="text-muted-foreground text-xs">
+        <span className="text-text-secondary-65 text-xs">
           {formatDistanceToNow(appeal.createdAt, { addSuffix: true })}
         </span>
       </div>
@@ -571,16 +570,16 @@ function AppealCard({ appeal }: AppealCardProps) {
       {/* Ban Info */}
       <div className="bg-destructive/5 border-destructive/20 mb-3 rounded-lg border p-3">
         <p className="text-destructive mb-1 text-xs font-medium">Original Ban Reason</p>
-        <p className="text-sm">{appeal.banReason}</p>
-        <p className="text-muted-foreground mt-1 text-xs">
+        <p className="text-text-primary text-sm">{appeal.banReason}</p>
+        <p className="text-text-secondary-65 mt-1 text-xs">
           Banned on {appeal.bannedAt.toLocaleDateString()}
         </p>
       </div>
 
       {/* Appeal Explanation */}
       <div className="mb-3">
-        <p className="mb-1 text-xs font-medium">Your Explanation</p>
-        <p className="text-muted-foreground line-clamp-3 text-sm">{appeal.explanation}</p>
+        <p className="text-text-primary mb-1 text-xs font-medium">Your Explanation</p>
+        <p className="text-text-secondary-65 line-clamp-3 text-sm">{appeal.explanation}</p>
       </div>
 
       {/* Decision (if any) */}
@@ -703,11 +702,11 @@ interface EmptyStateProps {
 function EmptyState({ icon: Icon, title, description }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
-      <div className="bg-muted mb-4 rounded-full p-4">
-        <Icon className="text-muted-foreground h-8 w-8" />
+      <div className="bg-muted/50 mb-4 rounded-full p-4">
+        <Icon className="text-text-secondary-65 h-8 w-8" />
       </div>
-      <h3 className="mb-1 font-medium">{title}</h3>
-      <p className="text-muted-foreground text-sm">{description}</p>
+      <h3 className="text-text-primary mb-1 font-medium">{title}</h3>
+      <p className="text-text-secondary-65 text-sm">{description}</p>
     </div>
   );
 }

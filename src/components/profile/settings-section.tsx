@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import {
@@ -11,7 +10,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Palette, Globe, Type, Eye, Keyboard, Download, Upload, FileJson } from 'lucide-react';
+import {
+  Palette,
+  Globe,
+  Type,
+  Eye,
+  Keyboard,
+  Download,
+  Upload,
+  FileJson,
+  Settings,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 export function SettingsSection() {
@@ -44,27 +53,37 @@ export function SettingsSection() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div>
-        <h1 className="text-lg font-semibold tracking-tight">Settings</h1>
-        <p className="text-muted-foreground text-sm">Customize your experience and preferences</p>
+      <div className="flex items-center gap-3">
+        <div className="from-brand-pink-500/20 to-brand-orange/20 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br">
+          <Settings className="text-brand-pink-500 h-5 w-5" />
+        </div>
+        <div>
+          <h1 className="text-text-primary text-lg font-semibold tracking-tight">Settings</h1>
+          <p className="text-text-secondary-65 text-sm">
+            Customize your experience and preferences
+          </p>
+        </div>
       </div>
 
       {/* Appearance */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Palette className="h-5 w-5" />
-            Appearance
-          </CardTitle>
-          <CardDescription>Customize how StoryChain looks on your device</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <Palette className="text-brand-pink-500 h-5 w-5" />
+          <div>
+            <h2 className="text-text-primary text-base font-semibold">Appearance</h2>
+            <p className="text-text-secondary-65 text-sm">
+              Customize how StoryChain looks on your device
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm font-medium">Theme</Label>
-              <p className="text-muted-foreground text-sm">Select your preferred color scheme</p>
+              <Label className="text-text-primary text-sm font-medium">Theme</Label>
+              <p className="text-text-secondary-65 text-sm">Select your preferred color scheme</p>
             </div>
             <Select
               value={settings.theme}
@@ -85,8 +104,8 @@ export function SettingsSection() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm font-medium">Reduced Motion</Label>
-              <p className="text-muted-foreground text-sm">
+              <Label className="text-text-primary text-sm font-medium">Reduced Motion</Label>
+              <p className="text-text-secondary-65 text-sm">
                 Minimize animations throughout the app
               </p>
             </div>
@@ -98,8 +117,8 @@ export function SettingsSection() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm font-medium">High Contrast</Label>
-              <p className="text-muted-foreground text-sm">
+              <Label className="text-text-primary text-sm font-medium">High Contrast</Label>
+              <p className="text-text-secondary-65 text-sm">
                 Increase contrast for better visibility
               </p>
             </div>
@@ -108,58 +127,60 @@ export function SettingsSection() {
               onCheckedChange={(checked) => handleSettingChange('highContrast', checked)}
             />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Language & Region */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Globe className="h-5 w-5" />
-            Language & Region
-          </CardTitle>
-          <CardDescription>Set your language and regional preferences</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label className="text-sm font-medium">Language</Label>
-              <p className="text-muted-foreground text-sm">Choose your preferred language</p>
-            </div>
-            <Select
-              value={settings.language}
-              onValueChange={(value) => handleSettingChange('language', value)}
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select language" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="es">Español</SelectItem>
-                <SelectItem value="fr">Français</SelectItem>
-                <SelectItem value="de">Deutsch</SelectItem>
-                <SelectItem value="ja">日本語</SelectItem>
-                <SelectItem value="zh">中文</SelectItem>
-              </SelectContent>
-            </Select>
+      <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <Globe className="text-brand-pink-500 h-5 w-5" />
+          <div>
+            <h2 className="text-text-primary text-base font-semibold">Language & Region</h2>
+            <p className="text-text-secondary-65 text-sm">
+              Set your language and regional preferences
+            </p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label className="text-text-primary text-sm font-medium">Language</Label>
+            <p className="text-text-secondary-65 text-sm">Choose your preferred language</p>
+          </div>
+          <Select
+            value={settings.language}
+            onValueChange={(value) => handleSettingChange('language', value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select language" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="en">English</SelectItem>
+              <SelectItem value="es">Español</SelectItem>
+              <SelectItem value="fr">Français</SelectItem>
+              <SelectItem value="de">Deutsch</SelectItem>
+              <SelectItem value="ja">日本語</SelectItem>
+              <SelectItem value="zh">中文</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
 
       {/* Editor Settings */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Type className="h-5 w-5" />
-            Editor
-          </CardTitle>
-          <CardDescription>Customize your writing experience</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
+      <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <Type className="text-brand-pink-500 h-5 w-5" />
+          <div>
+            <h2 className="text-text-primary text-base font-semibold">Editor</h2>
+            <p className="text-text-secondary-65 text-sm">Customize your writing experience</p>
+          </div>
+        </div>
+
+        <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm font-medium">Font Size</Label>
-              <p className="text-muted-foreground text-sm">Adjust the editor font size</p>
+              <Label className="text-text-primary text-sm font-medium">Font Size</Label>
+              <p className="text-text-secondary-65 text-sm">Adjust the editor font size</p>
             </div>
             <Select
               value={settings.fontSize}
@@ -181,8 +202,8 @@ export function SettingsSection() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm font-medium">Auto Save</Label>
-              <p className="text-muted-foreground text-sm">
+              <Label className="text-text-primary text-sm font-medium">Auto Save</Label>
+              <p className="text-text-secondary-65 text-sm">
                 Automatically save your work while writing
               </p>
             </div>
@@ -194,8 +215,8 @@ export function SettingsSection() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm font-medium">Line Numbers</Label>
-              <p className="text-muted-foreground text-sm">Show line numbers in the editor</p>
+              <Label className="text-text-primary text-sm font-medium">Line Numbers</Label>
+              <p className="text-text-secondary-65 text-sm">Show line numbers in the editor</p>
             </div>
             <Switch
               checked={settings.showLineNumbers}
@@ -205,65 +226,65 @@ export function SettingsSection() {
 
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
-              <Label className="text-sm font-medium">Spell Check</Label>
-              <p className="text-muted-foreground text-sm">Enable spell checking while writing</p>
+              <Label className="text-text-primary text-sm font-medium">Spell Check</Label>
+              <p className="text-text-secondary-65 text-sm">Enable spell checking while writing</p>
             </div>
             <Switch
               checked={settings.spellCheck}
               onCheckedChange={(checked) => handleSettingChange('spellCheck', checked)}
             />
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Accessibility */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <Eye className="h-5 w-5" />
-            Accessibility
-          </CardTitle>
-          <CardDescription>Make StoryChain more accessible</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="bg-muted rounded-lg p-2">
-                <Keyboard className="text-muted-foreground h-4 w-4" />
-              </div>
-              <div className="space-y-0.5">
-                <Label className="text-sm font-medium">Keyboard Shortcuts</Label>
-                <p className="text-muted-foreground text-sm">
-                  Enable keyboard shortcuts for quick actions
-                </p>
-              </div>
-            </div>
-            <Switch
-              checked={settings.keyboardShortcuts}
-              onCheckedChange={(checked) => handleSettingChange('keyboardShortcuts', checked)}
-            />
+      <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <Eye className="text-brand-pink-500 h-5 w-5" />
+          <div>
+            <h2 className="text-text-primary text-base font-semibold">Accessibility</h2>
+            <p className="text-text-secondary-65 text-sm">Make StoryChain more accessible</p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="bg-brand-pink-500/10 rounded-lg p-2">
+              <Keyboard className="text-brand-pink-500 h-4 w-4" />
+            </div>
+            <div className="space-y-0.5">
+              <Label className="text-text-primary text-sm font-medium">Keyboard Shortcuts</Label>
+              <p className="text-text-secondary-65 text-sm">
+                Enable keyboard shortcuts for quick actions
+              </p>
+            </div>
+          </div>
+          <Switch
+            checked={settings.keyboardShortcuts}
+            onCheckedChange={(checked) => handleSettingChange('keyboardShortcuts', checked)}
+          />
+        </div>
+      </div>
 
       {/* Data Management */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-lg">
-            <FileJson className="h-5 w-5" />
-            Data Management
-          </CardTitle>
-          <CardDescription>Export or import your data</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between rounded-lg border p-4">
+      <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+        <div className="mb-4 flex items-center gap-2">
+          <FileJson className="text-brand-pink-500 h-5 w-5" />
+          <div>
+            <h2 className="text-text-primary text-base font-semibold">Data Management</h2>
+            <p className="text-text-secondary-65 text-sm">Export or import your data</p>
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-center justify-between rounded-lg border bg-white/50 p-4">
             <div className="flex items-center gap-4">
-              <div className="bg-muted rounded-lg p-2">
-                <Download className="text-muted-foreground h-4 w-4" />
+              <div className="bg-brand-pink-500/10 rounded-lg p-2">
+                <Download className="text-brand-pink-500 h-4 w-4" />
               </div>
               <div>
-                <p className="text-sm font-medium">Export Data</p>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-text-primary text-sm font-medium">Export Data</p>
+                <p className="text-text-secondary-65 text-sm">
                   Download all your stories and settings
                 </p>
               </div>
@@ -273,22 +294,22 @@ export function SettingsSection() {
             </Button>
           </div>
 
-          <div className="flex items-center justify-between rounded-lg border p-4">
+          <div className="flex items-center justify-between rounded-lg border bg-white/50 p-4">
             <div className="flex items-center gap-4">
-              <div className="bg-muted rounded-lg p-2">
-                <Upload className="text-muted-foreground h-4 w-4" />
+              <div className="bg-brand-pink-500/10 rounded-lg p-2">
+                <Upload className="text-brand-pink-500 h-4 w-4" />
               </div>
               <div>
-                <p className="text-sm font-medium">Import Data</p>
-                <p className="text-muted-foreground text-sm">Restore from a previous export</p>
+                <p className="text-text-primary text-sm font-medium">Import Data</p>
+                <p className="text-text-secondary-65 text-sm">Restore from a previous export</p>
               </div>
             </div>
             <Button variant="outline" size="sm" onClick={handleImportData}>
               Import
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

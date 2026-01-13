@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -33,7 +32,7 @@ const mockNotifications = [
     message: 'Alice commented on "The Dawn of AI"',
     avatar: '/avatars/alice.png',
     read: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 30), // 30 mins ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 30),
   },
   {
     id: '2',
@@ -42,7 +41,7 @@ const mockNotifications = [
     message: 'Your chapter submission to "The Lost City" was approved',
     avatar: '/avatars/bob.png',
     read: false,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
   },
   {
     id: '3',
@@ -51,7 +50,7 @@ const mockNotifications = [
     message: 'Charlie started following you',
     avatar: '/avatars/charlie.png',
     read: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
   },
   {
     id: '4',
@@ -60,7 +59,7 @@ const mockNotifications = [
     message: 'Your story "Echoes of Tomorrow" received a new star',
     avatar: null,
     read: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 days ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2),
   },
   {
     id: '5',
@@ -69,7 +68,7 @@ const mockNotifications = [
     message: 'You were invited to collaborate on "Starlight Dreams"',
     avatar: '/avatars/diana.png',
     read: true,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3),
   },
 ];
 
@@ -121,16 +120,26 @@ export function NotificationsSection() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Page Header */}
-      <div>
-        <h1 className="text-lg font-semibold tracking-tight">Notifications</h1>
-        <p className="text-muted-foreground text-sm">Manage your notifications and preferences</p>
+      <div className="flex items-center gap-3">
+        <div className="from-brand-pink-500/20 to-brand-orange/20 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br">
+          <Bell className="text-brand-pink-500 h-5 w-5" />
+        </div>
+        <div>
+          <h1 className="text-text-primary text-lg font-semibold tracking-tight">Notifications</h1>
+          <p className="text-text-secondary-65 text-sm">
+            Manage your notifications and preferences
+          </p>
+        </div>
       </div>
 
       <Tabs defaultValue="notifications">
-        <TabsList>
-          <TabsTrigger value="notifications" className="gap-2">
+        <TabsList className="bg-muted/30">
+          <TabsTrigger
+            value="notifications"
+            className="data-[state=active]:bg-brand-pink-500 gap-2 data-[state=active]:text-white"
+          >
             <Bell className="h-4 w-4" />
             Notifications
             {unreadCount > 0 && (
@@ -139,135 +148,142 @@ export function NotificationsSection() {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="settings" className="gap-2">
+          <TabsTrigger
+            value="settings"
+            className="data-[state=active]:bg-brand-pink-500 gap-2 data-[state=active]:text-white"
+          >
             <Settings className="h-4 w-4" />
             Settings
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="notifications" className="mt-6">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="text-lg">Recent Notifications</CardTitle>
-                  <CardDescription>
-                    {unreadCount > 0
-                      ? `You have ${unreadCount} unread notification${unreadCount > 1 ? 's' : ''}`
-                      : 'All caught up!'}
-                  </CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  {unreadCount > 0 && (
-                    <Button variant="outline" size="sm" onClick={handleMarkAllAsRead}>
-                      <CheckCheck className="mr-2 h-4 w-4" />
-                      Mark all read
-                    </Button>
-                  )}
-                  {notifications.length > 0 && (
-                    <Button variant="outline" size="sm" onClick={handleClearAll}>
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Clear all
-                    </Button>
-                  )}
-                </div>
+          <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-text-primary text-base font-semibold">Recent Notifications</h2>
+                <p className="text-text-secondary-65 text-sm">
+                  {unreadCount > 0
+                    ? `You have ${unreadCount} unread notification${unreadCount > 1 ? 's' : ''}`
+                    : 'All caught up!'}
+                </p>
               </div>
-            </CardHeader>
-            <CardContent>
-              {notifications.length > 0 ? (
-                <ScrollArea className="h-[400px] pr-4">
-                  <div className="space-y-2">
-                    {notifications.map((notification) => {
-                      const Icon =
-                        notificationTypeIcons[
-                          notification.type as keyof typeof notificationTypeIcons
-                        ] || Bell;
-                      return (
-                        <div
-                          key={notification.id}
-                          className={cn(
-                            'flex items-start gap-4 rounded-lg p-4 transition-colors',
-                            notification.read
-                              ? 'hover:bg-muted/50 bg-transparent'
-                              : 'bg-primary/5 hover:bg-primary/10'
-                          )}
-                        >
-                          {notification.avatar ? (
-                            <Avatar className="h-10 w-10">
-                              <AvatarImage src={notification.avatar} />
-                              <AvatarFallback>
-                                <Icon className="h-4 w-4" />
-                              </AvatarFallback>
-                            </Avatar>
-                          ) : (
-                            <div className="bg-muted flex h-10 w-10 items-center justify-center rounded-full">
-                              <Icon className="text-muted-foreground h-4 w-4" />
-                            </div>
-                          )}
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center gap-2">
-                              <p className={cn('text-sm', !notification.read && 'font-medium')}>
-                                {notification.title}
-                              </p>
-                              {!notification.read && (
-                                <div className="bg-primary h-2 w-2 rounded-full" />
-                              )}
-                            </div>
-                            <p className="text-muted-foreground truncate text-sm">
-                              {notification.message}
-                            </p>
-                            <p className="text-muted-foreground mt-1 text-xs">
-                              {formatDistanceToNow(notification.createdAt, { addSuffix: true })}
-                            </p>
+              <div className="flex items-center gap-2">
+                {unreadCount > 0 && (
+                  <Button variant="outline" size="sm" onClick={handleMarkAllAsRead}>
+                    <CheckCheck className="mr-2 h-4 w-4" />
+                    Mark all read
+                  </Button>
+                )}
+                {notifications.length > 0 && (
+                  <Button variant="outline" size="sm" onClick={handleClearAll}>
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    Clear all
+                  </Button>
+                )}
+              </div>
+            </div>
+
+            {notifications.length > 0 ? (
+              <ScrollArea className="h-[400px] pr-4">
+                <div className="space-y-2">
+                  {notifications.map((notification) => {
+                    const Icon =
+                      notificationTypeIcons[
+                        notification.type as keyof typeof notificationTypeIcons
+                      ] || Bell;
+                    return (
+                      <div
+                        key={notification.id}
+                        className={cn(
+                          'flex items-start gap-4 rounded-lg p-4 transition-colors',
+                          notification.read
+                            ? 'hover:bg-muted/50 bg-transparent'
+                            : 'bg-brand-pink-500/5 hover:bg-brand-pink-500/10'
+                        )}
+                      >
+                        {notification.avatar ? (
+                          <Avatar className="h-10 w-10">
+                            <AvatarImage src={notification.avatar} />
+                            <AvatarFallback>
+                              <Icon className="h-4 w-4" />
+                            </AvatarFallback>
+                          </Avatar>
+                        ) : (
+                          <div className="bg-brand-pink-500/10 flex h-10 w-10 items-center justify-center rounded-full">
+                            <Icon className="text-brand-pink-500 h-4 w-4" />
                           </div>
-                          <div className="flex items-center gap-1">
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <p
+                              className={cn(
+                                'text-text-primary text-sm',
+                                !notification.read && 'font-medium'
+                              )}
+                            >
+                              {notification.title}
+                            </p>
                             {!notification.read && (
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-8 w-8"
-                                onClick={() => handleMarkAsRead(notification.id)}
-                              >
-                                <Check className="h-4 w-4" />
-                              </Button>
+                              <div className="bg-brand-pink-500 h-2 w-2 rounded-full" />
                             )}
+                          </div>
+                          <p className="text-text-secondary-65 truncate text-sm">
+                            {notification.message}
+                          </p>
+                          <p className="text-text-secondary-65 mt-1 text-xs">
+                            {formatDistanceToNow(notification.createdAt, { addSuffix: true })}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          {!notification.read && (
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="text-muted-foreground hover:text-destructive h-8 w-8"
-                              onClick={() => handleDelete(notification.id)}
+                              className="h-8 w-8"
+                              onClick={() => handleMarkAsRead(notification.id)}
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Check className="h-4 w-4" />
                             </Button>
-                          </div>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-text-secondary-65 hover:text-destructive h-8 w-8"
+                            onClick={() => handleDelete(notification.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
-                      );
-                    })}
-                  </div>
-                </ScrollArea>
-              ) : (
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="bg-muted mb-4 rounded-full p-4">
-                    <Bell className="text-muted-foreground h-8 w-8" />
-                  </div>
-                  <h3 className="mb-1 font-medium">No notifications</h3>
-                  <p className="text-muted-foreground text-sm">
-                    You're all caught up! Check back later.
-                  </p>
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
-            </CardContent>
-          </Card>
+              </ScrollArea>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="bg-muted/50 mb-4 rounded-full p-4">
+                  <Bell className="text-text-secondary-65 h-8 w-8" />
+                </div>
+                <h3 className="text-text-primary mb-1 font-medium">No notifications</h3>
+                <p className="text-text-secondary-65 text-sm">
+                  You're all caught up! Check back later.
+                </p>
+              </div>
+            )}
+          </div>
         </TabsContent>
 
         <TabsContent value="settings" className="mt-6 space-y-6">
           {/* Delivery Methods */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Delivery Methods</CardTitle>
-              <CardDescription>Choose how you want to receive notifications</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+            <div className="mb-4">
+              <h2 className="text-text-primary text-base font-semibold">Delivery Methods</h2>
+              <p className="text-text-secondary-65 text-sm">
+                Choose how you want to receive notifications
+              </p>
+            </div>
+            <div className="space-y-4">
               <SettingRow
                 icon={Mail}
                 label="Email Notifications"
@@ -282,16 +298,18 @@ export function NotificationsSection() {
                 checked={settings.pushNotifications}
                 onCheckedChange={() => handleSettingChange('pushNotifications')}
               />
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Notification Types */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Notification Types</CardTitle>
-              <CardDescription>Choose which notifications you want to receive</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+          <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+            <div className="mb-4">
+              <h2 className="text-text-primary text-base font-semibold">Notification Types</h2>
+              <p className="text-text-secondary-65 text-sm">
+                Choose which notifications you want to receive
+              </p>
+            </div>
+            <div className="space-y-4">
               <SettingRow
                 icon={MessageSquare}
                 label="Comments"
@@ -327,25 +345,23 @@ export function NotificationsSection() {
                 checked={settings.collaborations}
                 onCheckedChange={() => handleSettingChange('collaborations')}
               />
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Marketing */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Marketing & Updates</CardTitle>
-              <CardDescription>Stay updated with news and features</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <SettingRow
-                icon={Mail}
-                label="Marketing Emails"
-                description="Receive news, updates, and promotional content"
-                checked={settings.marketing}
-                onCheckedChange={() => handleSettingChange('marketing')}
-              />
-            </CardContent>
-          </Card>
+          <div className="border-border/50 bg-cream-95 rounded-xl border p-5">
+            <div className="mb-4">
+              <h2 className="text-text-primary text-base font-semibold">Marketing & Updates</h2>
+              <p className="text-text-secondary-65 text-sm">Stay updated with news and features</p>
+            </div>
+            <SettingRow
+              icon={Mail}
+              label="Marketing Emails"
+              description="Receive news, updates, and promotional content"
+              checked={settings.marketing}
+              onCheckedChange={() => handleSettingChange('marketing')}
+            />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
@@ -364,14 +380,14 @@ function SettingRow({ icon: Icon, label, description, checked, onCheckedChange }
   return (
     <div className="flex items-center justify-between py-2">
       <div className="flex items-center gap-4">
-        <div className="bg-muted rounded-lg p-2">
-          <Icon className="text-muted-foreground h-4 w-4" />
+        <div className="bg-brand-pink-500/10 rounded-lg p-2">
+          <Icon className="text-brand-pink-500 h-4 w-4" />
         </div>
         <div>
-          <Label htmlFor={label} className="cursor-pointer text-sm font-medium">
+          <Label htmlFor={label} className="text-text-primary cursor-pointer text-sm font-medium">
             {label}
           </Label>
-          <p className="text-muted-foreground text-sm">{description}</p>
+          <p className="text-text-secondary-65 text-sm">{description}</p>
         </div>
       </div>
       <Switch id={label} checked={checked} onCheckedChange={onCheckedChange} />

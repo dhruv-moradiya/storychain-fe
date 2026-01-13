@@ -155,11 +155,17 @@ export function BadgesSection() {
   };
 
   return (
-    <div className="space-y-8">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
       {/* Page Header */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
         className="flex items-center gap-3"
       >
         <div className="from-brand-pink-500/20 to-brand-orange/20 flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br">
@@ -180,9 +186,9 @@ export function BadgesSection() {
 
       {/* Badges Grid */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.25, duration: 0.3 }}
         className="border-border/50 bg-cream-95 rounded-xl border p-5"
       >
         <div className="mb-5 flex items-center justify-between">
@@ -222,17 +228,11 @@ export function BadgesSection() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
                   className="grid grid-cols-1 gap-4 lg:grid-cols-2"
                 >
-                  {filteredBadges.map((badge, index) => (
-                    <motion.div
-                      key={badge.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <BadgeCard badge={badge} />
-                    </motion.div>
+                  {filteredBadges.map((badge) => (
+                    <BadgeCard key={badge.id} badge={badge} />
                   ))}
                 </motion.div>
               ) : (
@@ -241,6 +241,7 @@ export function BadgesSection() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
                   className="flex flex-col items-center justify-center py-12 text-center"
                 >
                   <div className="bg-muted/50 mb-4 flex h-16 w-16 items-center justify-center rounded-full">
@@ -261,7 +262,7 @@ export function BadgesSection() {
 
       {/* Rarity Legend */}
       <RarityLegend />
-    </div>
+    </motion.div>
   );
 }
 
