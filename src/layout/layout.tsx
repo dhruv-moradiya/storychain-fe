@@ -11,7 +11,8 @@ const Layout = () => {
   return (
     <div className="flex min-h-screen flex-col">
       {!isHomePage && <Navbar />}
-      <main className="bg-bg-cream flex-1">
+      {/* Add padding-top to account for fixed navbar */}
+      <main className={`bg-bg-cream flex-1 ${!isHomePage ? 'pt-14' : ''}`}>
         <Outlet />
         <Analytics />
       </main>

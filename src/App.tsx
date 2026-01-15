@@ -17,18 +17,14 @@ const SubmitRequests = lazyRoute(() => import('./pages/submit-requests'));
 const SubmitRequestDetail = lazyRoute(() => import('./pages/submit-request-detail'));
 const SignUp = lazyRoute(() => import('./pages/sign-up'), 'auth');
 const SignIn = lazyRoute(() => import('./pages/sign-in'), 'auth');
-const Pricing = lazyRoute(() => import('./pages/pricing'), 'page');
-const HowToUse = lazyRoute(() => import('./pages/how-to-use'), 'page');
+const Pricing = lazyRoute(() => import('./pages/pricing'), 'minimal');
+const HowToUse = lazyRoute(() => import('./pages/how-to-use'), 'minimal');
+const Leaderboard = lazyRoute(() => import('./pages/leaderboard'), 'page');
 
 // Profile Layout and Sections
 const ProfileLayout = lazyRoute(() => import('./components/profile/profile-layout'), 'profile');
 const GeneralSection = lazyRoute(() => import('./components/profile/general-section'), 'profile');
-const StoriesSection = lazyRoute(() => import('./components/profile/stories-section'), 'profile');
 const BadgesSection = lazyRoute(() => import('./components/profile/badges-section'), 'profile');
-const FollowingSection = lazyRoute(
-  () => import('./components/profile/following-section'),
-  'profile'
-);
 const NotificationsSection = lazyRoute(
   () => import('./components/profile/notifications-section'),
   'profile'
@@ -40,7 +36,7 @@ const MyReportsSection = lazyRoute(
 const SettingsSection = lazyRoute(() => import('./components/profile/settings-section'), 'profile');
 const SubscriptionSection = lazyRoute(
   () => import('./components/profile/subscription-section'),
-  'profile'
+  'minimal'
 );
 const AdminSection = lazyRoute(() => import('./components/profile/admin-section'), 'profile');
 
@@ -101,6 +97,10 @@ export const router = createBrowserRouter([
         element: <StoryBuilder />,
       },
       {
+        path: 'builder',
+        element: <StoryBuilder />,
+      },
+      {
         path: 'profile',
         element: <ProfileLayout />,
         children: [
@@ -109,16 +109,8 @@ export const router = createBrowserRouter([
             element: <GeneralSection />,
           },
           {
-            path: 'stories',
-            element: <StoriesSection />,
-          },
-          {
             path: 'badges',
             element: <BadgesSection />,
-          },
-          {
-            path: 'following',
-            element: <FollowingSection />,
           },
           {
             path: 'notifications',
@@ -184,6 +176,10 @@ export const router = createBrowserRouter([
       {
         path: 'how-to-use',
         element: <HowToUse />,
+      },
+      {
+        path: 'leaderboard',
+        element: <Leaderboard />,
       },
     ],
   },

@@ -9,7 +9,7 @@ interface StoryHeroProps {
   title: string;
   slug: string;
   status: string;
-  genre: string;
+  genres: string;
   contentRating: string;
   totalVotes: string;
   onBack: () => void;
@@ -21,7 +21,7 @@ export function StoryHero({
   title,
   slug,
   status,
-  genre,
+  genres,
   contentRating,
   totalVotes,
   onBack,
@@ -120,7 +120,7 @@ export function StoryHero({
 
         <div className="flex flex-wrap gap-1.5 sm:gap-2">
           <Tag variant="status">{status}</Tag>
-          <Tag variant="genre">{genre.replace(/_/g, ' ')}</Tag>
+          <Tag variant="genre">{genres.replace(/_/g, ' ')}</Tag>
           <Tag variant="rating">{contentRating}</Tag>
         </div>
       </motion.header>

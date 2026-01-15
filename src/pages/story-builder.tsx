@@ -81,6 +81,8 @@ const StoryBuilder = () => {
         onTitleChange={setTitle}
         onSave={handleSave}
         isSaving={isSaving}
+        editorContent={editor.getHTML()}
+        autoSaveId={autoSaveId}
       />
       <BuilderToolbar editor={editor} />
       <BuilderCanvas editor={editor} />

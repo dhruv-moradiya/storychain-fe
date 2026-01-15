@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Check, Sparkles, ArrowRight, IndianRupee, DollarSign } from 'lucide-react';
-import type { Plan, BillingInterval, Currency } from '../pricing.types';
+import { PaymentModal } from './payment-modal';
+import type { Plan, BillingInterval, Currency, PaymentState } from '../pricing.types';
+import { useNavigate } from 'react-router';
 
 interface PlanCardProps {
   plan: Plan;
@@ -29,6 +32,10 @@ function formatPrice(amountInPaise: number, currency: Currency): string {
 }
 
 export function PlanCard({ plan, billingInterval, currency, index }: PlanCardProps) {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [paymentState, setPaymentState] = useState<PaymentState>({ status: 'idle' });
+
   const getPrice = () => {
     if (currency === 'INR') {
       return billingInterval === 'monthly' ? plan.monthlyPriceINR : plan.yearlyPriceINR;
@@ -50,6 +57,56 @@ export function PlanCard({ plan, billingInterval, currency, index }: PlanCardPro
   const Icon = plan.icon;
   const CurrencyIcon = currency === 'INR' ? IndianRupee : DollarSign;
   const isFree = plan.id === 'free';
+
+  const handlePurchase = () => {
+    if (isFree) {
+      navigate('/signup');
+      return;
+    }
+
+    setIsModalOpen(true);
+    setPaymentState({ status: 'processing' });
+
+    // Simulate payment processing (replace with actual Razorpay integration)
+    setTimeout(() => {
+      // Simulate random success/failure for demo
+      const success = Math.random() > 0.3;
+      if (success) {
+        setPaymentState({
+          status: 'success',
+          paymentId: `pay_${Math.random().toString(36).substring(7)}`,
+          orderId: `order_${Math.random().toString(36).substring(7)}`,
+        });
+      } else {
+        const errors = ['PAYMENT_FAILED', 'CARD_DECLINED', 'NETWORK_ERROR', 'TIMEOUT'];
+        setPaymentState({
+          status: 'error',
+          errorCode: errors[Math.floor(Math.random() * errors.length)],
+        });
+      }
+    }, 3000);
+  };
+
+  const handleRetry = () => {
+    setPaymentState({ status: 'processing' });
+    setTimeout(() => {
+      setPaymentState({
+        status: 'success',
+        paymentId: `pay_${Math.random().toString(36).substring(7)}`,
+        orderId: `order_${Math.random().toString(36).substring(7)}`,
+      });
+    }, 2000);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setPaymentState({ status: 'idle' });
+  };
+
+  const handleGoToDashboard = () => {
+    setIsModalOpen(false);
+    navigate('/profile/subscription');
+  };
 
   return (
     <motion.div
@@ -125,6 +182,7 @@ export function PlanCard({ plan, billingInterval, currency, index }: PlanCardPro
 
       {/* CTA Button */}
       <Button
+        onClick={handlePurchase}
         className={cn(
           'w-full',
           plan.highlighted ? 'bg-brand-pink-500 hover:bg-brand-pink-600 text-white' : ''
@@ -134,6 +192,17 @@ export function PlanCard({ plan, billingInterval, currency, index }: PlanCardPro
         {isFree ? 'Get Started Free' : `Upgrade to ${plan.name}`}
         <ArrowRight className="ml-2 h-4 w-4" />
       </Button>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        paymentState={paymentState}
+        plan={plan}
+        currency={currency}
+        onRetry={handleRetry}
+        onGoToDashboard={handleGoToDashboard}
+      />
     </motion.div>
   );
 }

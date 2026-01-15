@@ -1,5 +1,6 @@
 import '@xyflow/react/dist/style.css';
 
+import AnalyticsSection from '@/components/stories/sections/analytics-section';
 import ChaptersSection from '@/components/stories/sections/chapters-section';
 import CollaboratorSection from '@/components/stories/sections/collaborators-section';
 import OverviewSection from '@/components/stories/sections/overview-section';
@@ -33,6 +34,7 @@ export default function Story() {
           <Route path="tree" element={<StoryTree />} />
           <Route path="settings" element={<SettingSection />} />
           <Route path="history" element={<HistorySection />} />
+          <Route path="analytics" element={<AnalyticsSection />} />
           {/* <Route path="versions" element={<VersionsSection />} />
           <Route path="comments" element={<CommentsSection />} />
           <Route path="collaborators" element={<CollaboratorsSection />} />

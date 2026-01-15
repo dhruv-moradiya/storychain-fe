@@ -1,7 +1,31 @@
-import { ArrowLeft, Eye, Settings, Save, Send, Loader2 } from 'lucide-react';
+import {
+  ArrowLeft,
+  Eye,
+  Settings,
+  Save,
+  Send,
+  Loader2,
+  ChevronDown,
+  FileText,
+  GitPullRequest,
+} from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '@/components/ui/responsive-dialog';
+import { ChapterReader, type ChapterData } from '@/components/common/chapter-reader';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router';
 
@@ -12,6 +36,13 @@ interface BuilderHeaderProps {
   onTitleChange: (title: string) => void;
   onSave: () => void;
   isSaving: boolean;
+  onPublish?: () => void;
+  onSaveAsDraft?: () => void;
+  onSubmitRequest?: () => void;
+  editorContent?: string;
+  authorName?: string;
+  authorAvatar?: string;
+  autoSaveId?: string | null;
 }
 
 const STATUS_CONFIG: Record<ChapterStatus, { label: string; color: string; dotColor: string }> = {
@@ -41,10 +72,36 @@ const STATUS_CONFIG: Record<ChapterStatus, { label: string; color: string; dotCo
  * Builder header component
  * Top section with back button, chapter name, status, and action buttons
  */
-function BuilderHeader({ title, onTitleChange, onSave, isSaving }: BuilderHeaderProps) {
+function BuilderHeader({
+  title,
+  onTitleChange,
+  onSave,
+  isSaving,
+  onPublish,
+  onSaveAsDraft,
+  onSubmitRequest,
+  editorContent = '',
+  authorName = 'You',
+  authorAvatar,
+  autoSaveId,
+}: BuilderHeaderProps) {
   const navigate = useNavigate();
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const status: ChapterStatus = 'draft';
   const statusConfig = STATUS_CONFIG[status];
+
+  // Create chapter data for preview
+  const previewChapter: ChapterData = {
+    id: 'preview',
+    title: title || 'Untitled Chapter',
+    content: editorContent,
+    author: {
+      id: 'current-user',
+      name: authorName,
+      avatar: authorAvatar,
+    },
+    status: 'draft',
+  };
 
   return (
     <div className="border-border/50 bg-cream-95 sticky top-0 z-30 w-full border-b backdrop-blur-md">
@@ -61,12 +118,19 @@ function BuilderHeader({ title, onTitleChange, onSave, isSaving }: BuilderHeader
           </Button>
 
           <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-            <Input
-              value={title}
-              onChange={(e) => onTitleChange(e.target.value)}
-              placeholder="Untitled Chapter"
-              className="text-text-primary placeholder:text-text-secondary-65 focus-visible:ring-brand-pink-500/30 h-8 min-w-0 flex-1 border-none bg-transparent text-sm font-medium shadow-none focus-visible:ring-1 sm:max-w-56 sm:text-base"
-            />
+            <div className="flex min-w-0 flex-1 flex-col">
+              <Input
+                value={title}
+                onChange={(e) => onTitleChange(e.target.value)}
+                placeholder="Untitled Chapter"
+                className="text-text-primary placeholder:text-text-secondary-65 focus-visible:ring-brand-pink-500/30 h-8 min-w-0 flex-1 border-none bg-transparent text-sm font-medium shadow-none focus-visible:ring-1 sm:max-w-56 sm:text-base"
+              />
+              {autoSaveId && (
+                <span className="text-text-secondary-65 truncate pl-3 text-[10px]">
+                  Draft ID: {autoSaveId.slice(0, 8)}...
+                </span>
+              )}
+            </div>
             <Badge
               variant="secondary"
               className={cn('hidden flex-shrink-0 gap-1.5 border sm:flex', statusConfig.color)}
@@ -77,16 +141,37 @@ function BuilderHeader({ title, onTitleChange, onSave, isSaving }: BuilderHeader
           </div>
         </div>
 
-        {/* Right Section - Preview, Settings, Save, Publish */}
+        {/* Right Section - Preview, Settings, Save, Actions Dropdown */}
         <div className="flex flex-shrink-0 items-center gap-1 sm:gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-text-secondary hover:bg-muted/50 hover:text-text-primary hidden gap-1.5 md:flex"
-          >
-            <Eye className="h-4 w-4" />
-            <span className="hidden lg:inline">Preview</span>
-          </Button>
+          <ResponsiveDialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-text-secondary hover:bg-muted/50 hover:text-text-primary hidden gap-1.5 md:flex"
+              onClick={() => setIsPreviewOpen(true)}
+            >
+              <Eye className="h-4 w-4" />
+              <span className="hidden lg:inline">Preview</span>
+            </Button>
+
+            <ResponsiveDialogContent
+              className="sm:max-w-2xl"
+              sheetHeight="90%"
+              showCloseButton={true}
+            >
+              <ResponsiveDialogHeader>
+                <ResponsiveDialogTitle>Preview</ResponsiveDialogTitle>
+              </ResponsiveDialogHeader>
+              <div className="mt-4 max-h-[70vh] overflow-y-auto">
+                <ChapterReader
+                  chapter={previewChapter}
+                  showHeader={true}
+                  showStats={false}
+                  variant="preview"
+                />
+              </div>
+            </ResponsiveDialogContent>
+          </ResponsiveDialog>
 
           <Button
             variant="ghost"
@@ -108,13 +193,33 @@ function BuilderHeader({ title, onTitleChange, onSave, isSaving }: BuilderHeader
             <span className="hidden sm:inline">{isSaving ? 'Saving...' : 'Save'}</span>
           </Button>
 
-          <Button
-            size="sm"
-            className="bg-brand-pink-500 hover:bg-brand-pink-600 gap-1.5 text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
-          >
-            <Send className="h-4 w-4" />
-            <span className="hidden sm:inline">Publish</span>
-          </Button>
+          {/* Actions Dropdown - Publish, Save as Draft, Submit Request */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                size="sm"
+                className="bg-brand-pink-500 hover:bg-brand-pink-600 gap-1.5 text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
+              >
+                <Send className="h-4 w-4" />
+                <span className="hidden sm:inline">Publish</span>
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuItem onClick={onPublish} className="gap-2">
+                <Send className="h-4 w-4" />
+                Publish
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onSaveAsDraft} className="gap-2">
+                <FileText className="h-4 w-4" />
+                Save as Draft
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onSubmitRequest} className="gap-2">
+                <GitPullRequest className="h-4 w-4" />
+                Create Submit Request
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </div>

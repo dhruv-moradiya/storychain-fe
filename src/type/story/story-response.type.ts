@@ -50,7 +50,7 @@ interface IStoryListItemResponse {
   creatorId: string;
   status: TStoryStatus;
   stats: IStoryStats;
-  settings: Pick<IStorySettings, 'genre' | 'contentRating'>;
+  settings: Pick<IStorySettings, 'genres' | 'contentRating'>;
   createdAt: Date;
   updatedAt: Date;
 }

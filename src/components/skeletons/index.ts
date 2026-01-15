@@ -1,6 +1,7 @@
 export { AuthSkeleton } from './auth-skeleton';
 export { ChapterSkeleton } from './chapter-skeleton';
 export { DashboardSkeleton } from './dashboard-skeleton';
+export { MinimalLoader } from './minimal-loader';
 export { PageSkeleton } from './page-skeleton';
 export { ProfileSkeleton } from './profile-skeleton';
 export { StoryBuilderSkeleton } from './story-builder-skeleton';

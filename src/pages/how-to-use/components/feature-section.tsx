@@ -11,6 +11,22 @@ interface FeatureSectionProps {
 export function FeatureSection({ section, index }: FeatureSectionProps) {
   const isEven = index % 2 === 0;
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+  };
+
   return (
     <section className={cn('px-6 py-12', isEven ? 'bg-bg-cream' : 'bg-cream-95')}>
       <div className="mx-auto max-w-5xl">
@@ -18,7 +34,7 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5 }}
           className="mb-10 text-center"
         >
@@ -36,16 +52,19 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
         </motion.div>
 
         {/* Feature Cards */}
-        <div className="grid gap-6 md:grid-cols-3">
-          {section.items.map((item, itemIndex) => {
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid gap-6 md:grid-cols-3"
+        >
+          {section.items.map((item) => {
             const Icon = item.icon;
             return (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: itemIndex * 0.1 }}
+                variants={itemVariants}
                 className={cn(
                   'group rounded-2xl border p-6 transition-all hover:shadow-md',
                   isEven
@@ -54,20 +73,16 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
                 )}
               >
                 {/* Icon */}
-                <motion.div
-                  initial={{ scale: 0.8 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: itemIndex * 0.1 + 0.2 }}
+                <div
                   className={cn(
-                    'mb-4 flex h-12 w-12 items-center justify-center rounded-xl',
+                    'mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110',
                     isEven ? 'bg-brand-blue/10' : 'bg-brand-pink-500/10'
                   )}
                 >
                   <Icon
                     className={cn('h-6 w-6', isEven ? 'text-brand-blue' : 'text-brand-pink-500')}
                   />
-                </motion.div>
+                </div>
 
                 {/* Content */}
                 <h3 className="text-text-primary mb-2 text-lg font-semibold">{item.title}</h3>
@@ -82,14 +97,7 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
                   </p>
                   <ul className="space-y-1.5">
                     {item.tips.map((tip, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: itemIndex * 0.1 + 0.3 + i * 0.05 }}
-                        className="flex items-start gap-2"
-                      >
+                      <li key={i} className="flex items-start gap-2">
                         <Check
                           className={cn(
                             'mt-0.5 h-3 w-3 flex-shrink-0',
@@ -97,14 +105,14 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
                           )}
                         />
                         <span className="text-text-secondary-65 text-xs">{tip}</span>
-                      </motion.li>
+                      </li>
                     ))}
                   </ul>
                 </div>
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

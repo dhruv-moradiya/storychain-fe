@@ -2,12 +2,10 @@ import { useUser, useClerk } from '@clerk/clerk-react';
 import { NavLink, useLocation } from 'react-router';
 import {
   User,
-  BookOpen,
   Award,
   Bell,
   Settings,
   LogOut,
-  UserPlus,
   Shield,
   FileWarning,
   ChevronRight,
@@ -36,9 +34,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 
 export type ProfileSection =
   | 'general'
-  | 'stories'
   | 'badges'
-  | 'following'
   | 'notifications'
   | 'my-reports'
   | 'subscription'
@@ -66,25 +62,11 @@ const menuItems: Array<{
     description: 'Profile & account',
   },
   {
-    id: 'stories',
-    label: 'My Stories',
-    icon: BookOpen,
-    path: '/profile/stories',
-    description: 'Your creations',
-  },
-  {
     id: 'badges',
     label: 'Badges',
     icon: Award,
     path: '/profile/badges',
     description: 'Achievements',
-  },
-  {
-    id: 'following',
-    label: 'Following',
-    icon: UserPlus,
-    path: '/profile/following',
-    description: 'Users you follow',
   },
   {
     id: 'notifications',

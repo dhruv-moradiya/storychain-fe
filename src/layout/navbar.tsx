@@ -7,9 +7,10 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useClerk, useUser } from '@clerk/clerk-react';
-import { Link, useNavigate } from 'react-router';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useNavigate, useLocation } from 'react-router';
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import {
   Compass,
@@ -23,6 +24,10 @@ import {
   Star,
   CoinsIcon,
   HandHeart,
+  Menu,
+  User,
+  Settings,
+  LogOut,
 } from 'lucide-react';
 import { NavItem } from '@/components/common';
 import { useState } from 'react';
@@ -68,6 +73,14 @@ const mockNotifications = [
 ];
 
 type Notification = (typeof mockNotifications)[number];
+
+const mobileNavItems = [
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/explore', label: 'Explore', icon: Compass },
+  { to: '/builder', label: 'Builder', icon: Feather },
+  { to: '/pricing', label: 'Pricing', icon: CoinsIcon },
+  { to: '/how-to-use', label: 'How to use', icon: HandHeart },
+];
 
 const NotificationItem = ({
   notification,
@@ -128,8 +141,23 @@ export default function Navbar() {
   const { signOut } = useClerk();
   const { isSignedIn, user } = useUser();
   const navigate = useNavigate();
+  const location = useLocation();
   const [notifications, setNotifications] = useState(mockNotifications);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    // Hide navbar when scrolling down, show when scrolling up
+    if (latest > previous && latest > 100) {
+      setIsHidden(true);
+    } else {
+      setIsHidden(false);
+    }
+  });
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
@@ -141,28 +169,142 @@ export default function Navbar() {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
   };
 
+  const handleMobileNavigate = (path: string) => {
+    navigate(path);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <nav
+    <motion.nav
+      initial={{ y: 0 }}
+      animate={{ y: isHidden ? -100 : 0 }}
+      transition={{ duration: 0.3, ease: 'easeInOut' }}
       className={cn(
-        'sticky top-0 z-40 w-full',
+        'fixed top-0 right-0 left-0 z-40 w-full',
         'border-border/50 border-b',
-        'bg-cream-95 backdrop-blur-md'
+        'bg-cream-95/95 backdrop-blur-md'
       )}
     >
       <div className="mx-auto flex h-14 items-center justify-between px-4 sm:px-6">
-        {/* LEFT */}
-        <Link to="/" className="flex items-center gap-2.5">
-          <span className="bg-brand-pink-500 h-3 w-3 rounded-full shadow-[0_0_12px_var(--brand-pink-shadow35)]" />
-          <span className="text-text-primary text-[18px] font-semibold tracking-tight">
-            StoryChain
-          </span>
-        </Link>
+        {/* LEFT - Logo and Mobile Menu */}
+        <div className="flex items-center gap-3">
+          {/* Mobile Menu Button */}
+          {isSignedIn && (
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-9 w-9 md:hidden">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="border-border/50 bg-cream-95 w-72 p-0">
+                <div className="flex h-full flex-col">
+                  {/* Mobile Menu Header */}
+                  <div className="border-border/50 flex items-center justify-between border-b px-4 py-4">
+                    <Link
+                      to="/"
+                      className="flex items-center gap-2.5"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <span className="bg-brand-pink-500 h-3 w-3 rounded-full shadow-[0_0_12px_var(--brand-pink-shadow35)]" />
+                      <span className="text-text-primary text-[18px] font-semibold tracking-tight">
+                        StoryChain
+                      </span>
+                    </Link>
+                  </div>
 
+                  {/* Mobile Nav Items */}
+                  <ScrollArea className="flex-1 py-4">
+                    <div className="space-y-1 px-3">
+                      {mobileNavItems.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = location.pathname === item.to;
+                        return (
+                          <motion.button
+                            key={item.to}
+                            onClick={() => handleMobileNavigate(item.to)}
+                            whileTap={{ scale: 0.98 }}
+                            className={cn(
+                              'flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-all',
+                              isActive
+                                ? 'bg-brand-pink-500/10 text-brand-pink-500'
+                                : 'text-text-secondary-65 hover:bg-cream-90 hover:text-text-primary'
+                            )}
+                          >
+                            <Icon className="h-5 w-5" />
+                            <span className="font-medium">{item.label}</span>
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+                  </ScrollArea>
+
+                  {/* Mobile Menu Footer - User Section */}
+                  <div className="border-border/50 border-t p-4">
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className="border-border/50 h-10 w-10 overflow-hidden rounded-full border">
+                        <img
+                          src="https://i.pinimg.com/736x/4c/ab/77/4cab77de6b83b7e3149ce03867194ea5.jpg"
+                          alt="Profile"
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-text-primary truncate font-medium">
+                          {user?.fullName || 'Your Profile'}
+                        </p>
+                        <p className="text-text-secondary-65 truncate text-xs">
+                          {user?.primaryEmailAddress?.emailAddress}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <button
+                        onClick={() => handleMobileNavigate('/profile')}
+                        className="text-text-secondary-65 hover:bg-cream-90 hover:text-text-primary flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors"
+                      >
+                        <User className="h-4 w-4" />
+                        <span className="text-sm">Profile</span>
+                      </button>
+                      <button
+                        onClick={() => handleMobileNavigate('/profile/settings')}
+                        className="text-text-secondary-65 hover:bg-cream-90 hover:text-text-primary flex w-full items-center gap-3 rounded-lg px-3 py-2 transition-colors"
+                      >
+                        <Settings className="h-4 w-4" />
+                        <span className="text-sm">Settings</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          signOut({ redirectUrl: '/sign-in' });
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-red-500 transition-colors hover:bg-red-500/10"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span className="text-sm">Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+          )}
+
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2.5">
+            <span className="bg-brand-pink-500 h-3 w-3 rounded-full shadow-[0_0_12px_var(--brand-pink-shadow35)]" />
+            <span className="text-text-primary text-[18px] font-semibold tracking-tight">
+              StoryChain
+            </span>
+          </Link>
+        </div>
+
+        {/* Desktop Nav Items */}
         {isSignedIn && (
           <ul className="hidden items-center gap-2 md:flex">
             <NavItem to="/dashboard" label="Dashboard" icon={<LayoutDashboard size={16} />} />
             <NavItem to="/explore" label="Explore" icon={<Compass size={16} />} />
-            <NavItem to="/" label="Builder" icon={<Feather size={16} />} />
+            <NavItem to="/builder" label="Builder" icon={<Feather size={16} />} />
             <NavItem to="/pricing" label="Pricing" icon={<CoinsIcon size={16} />} />
             <NavItem to="/how-to-use" label="How to use" icon={<HandHeart size={16} />} />
           </ul>
@@ -329,6 +471,6 @@ export default function Navbar() {
           )}
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }

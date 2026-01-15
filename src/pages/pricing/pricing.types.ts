@@ -30,3 +30,13 @@ export interface FAQ {
   question: string;
   answer: string;
 }
+
+export type PaymentStatus = 'idle' | 'processing' | 'success' | 'error';
+
+export interface PaymentState {
+  status: PaymentStatus;
+  orderId?: string;
+  paymentId?: string;
+  errorMessage?: string;
+  errorCode?: string;
+}

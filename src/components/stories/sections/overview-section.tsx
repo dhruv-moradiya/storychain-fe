@@ -19,6 +19,7 @@ const OverviewSection = () => {
 
   const { data, error, isLoading } = useGetStoryOverviewBySlug(slug ?? '');
   const story = data?.data;
+  console.log('story :>> ', story);
 
   if (isLoading) return <OverviewSectionLoading />;
   if (error) return <OverviewSectionError message={error.message} />;
@@ -78,7 +79,7 @@ const OverviewSection = () => {
         title={story.title}
         slug={story.slug}
         status={story.status}
-        genre={story.genre}
+        genres={story.genre}
         contentRating={story.contentRating}
         totalVotes={inlineStats.totalVotes}
         onBack={() => navigate('/')}

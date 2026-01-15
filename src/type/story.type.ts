@@ -60,7 +60,7 @@ interface IStorySettings {
   requireApproval: boolean;
   allowComments: boolean;
   allowVoting: boolean;
-  genre:
+  genres:
     | 'FANTASY'
     | 'SCI_FI'
     | 'MYSTERY'

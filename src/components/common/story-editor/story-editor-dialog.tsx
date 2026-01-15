@@ -1,21 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useState } from 'react';
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '../../ui/dialog';
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+} from '../../ui/responsive-dialog';
 
 import { Button } from '../../ui/button';
 
 import { StoryFormSchema, type TStoryFormValues } from '@/schema/story.schema';
 
-import { BookOpen, Send } from 'lucide-react';
-import { StoryFormFields } from './story-form-fields';
+import { ArrowLeft, ArrowRight, BookOpen, Send } from 'lucide-react';
+import { BasicInfoStep, SettingsStep, StepIndicator } from './story-form-fields';
 import { handleApiError } from '@/lib/utils';
 import { useQueryClient } from '@tanstack/react-query';
 import { Spinner } from '@/components/ui/spinner';
@@ -29,6 +30,7 @@ type StoryEditorDialogProps = {
 };
 
 export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDialogProps) {
+  const [step, setStep] = useState(1);
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useCreateStory();
@@ -40,8 +42,8 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
       title: '',
       slug: '',
       description: '',
-      genre: 'OTHER',
-      rating: 'GENERAL',
+      genres: [],
+      rating: 'general',
       visibility: 'public',
       branching: false,
       approvalMode: 'open',
@@ -50,7 +52,7 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
     },
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, trigger } = methods;
 
   const onSubmit = (data: TStoryFormValues) => {
     mutate(
@@ -58,6 +60,8 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
       {
         onSuccess: () => {
           onOpenChange(false);
+          setStep(1);
+          methods.reset();
         },
         onError: (error) => {
           const message = handleApiError(error);
@@ -70,55 +74,107 @@ export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDia
     );
   };
 
+  const handleNext = async () => {
+    const isValid = await trigger(['title', 'genres', 'description', 'rating']);
+    if (isValid) {
+      setStep(2);
+    }
+  };
+
+  const handleBack = () => {
+    setStep(1);
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    onOpenChange(isOpen);
+    if (!isOpen) {
+      setStep(1);
+      methods.reset();
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="grid max-h-[90vh] grid-rows-[auto_1fr_auto] overflow-hidden border-black/10 bg-white sm:max-w-[600px]">
+    <ResponsiveDialog open={open} onOpenChange={handleOpenChange}>
+      <ResponsiveDialogContent
+        className="bg-bg-cream border-border/50 sm:max-w-[500px]"
+        sheetHeight="85%"
+      >
         {/* HEADER */}
-        <DialogHeader>
-          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
-            <div className="bg-brand-pink-500/15 flex h-8 w-8 items-center justify-center rounded-lg">
-              <BookOpen className="text-brand-pink-500 h-4 w-4" />
+        <ResponsiveDialogHeader className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="bg-brand-pink-500/10 flex h-10 w-10 items-center justify-center rounded-xl">
+              <BookOpen className="text-brand-pink-500 h-5 w-5" />
             </div>
-            Create New Story
-          </DialogTitle>
-          <DialogDescription className="text-text-secondary-65 font-mono text-sm">
-            Fill in the details to start your new story
-          </DialogDescription>
-        </DialogHeader>
+            <div>
+              <ResponsiveDialogTitle className="text-text-primary text-lg font-semibold">
+                Create New Story
+              </ResponsiveDialogTitle>
+              <ResponsiveDialogDescription className="text-text-secondary-65 text-sm">
+                {step === 1 ? 'Start with the basics' : 'Configure your story settings'}
+              </ResponsiveDialogDescription>
+            </div>
+          </div>
+          <StepIndicator currentStep={step} />
+        </ResponsiveDialogHeader>
 
         {/* FORM */}
         <FormProvider {...methods}>
-          <form id="story-form" onSubmit={handleSubmit(onSubmit)} className="overflow-y-auto py-4">
-            <StoryFormFields />
-          </form>
+          <div className="max-h-[55vh] overflow-y-auto py-4 sm:max-h-[45vh]">
+            {step === 1 ? <BasicInfoStep /> : <SettingsStep />}
+          </div>
         </FormProvider>
 
         {/* FOOTER */}
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            className="border-black/10 font-mono hover:bg-black/5"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            form="story-form"
-            disabled={isPending}
-            className="bg-brand-pink-500 hover:bg-brand-pink-600 gap-2 font-mono text-white"
-          >
-            {!isPending ? (
-              <>
-                <Send className="h-4 w-4" />
-                Create Story
-              </>
-            ) : (
-              <Spinner />
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <ResponsiveDialogFooter className="border-border/50 gap-2 border-t pt-4">
+          {step === 1 ? (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOpenChange(false)}
+                className="border-border text-text-secondary hover:bg-muted/50 hover:text-text-primary"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="button"
+                onClick={handleNext}
+                className="bg-brand-pink-500 hover:bg-brand-pink-600 gap-2 text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
+              >
+                Next
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleBack}
+                className="border-border text-text-secondary hover:bg-muted/50 hover:text-text-primary gap-2"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back
+              </Button>
+              <Button
+                type="button"
+                disabled={isPending}
+                onClick={handleSubmit(onSubmit)}
+                className="bg-brand-pink-500 hover:bg-brand-pink-600 gap-2 text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
+              >
+                {!isPending ? (
+                  <>
+                    <Send className="h-4 w-4" />
+                    Create Story
+                  </>
+                ) : (
+                  <Spinner />
+                )}
+              </Button>
+            </>
+          )}
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

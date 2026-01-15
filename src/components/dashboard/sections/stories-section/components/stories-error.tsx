@@ -17,10 +17,10 @@ interface StoriesErrorProps {
 export default function StoriesError({ onRetry }: StoriesErrorProps) {
   return (
     <Empty
-      className={`via-background to-muted/40 dark:via-background dark:to-muted/20 relative mx-auto max-w-lg overflow-hidden rounded-xl border bg-gradient-to-b from-red-50/40 py-14 shadow-lg dark:from-red-950/40`}
+      className={`from-cream-95 via-cream-90 to-cream-95 relative mx-auto max-w-lg overflow-hidden rounded-xl border border-red-200/50 bg-gradient-to-b py-14 shadow-lg`}
     >
       {/* Radial Glow */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,0,0,0.1),transparent_70%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(239,68,68,0.08),transparent_70%)]" />
 
       <EmptyHeader>
         <div className="relative flex items-center justify-center">
