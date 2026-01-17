@@ -1,44 +1,51 @@
 // src/schema/story.schema.ts
 import { z } from 'zod';
+import { GENRE_VALUES, CONTENT_RATING_VALUES, STORY_STATUSES } from '@/constants/story.constants';
 
-// Content rating options with descriptions (lowercase values for API payload)
-export const CONTENT_RATINGS = [
-  { value: 'all_ages', label: 'All Ages (全年齢)', description: 'Suitable for everyone' },
-  { value: 'general', label: 'General (一般)', description: 'May contain mild themes' },
-  { value: 'teen', label: 'Teen (15+)', description: 'May contain violence, mild language' },
-  { value: 'young_adult', label: 'Young Adult (17+)', description: 'May contain strong themes' },
-  { value: 'mature', label: 'Mature (18+)', description: 'Adult content, violence, language' },
-  { value: 'r18', label: 'R-18 (成人向け)', description: 'Explicit adult content' },
-  { value: 'r18g', label: 'R-18G (過激)', description: 'Extreme/gore content' },
-] as const;
+// Re-export constants for backward compatibility
+export { CONTENT_RATINGS, STORY_STATUSES } from '@/constants/story.constants';
 
 export const StoryFormSchema = z.object({
   title: z
     .string()
     .trim()
-    .min(3, 'Story name must be at least 3 characters')
-    .max(200, 'Story name cannot exceed 200 characters'),
+    .min(3, 'Title must be at least 3 characters long')
+    .max(200, 'Title cannot exceed 200 characters'),
 
-  slug: z
-    .string()
-    .trim()
-    .min(3, 'Slug must be at least 3 characters')
-    .max(200, 'Slug cannot exceed 200 characters'),
+  slug: z.string().trim().toLowerCase().min(3, 'Slug must be at least 3 characters long'),
 
   description: z.string().trim().max(2000, 'Description cannot exceed 2000 characters'),
 
-  genres: z
-    .array(z.string())
-    .min(1, 'Select at least one genre')
-    .max(5, 'Maximum 5 genres allowed'),
+  coverImage: z
+    .object({
+      url: z.string().url().optional(),
+      publicId: z.string().optional(),
+    })
+    .optional(),
 
-  rating: z.enum(['all_ages', 'general', 'teen', 'young_adult', 'mature', 'r18', 'r18g']),
+  settings: z
+    .object({
+      isPublic: z.boolean().default(true),
+      allowBranching: z.boolean().default(true),
+      requireApproval: z.boolean().default(false),
+      allowComments: z.boolean().default(true),
+      allowVoting: z.boolean().default(true),
+      genres: z.array(z.enum(GENRE_VALUES)).default([]),
+      contentRating: z.enum(CONTENT_RATING_VALUES).default('general'),
+    })
+    .default({
+      isPublic: true,
+      allowBranching: true,
+      requireApproval: false,
+      allowComments: true,
+      allowVoting: true,
+      genres: [],
+      contentRating: 'general',
+    }),
 
-  visibility: z.enum(['public', 'private']),
-  branching: z.boolean(),
-  approvalMode: z.enum(['open', 'curated']),
-  commentsEnabled: z.boolean(),
-  votingEnabled: z.boolean(),
+  tags: z.array(z.string().trim().toLowerCase()).default([]),
+
+  status: z.enum(STORY_STATUSES).default('draft'),
 });
 
 export type TStoryFormValues = z.infer<typeof StoryFormSchema>;

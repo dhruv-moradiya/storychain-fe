@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { TrendingUp, TrendingDown, Minus, Eye, BookOpen, ThumbsUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { BookOpen, Eye, Minus, ThumbsUp, TrendingDown, TrendingUp } from 'lucide-react';
 import type { LeaderboardUser } from '../leaderboard.types';
 
 interface WritersListProps {
@@ -14,93 +14,134 @@ export function WritersList({ writers }: WritersListProps) {
     return num.toString();
   };
 
+  const getRankStyle = (rank: number) => {
+    if (rank === 4) return 'from-purple-400 to-purple-500';
+    if (rank === 5) return 'from-blue-400 to-blue-500';
+    return 'from-gray-400 to-gray-500';
+  };
+
   // Skip first 3 as they're on the podium
   const listWriters = writers.slice(3);
 
   return (
-    <div className="space-y-2">
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {listWriters.map((writer, index) => (
         <motion.div
           key={writer.id}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3, delay: index * 0.05 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: index * 0.05 }}
+          whileHover={{ y: -4, transition: { duration: 0.2 } }}
           className={cn(
-            'group flex items-center gap-3 rounded-xl px-3 py-3 transition-all sm:gap-4 sm:px-4',
+            'group relative cursor-pointer overflow-hidden rounded-2xl border bg-white/60 p-4 shadow-sm backdrop-blur transition-all hover:shadow-lg',
             writer.isCurrentUser
-              ? 'border-brand-pink-500/30 bg-brand-pink-500/5 border'
-              : 'hover:bg-cream-90/60'
+              ? 'border-brand-pink-500/30 ring-brand-pink-500/20 ring-2'
+              : 'hover:border-brand-pink-500/20 border-black/5'
           )}
         >
-          {/* Rank */}
-          <div className="flex w-8 flex-shrink-0 items-center justify-center">
-            <span className="text-text-secondary-65 text-lg font-bold">{writer.rank}</span>
-          </div>
+          {/* Subtle gradient background */}
+          <div className="to-cream-90/30 pointer-events-none absolute inset-0 bg-gradient-to-br from-white/80 via-transparent" />
 
-          {/* Rank Change */}
-          <div className="flex w-5 flex-shrink-0 items-center justify-center">
-            {writer.rankChange > 0 ? (
-              <div className="flex items-center text-green-500">
-                <TrendingUp className="h-4 w-4" />
-              </div>
-            ) : writer.rankChange < 0 ? (
-              <div className="flex items-center text-red-500">
-                <TrendingDown className="h-4 w-4" />
-              </div>
-            ) : (
-              <div className="flex items-center text-gray-400">
-                <Minus className="h-4 w-4" />
-              </div>
-            )}
-          </div>
+          {/* Current user indicator */}
+          {writer.isCurrentUser && (
+            <div className="absolute top-3 right-3">
+              <span className="bg-brand-pink-500 rounded-full px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm">
+                You
+              </span>
+            </div>
+          )}
 
-          {/* Avatar */}
-          <img
-            src={writer.avatarUrl}
-            alt={writer.username}
-            className="ring-border/50 h-10 w-10 flex-shrink-0 rounded-full object-cover ring-2 sm:h-12 sm:w-12"
-          />
+          <div className="relative">
+            {/* Top section: Avatar and rank */}
+            <div className="mb-4 flex items-start gap-3">
+              {/* Rank Badge */}
+              <div
+                className={cn(
+                  'flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br text-xs font-bold text-white shadow-md',
+                  getRankStyle(writer.rank)
+                )}
+              >
+                {writer.rank}
+              </div>
 
-          {/* Info */}
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <p className="text-text-primary truncate font-semibold">{writer.displayName}</p>
-              {writer.isCurrentUser && (
-                <span className="bg-brand-pink-500 rounded-full px-2 py-0.5 text-[10px] font-medium text-white">
-                  You
-                </span>
+              {/* Avatar with ring */}
+              <div className="relative">
+                <div className="from-brand-pink-500/20 to-brand-blue/20 rounded-full bg-gradient-to-br p-0.5">
+                  <img
+                    src={writer.avatarUrl}
+                    alt={writer.username}
+                    className="h-14 w-14 rounded-full border-2 border-white object-cover shadow-sm"
+                  />
+                </div>
+
+                {/* Rank change indicator */}
+                <div className="absolute -right-1 -bottom-1">
+                  {writer.rankChange > 0 ? (
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-white shadow-sm">
+                      <TrendingUp className="h-3 w-3" />
+                    </div>
+                  ) : writer.rankChange < 0 ? (
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white shadow-sm">
+                      <TrendingDown className="h-3 w-3" />
+                    </div>
+                  ) : (
+                    <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gray-400 text-white shadow-sm">
+                      <Minus className="h-3 w-3" />
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Badges */}
+              {writer.badges.length > 0 && (
+                <div className="ml-auto flex gap-1">
+                  {writer.badges.slice(0, 3).map((badge) => (
+                    <span key={badge.id} className="text-base drop-shadow-sm" title={badge.name}>
+                      {badge.icon}
+                    </span>
+                  ))}
+                </div>
               )}
-              {writer.badges.slice(0, 2).map((badge) => (
-                <span key={badge.id} className="text-sm" title={badge.name}>
-                  {badge.icon}
-                </span>
-              ))}
             </div>
-            <p className="text-text-secondary-65 text-xs">@{writer.username}</p>
-          </div>
 
-          {/* Stats */}
-          <div className="hidden items-center gap-4 text-xs sm:flex">
-            <div className="text-text-secondary-65 flex items-center gap-1">
-              <Eye className="h-3.5 w-3.5" />
-              <span>{formatNumber(writer.stats.totalReads)}</span>
+            {/* User Info */}
+            <div className="mb-3">
+              <p className="text-text-tertiary group-hover:text-brand-pink-500 truncate font-semibold transition-colors">
+                {writer.displayName}
+              </p>
+              <p className="text-brand-pink-500 text-xs font-medium">@{writer.username}</p>
             </div>
-            <div className="text-text-secondary-65 flex items-center gap-1">
-              <BookOpen className="h-3.5 w-3.5" />
-              <span>{writer.stats.storiesWritten}</span>
-            </div>
-            <div className="text-text-secondary-65 flex items-center gap-1">
-              <ThumbsUp className="h-3.5 w-3.5" />
-              <span>{formatNumber(writer.stats.upvotesReceived)}</span>
-            </div>
-          </div>
 
-          {/* Mobile stats */}
-          <div className="flex flex-col items-end sm:hidden">
-            <span className="text-text-primary text-sm font-semibold">
-              {formatNumber(writer.stats.totalReads)}
-            </span>
-            <span className="text-text-secondary-65 text-[10px]">reads</span>
+            {/* Stats Grid */}
+            <div className="bg-cream-90/50 grid grid-cols-3 gap-2 rounded-xl p-2.5">
+              <div className="flex flex-col items-center">
+                <div className="text-brand-pink-500 flex items-center gap-1">
+                  <Eye className="h-3.5 w-3.5" />
+                  <span className="text-text-tertiary text-sm font-bold">
+                    {formatNumber(writer.stats.totalReads)}
+                  </span>
+                </div>
+                <span className="text-text-secondary-65 text-[10px]">reads</span>
+              </div>
+              <div className="border-border/30 flex flex-col items-center border-x">
+                <div className="text-brand-blue flex items-center gap-1">
+                  <BookOpen className="h-3.5 w-3.5" />
+                  <span className="text-text-tertiary text-sm font-bold">
+                    {writer.stats.storiesWritten}
+                  </span>
+                </div>
+                <span className="text-text-secondary-65 text-[10px]">stories</span>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="flex items-center gap-1 text-amber-500">
+                  <ThumbsUp className="h-3.5 w-3.5" />
+                  <span className="text-text-tertiary text-sm font-bold">
+                    {formatNumber(writer.stats.upvotesReceived)}
+                  </span>
+                </div>
+                <span className="text-text-secondary-65 text-[10px]">votes</span>
+              </div>
+            </div>
           </div>
         </motion.div>
       ))}

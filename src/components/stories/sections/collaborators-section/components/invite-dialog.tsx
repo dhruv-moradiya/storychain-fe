@@ -29,7 +29,7 @@ import {
   UserPlus,
 } from 'lucide-react';
 
-import { StoryCollaboratorRole, type TStoryCollaboratorRole } from '@/type/story.type';
+import { StoryCollaboratorRole, type TStoryCollaboratorRole } from '@/type/story';
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useCreateInvitation } from '@/hooks/story/story.mutations';

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Flame, PenTool, BookOpen, GitBranch, Calendar } from 'lucide-react';
+import { Trophy, Flame, PenTool, BookOpen, GitBranch, Calendar, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,6 +25,29 @@ const periods: { key: LeaderboardPeriod; label: string }[] = [
   { key: 'allTime', label: 'All Time' },
 ];
 
+// Section divider component
+function SectionDivider({
+  icon: Icon,
+  title,
+  colorClass,
+}: {
+  icon: typeof Trophy;
+  title: string;
+  colorClass: string;
+}) {
+  return (
+    <div className="mb-6 flex items-center gap-3">
+      <div className={cn('flex h-9 w-9 items-center justify-center rounded-xl', colorClass)}>
+        <Icon className="h-4 w-4 text-white" />
+      </div>
+      <h2 className="font-libreBaskerville text-text-tertiary text-base font-semibold tracking-tight sm:text-lg">
+        {title}
+      </h2>
+      <div className="from-border/50 h-px flex-1 bg-gradient-to-r to-transparent" />
+    </div>
+  );
+}
+
 export default function LeaderboardPage() {
   const [activeTab, setActiveTab] = useState<LeaderboardTab>('writers');
   const [period, setPeriod] = useState<LeaderboardPeriod>('weekly');
@@ -32,60 +55,99 @@ export default function LeaderboardPage() {
   const selectedPeriod = periods.find((p) => p.key === period);
 
   return (
-    <div className="min-h-screen pb-20">
+    <div className="bg-bg-cream relative min-h-screen pb-20">
+      {/* Background pattern */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle,_rgba(0,0,0,0.02)_1px,_transparent_1px)] [background-size:24px_24px] opacity-60" />
+
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        {/* Background gradient */}
-        <div className="from-brand-pink-500/10 via-cream-95 to-brand-blue/10 absolute inset-0 bg-gradient-to-br" />
+      <section className="relative overflow-hidden px-6 pt-12 pb-8">
+        {/* Background decorations - matching pricing/home style */}
+        <div className="pointer-events-none absolute inset-0">
+          <div
+            className="absolute top-0 left-1/4 h-72 w-72 rounded-full opacity-20 blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, var(--brand-pink-500) 0%, transparent 70%)',
+            }}
+          />
+          <div
+            className="absolute top-20 right-1/4 h-56 w-56 rounded-full opacity-15 blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, var(--brand-blue) 0%, transparent 70%)',
+            }}
+          />
+          <div
+            className="absolute bottom-0 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full opacity-10 blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, var(--brand-orange) 0%, transparent 70%)',
+            }}
+          />
+        </div>
 
-        {/* Decorative elements */}
-        <div className="bg-brand-pink-500/20 absolute top-10 left-10 h-32 w-32 rounded-full blur-3xl" />
-        <div className="bg-brand-blue/20 absolute top-20 right-10 h-40 w-40 rounded-full blur-3xl" />
-
-        <div className="relative mx-auto max-w-5xl px-4 pt-8 pb-6 sm:px-6">
+        <div className="relative mx-auto max-w-5xl">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-6 text-center"
+            className="mb-8 text-center"
           >
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-amber-500/10 px-4 py-1.5">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-4 py-2"
+            >
               <Trophy className="h-4 w-4 text-amber-500" />
               <span className="text-sm font-medium text-amber-600">Leaderboard</span>
-            </div>
-            <h1 className="text-text-primary mb-2 text-2xl font-bold sm:text-3xl">Hall of Fame</h1>
-            <p className="text-text-secondary-65 text-sm sm:text-base">
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="font-libreBaskerville text-text-tertiary mb-4 text-3xl leading-tight tracking-tight sm:text-4xl lg:text-5xl"
+            >
+              Hall of Fame
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-text-secondary-65 mx-auto max-w-lg text-sm leading-relaxed sm:text-base"
+            >
               Celebrating our most talented writers and beloved stories
-            </p>
+            </motion.p>
           </motion.div>
 
-          {/* Tabs */}
+          {/* Tabs & Period Selector */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-6 flex flex-col items-center justify-between gap-4 sm:flex-row"
+            transition={{ delay: 0.3 }}
+            className="mb-8 flex flex-col items-center justify-between gap-4 sm:flex-row"
           >
-            {/* Tab buttons */}
-            <div className="bg-cream-90/80 flex gap-1 rounded-xl p-1">
+            {/* Tab buttons - pill style */}
+            <div className="flex gap-2 rounded-2xl border border-black/5 bg-white/60 p-1.5 shadow-sm backdrop-blur">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.key;
 
                 return (
-                  <button
+                  <motion.button
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key)}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     className={cn(
-                      'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all',
+                      'flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all',
                       isActive
-                        ? 'text-brand-pink-500 bg-white shadow-sm'
-                        : 'text-text-secondary-65 hover:text-text-primary'
+                        ? 'bg-brand-pink-500 text-white shadow-md'
+                        : 'text-text-secondary-65 hover:text-text-primary hover:bg-white'
                     )}
                   >
                     <Icon className="h-4 w-4" />
                     <span className="hidden sm:inline">{tab.label}</span>
-                  </button>
+                  </motion.button>
                 );
               })}
             </div>
@@ -95,25 +157,28 @@ export default function LeaderboardPage() {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  size="sm"
-                  className="border-border/50 bg-cream-95 hover:bg-cream-90 gap-2"
+                  className="gap-2 rounded-xl border-black/10 bg-white/80 shadow-sm hover:bg-white"
                 >
-                  <Calendar className="text-text-secondary-65 h-3.5 w-3.5" />
-                  {selectedPeriod?.label}
+                  <Calendar className="text-text-secondary-65 h-4 w-4" />
+                  <span className="font-medium">{selectedPeriod?.label}</span>
                   <Flame
                     className={cn(
-                      'h-3.5 w-3.5',
+                      'h-4 w-4 transition-colors',
                       period === 'weekly' ? 'text-orange-500' : 'text-text-secondary-65'
                     )}
                   />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-cream-95">
+              <DropdownMenuContent
+                align="end"
+                className="rounded-xl border-black/5 bg-white shadow-lg"
+              >
                 {periods.map((p) => (
                   <DropdownMenuItem
                     key={p.key}
                     onClick={() => setPeriod(p.key)}
                     className={cn(
+                      'cursor-pointer rounded-lg',
                       period === p.key ? 'bg-brand-pink-500/10 text-brand-pink-500' : ''
                     )}
                   >
@@ -128,19 +193,19 @@ export default function LeaderboardPage() {
           {activeTab === 'writers' && (
             <motion.div
               key="podium"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="border-border/50 bg-cream-95/80 rounded-2xl border backdrop-blur-sm"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="overflow-hidden rounded-2xl border border-black/5 bg-white/60 shadow-sm backdrop-blur"
             >
               <Podium topThree={mockTopWriters.slice(0, 3)} />
             </motion.div>
           )}
         </div>
-      </div>
+      </section>
 
       {/* List Section */}
-      <div className="mx-auto max-w-5xl px-4 pt-6 sm:px-6">
+      <section className="relative z-10 mx-auto max-w-5xl px-6 pt-8">
         <motion.div
           key={activeTab}
           initial={{ opacity: 0, y: 20 }}
@@ -149,39 +214,25 @@ export default function LeaderboardPage() {
         >
           {activeTab === 'writers' && (
             <>
-              <div className="mb-4 flex items-center gap-2">
-                <div className="bg-brand-pink-500 h-1 w-1 rounded-full" />
-                <h2 className="text-text-primary text-sm font-semibold tracking-wide uppercase">
-                  More Writers
-                </h2>
-                <div className="bg-border/50 h-px flex-1" />
-              </div>
+              <SectionDivider icon={PenTool} title="More Writers" colorClass="bg-brand-pink-500" />
               <WritersList writers={mockTopWriters} />
             </>
           )}
 
           {activeTab === 'stories' && (
             <>
-              <div className="mb-4 flex items-center gap-2">
-                <div className="bg-brand-blue h-1 w-1 rounded-full" />
-                <h2 className="text-text-primary text-sm font-semibold tracking-wide uppercase">
-                  Trending Stories
-                </h2>
-                <div className="bg-border/50 h-px flex-1" />
-              </div>
+              <SectionDivider icon={BookOpen} title="Trending Stories" colorClass="bg-brand-blue" />
               <StoriesList stories={mockTopStories} />
             </>
           )}
 
           {activeTab === 'contributors' && (
             <>
-              <div className="mb-4 flex items-center gap-2">
-                <div className="h-1 w-1 rounded-full bg-green-500" />
-                <h2 className="text-text-primary text-sm font-semibold tracking-wide uppercase">
-                  Top Branch Contributors
-                </h2>
-                <div className="bg-border/50 h-px flex-1" />
-              </div>
+              <SectionDivider
+                icon={GitBranch}
+                title="Top Branch Contributors"
+                colorClass="bg-green-500"
+              />
               <ContributorsList contributors={mockTopContributors} />
             </>
           )}
@@ -192,16 +243,17 @@ export default function LeaderboardPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-8 text-center"
+          className="mt-10 text-center"
         >
           <Button
             variant="outline"
-            className="border-brand-pink-500/30 text-brand-pink-500 hover:bg-brand-pink-500/10"
+            className="border-brand-pink-500/30 text-brand-pink-500 hover:bg-brand-pink-500 rounded-xl px-8 hover:text-white"
           >
+            <Sparkles className="mr-2 h-4 w-4" />
             Load More
           </Button>
         </motion.div>
-      </div>
+      </section>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { QueryKey } from '@/lib/query-keys';
 import { storyApi } from '@/api/story.api';
 import { useAuth } from '@clerk/clerk-react';
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { IStory } from '@/type/story.type';
+import type { IStory } from '@/type/story';
 import { STALE_TIME } from '@/lib/constants';
 import type { IGetStoryOverviewBySlugResponse } from '@/type/story';
 

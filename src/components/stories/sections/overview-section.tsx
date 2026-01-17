@@ -10,7 +10,7 @@ import {
   CollaboratorsPreview,
   ChapterPreview,
 } from './overview-section/index';
-import { StoryCollaboratorRole } from '@/type/story.type';
+import { StoryCollaboratorRole } from '@/type/story';
 import { useGetStoryOverviewBySlug } from '@/hooks/story/story.queries';
 
 const OverviewSection = () => {
@@ -19,7 +19,6 @@ const OverviewSection = () => {
 
   const { data, error, isLoading } = useGetStoryOverviewBySlug(slug ?? '');
   const story = data?.data;
-  console.log('story :>> ', story);
 
   if (isLoading) return <OverviewSectionLoading />;
   if (error) return <OverviewSectionError message={error.message} />;
@@ -79,7 +78,7 @@ const OverviewSection = () => {
         title={story.title}
         slug={story.slug}
         status={story.status}
-        genres={story.genre}
+        genres={story.genres}
         contentRating={story.contentRating}
         totalVotes={inlineStats.totalVotes}
         onBack={() => navigate('/')}

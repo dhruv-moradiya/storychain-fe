@@ -1,4 +1,4 @@
-import type { IStoryCollaboratorWithUser } from '@/type/story.type';
+import type { IStoryCollaboratorWithUser } from '@/type/story';
 import {
   createColumnHelper,
   flexRender,
@@ -237,14 +237,14 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm"
+      className="border-border/50 overflow-hidden rounded-xl border"
     >
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow
               key={headerGroup.id}
-              className="bg-cream-95 hover:bg-cream-95 border-b border-black/5"
+              className="bg-muted/30 hover:bg-muted/30 border-border/30 border-b"
             >
               {headerGroup.headers.map((header) => (
                 <TableHead
@@ -267,7 +267,7 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.15, delay: idx * 0.03 }}
-              className="group hover:bg-cream-95/50 border-b border-black/5 transition-colors"
+              className="group hover:bg-muted/30 border-border/30 border-b transition-colors"
             >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id} className="px-4 py-4">

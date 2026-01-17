@@ -19,7 +19,7 @@ export function PaymentModal({
   onClose,
   paymentState,
   plan,
-  currency,
+  // currency,
   onRetry,
   onGoToDashboard,
 }: PaymentModalProps) {

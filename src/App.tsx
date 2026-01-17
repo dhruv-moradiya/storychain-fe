@@ -3,6 +3,7 @@ import { ProtectedRoute } from '@/components/protected-route';
 import { lazyRoute } from '@/lib/lazy-route';
 import { createBrowserRouter } from 'react-router';
 import NotFound from './components/common/not-found';
+import Explore from './pages/explore';
 
 // Lazy pages
 const Home = lazyRoute(() => import('./pages/home'), 'page');
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
       {
         path: 'dashboard/*',
         element: <Dashboard />,
+      },
+      {
+        path: 'explore',
+        element: <Explore />,
       },
       {
         path: 'stories/:slug/*',

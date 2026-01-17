@@ -1,6 +1,6 @@
 import type { AxiosInstance } from 'axios';
 import type { TStoryFormValues } from '@/schema/story.schema';
-import type { IStory, IStoryCollaboratorWithUser, TStoryCollaboratorRole } from '@/type/story.type';
+import type { IStory, IStoryCollaboratorWithUser, TStoryCollaboratorRole } from '@/type/story';
 import type {
   IStorySettingUpdateRequest,
   IUpdateStoryCoverImageRequest,

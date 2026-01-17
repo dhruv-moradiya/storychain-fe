@@ -1,4 +1,4 @@
-import type { IStorySettings } from '@/type/story.type';
+import type { IStorySettings } from '@/type/story';
 
 export interface SettingTabProps {
   settings: IStorySettings;

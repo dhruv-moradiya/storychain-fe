@@ -1,4 +1,3 @@
-import type { IBaseType } from '..';
 import type { IChapterNodeData } from '../story-canvas.type';
 import type {
   IStory,
@@ -8,8 +7,10 @@ import type {
   IStorySettings,
   IStoryStats,
   TStoryCollaboratorRole,
+  TStoryContentRating,
+  TStoryGenres,
   TStoryStatus,
-} from '../story.type';
+} from './story.types';
 
 // Story Response Types
 
@@ -63,108 +64,88 @@ interface IStoryDetailResponse extends IStoryResponse {
   };
 }
 
+// Generic API Response Type
+type TApiResponse<T> = {
+  success: boolean;
+  message: string;
+  data: T;
+};
+
 // API Response Wrappers
 
-interface IGetStoryByIdResponse extends IBaseType {
-  data: IStory;
-}
+type IGetStoryBySlugResponse = TApiResponse<IStory>;
 
-interface IGetStoryBySlugResponse extends IBaseType {
-  data: IStory;
-}
-
-interface IGetStoryOverviewBySlugResponse extends IBaseType {
-  data: Omit<
+type IGetStoryOverviewBySlugResponse = TApiResponse<
+  Omit<
     IStory,
     'creatorId' | 'settings' | 'cardImage' | 'trendingScore' | 'createdAt' | 'updatedAt'
   > & {
-    // creator: IStoryCreator;
-    genre: string;
-    contentRating: string;
+    genres: TStoryGenres[];
+    contentRating: TStoryContentRating;
     collaborators: IStoryCollaboratorInfo[];
-  };
-}
+  }
+>;
 
-interface IGetStorySettingsBySlugResponse extends IBaseType {
-  data: IStorySettings;
-}
+type IGetStorySettingsBySlugResponse = TApiResponse<{
+  settings: IStorySettings;
+  coverImage?: IStory['coverImage'];
+  cardImage?: IStory['cardImage'];
+}>;
 
-interface IGetAllStoriesResponse extends IBaseType {
-  data: IStory[];
-}
+type IGetAllStoriesResponse = TApiResponse<IStory[]>;
 
-interface IGetNewStoriesResponse extends IBaseType {
-  data: IStoryListItemResponse[];
-}
+type IGetNewStoriesResponse = TApiResponse<IStoryListItemResponse[]>;
 
-interface IGetMyStoriesResponse extends IBaseType {
-  data: IStory[];
-}
+type IGetMyStoriesResponse = TApiResponse<IStory[]>;
 
-interface IGetDraftStoriesResponse extends IBaseType {
-  data: IStory[];
-}
+type IGetDraftStoriesResponse = TApiResponse<IStory[]>;
 
-interface ICreateStoryResponse extends IBaseType {
-  data: {
-    _id: string;
-    title: string;
-    slug: string;
-    status: TStoryStatus;
-    createdAt: Date;
-  };
-}
+type ICreateStoryResponse = TApiResponse<{
+  _id: string;
+  title: string;
+  slug: string;
+  status: TStoryStatus;
+  createdAt: Date;
+}>;
 
-interface IPublishStoryResponse extends IBaseType {
-  data: {
-    _id: string;
-    title: string;
-    slug: string;
-    status: TStoryStatus;
-    publishedAt: Date;
-  };
-}
+type IPublishStoryResponse = TApiResponse<{
+  _id: string;
+  title: string;
+  slug: string;
+  status: TStoryStatus;
+  publishedAt: Date;
+}>;
 
-interface IUpdateStorySettingsBySlugResponse extends IBaseType {
-  data: {
-    settings: IStorySettings;
-  };
-}
+type IUpdateStorySettingsBySlugResponse = TApiResponse<{
+  settings: IStorySettings;
+}>;
 
 // Collaborator Response Types
 
-interface IGetStoryCollaboratorsResponse extends IBaseType {
-  data: IStoryCollaboratorWithUser[];
-}
+type IGetStoryCollaboratorsResponse = TApiResponse<IStoryCollaboratorWithUser[]>;
 
-interface ICreateInvitationResponse extends IBaseType {
-  data: {
-    _id: string;
-    storyId: string;
-    role: TStoryCollaboratorRole;
-    invitedUser: {
-      id: string;
-      name: string;
-    };
-    inviterUser: {
-      id: string;
-      name: string;
-    };
-    status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'REMOVED';
-    createdAt: Date;
+type ICreateInvitationResponse = TApiResponse<{
+  _id: string;
+  storyId: string;
+  role: TStoryCollaboratorRole;
+  invitedUser: {
+    id: string;
+    name: string;
   };
-}
-
-interface IAcceptInvitationResponse extends IBaseType {
-  data: IStoryCollaborator;
-}
-
-interface IDeclineInvitationResponse extends IBaseType {
-  data: {
-    _id: string;
-    status: 'DECLINED';
+  inviterUser: {
+    id: string;
+    name: string;
   };
-}
+  status: 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'REMOVED';
+  createdAt: Date;
+}>;
+
+type IAcceptInvitationResponse = TApiResponse<IStoryCollaborator>;
+
+type IDeclineInvitationResponse = TApiResponse<{
+  _id: string;
+  status: 'DECLINED';
+}>;
 
 // Story Tree Response Types
 
@@ -183,57 +164,49 @@ interface IStoryChapterNodeResponse {
   children?: IStoryChapterNodeResponse[];
 }
 
-interface IGetStoryTreeResponse extends IBaseType {
-  data: {
-    storyId: string;
-    chapters: IChapterNodeData[];
-  };
-}
+type IGetStoryTreeResponse = TApiResponse<{
+  storyId: string;
+  chapters: IChapterNodeData[];
+}>;
 
 // Chapter Response Types
 
-interface IAddChapterResponse extends IBaseType {
-  data: {
-    _id: string;
-    storyId: string;
-    title: string;
-    content: string;
-    parentChapterId?: string;
-    authorId: string;
-    order: number;
-    depth: number;
-    createdAt: Date;
-  };
-}
+type IAddChapterResponse = TApiResponse<{
+  _id: string;
+  storyId: string;
+  title: string;
+  content: string;
+  parentChapterId?: string;
+  authorId: string;
+  order: number;
+  depth: number;
+  createdAt: Date;
+}>;
 
-interface IGetSignatureUrlResponse extends IBaseType {
-  data: {
-    uploadURL: string;
-  };
-}
+type IGetSignatureUrlResponse = TApiResponse<{
+  uploadURL: string;
+}>;
 
-interface IUpdateStoryCoverImageResponse extends IBaseType {
-  data: {
-    coverImage: {
-      url: string;
-      publicId: string;
-    };
+type IUpdateStoryCoverImageResponse = TApiResponse<{
+  coverImage: {
+    url: string;
+    publicId: string;
   };
-}
+}>;
 
-interface IUpdateStoryCardImageResponse extends IBaseType {
-  data: {
-    cardImage: {
-      url: string;
-      publicId: string;
-    };
+type IUpdateStoryCardImageResponse = TApiResponse<{
+  cardImage: {
+    url: string;
+    publicId: string;
   };
-}
+}>;
 
 export type {
   IAcceptInvitationResponse,
   // Chapter Response Types
   IAddChapterResponse,
+  // Generic API Response Type
+  TApiResponse,
   ICreateInvitationResponse,
   ICreateStoryResponse,
   IDeclineInvitationResponse,
@@ -243,7 +216,6 @@ export type {
   IGetNewStoriesResponse,
   IGetSignatureUrlResponse,
   // API Response Wrappers
-  IGetStoryByIdResponse,
   IGetStoryBySlugResponse,
   // Collaborator Response Types
   IGetStoryCollaboratorsResponse,

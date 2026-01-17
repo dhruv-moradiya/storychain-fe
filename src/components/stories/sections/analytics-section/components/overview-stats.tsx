@@ -114,7 +114,7 @@ export function OverviewStats({ data }: OverviewStatsProps) {
                   )}
                   <span>
                     {isPositive ? '+' : ''}
-                    {config.isRating ? change.toFixed(1) : `${change}%`}
+                    {config.color ? change.toFixed(1) : `${change}%`}
                   </span>
                 </div>
               </div>

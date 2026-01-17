@@ -1,16 +1,17 @@
 import { motion } from 'framer-motion';
-import { Heart, Share2, Bell, Bookmark } from 'lucide-react';
+import { Heart, Share2, Bell, Bookmark, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { storyStatusBadge, contentRatingBadge, genresBadges } from '@/components/common/badge';
+import type { TStoryStatus } from '@/type/story';
 
 interface StoryHeroProps {
   coverImage?: string;
   cardImage?: string;
   title: string;
   slug: string;
-  status: string;
-  genres: string;
+  status: TStoryStatus;
   contentRating: string;
+  genres: string[];
   totalVotes: string;
   onBack: () => void;
 }
@@ -21,8 +22,8 @@ export function StoryHero({
   title,
   slug,
   status,
-  genres,
   contentRating,
+  genres,
   totalVotes,
   onBack,
 }: StoryHeroProps) {
@@ -86,12 +87,18 @@ export function StoryHero({
         transition={{ duration: 0.5 }}
         className="relative h-48 w-full overflow-hidden rounded-2xl shadow-lg sm:h-56"
       >
-        <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-        <img
-          src={coverImage || '/images/placeholder-cover.png'}
-          alt={title}
-          className="h-full w-full object-cover"
-        />
+        {coverImage ? (
+          <img src={coverImage} alt={title} className="h-full w-full object-cover" />
+        ) : (
+          <div className="from-brand-pink-500/20 via-brand-purple/20 to-brand-orange/20 flex h-full w-full items-center justify-center bg-gradient-to-br">
+            <div className="flex flex-col items-center gap-3">
+              <div className="bg-background/10 flex h-16 w-16 items-center justify-center rounded-full backdrop-blur-sm">
+                <BookOpen className="text-foreground/60 h-8 w-8" />
+              </div>
+              <span className="text-foreground/50 text-sm font-medium">No cover image</span>
+            </div>
+          </div>
+        )}
 
         {/* Card Image Overlay */}
         {cardImage && (
@@ -119,35 +126,14 @@ export function StoryHero({
         <h1 className="text-text-primary text-xl font-bold sm:text-2xl md:text-3xl">{title}</h1>
 
         <div className="flex flex-wrap gap-1.5 sm:gap-2">
-          <Tag variant="status">{status}</Tag>
-          <Tag variant="genre">{genres.replace(/_/g, ' ')}</Tag>
-          <Tag variant="rating">{contentRating}</Tag>
+          {storyStatusBadge(status)}
+          {contentRatingBadge(contentRating)}
         </div>
+
+        {genres.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">{genresBadges(genres)}</div>
+        )}
       </motion.header>
     </div>
-  );
-}
-
-function Tag({
-  children,
-  variant,
-}: {
-  children: React.ReactNode;
-  variant: 'status' | 'genre' | 'rating';
-}) {
-  const variantStyles = {
-    status: 'bg-badge-success-bg text-badge-success border-badge-success-border',
-    genre: 'bg-brand-pink-500/10 text-brand-pink-500 border-brand-pink-500/30',
-    rating: 'bg-brand-orange/10 text-brand-orange border-brand-orange/30',
-  };
-
-  return (
-    <motion.span
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className={cn('rounded-md border px-2.5 py-1 text-xs font-medium', variantStyles[variant])}
-    >
-      {children}
-    </motion.span>
   );
 }
