@@ -51,11 +51,11 @@ const columnHelper = createColumnHelper<IStoryCollaboratorWithUser>();
 
 // Role configuration with icons and colors
 const ROLE_CONFIG: Record<string, { icon: typeof Crown; color: BadgeColorKey; label: string }> = {
-  OWNER: { icon: Crown, color: 'amber', label: 'Owner' },
-  CO_AUTHOR: { icon: PenTool, color: 'purple', label: 'Co-Author' },
-  MODERATOR: { icon: Shield, color: 'blue', label: 'Moderator' },
-  REVIEWER: { icon: Eye, color: 'cyan', label: 'Reviewer' },
-  CONTRIBUTOR: { icon: Handshake, color: 'gray', label: 'Contributor' },
+  owner: { icon: Crown, color: 'amber', label: 'Owner' },
+  co_author: { icon: PenTool, color: 'purple', label: 'Co-Author' },
+  moderator: { icon: Shield, color: 'blue', label: 'Moderator' },
+  reviewer: { icon: Eye, color: 'cyan', label: 'Reviewer' },
+  contributor: { icon: Handshake, color: 'gray', label: 'Contributor' },
 };
 
 // Status configuration
@@ -63,10 +63,10 @@ const STATUS_CONFIG: Record<
   string,
   { icon: typeof CheckCircle; color: BadgeColorKey; label: string }
 > = {
-  ACCEPTED: { icon: CheckCircle, color: 'success', label: 'Accepted' },
-  PENDING: { icon: Clock, color: 'warning', label: 'Pending' },
-  DECLINED: { icon: XCircle, color: 'error', label: 'Declined' },
-  REMOVED: { icon: XCircle, color: 'gray', label: 'Removed' },
+  accepted: { icon: CheckCircle, color: 'success', label: 'Accepted' },
+  pending: { icon: Clock, color: 'warning', label: 'Pending' },
+  declined: { icon: XCircle, color: 'error', label: 'Declined' },
+  removed: { icon: XCircle, color: 'gray', label: 'Removed' },
 };
 
 const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
@@ -103,11 +103,11 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
                     <roleConfig.icon
                       className={cn(
                         'h-4 w-4',
-                        collaborator.role === 'OWNER' && 'text-amber-500',
-                        collaborator.role === 'CO_AUTHOR' && 'text-purple-500',
-                        collaborator.role === 'MODERATOR' && 'text-blue-500',
-                        collaborator.role === 'REVIEWER' && 'text-cyan-500',
-                        collaborator.role === 'CONTRIBUTOR' && 'text-gray-500'
+                        collaborator.role === 'owner' && 'text-amber-500',
+                        collaborator.role === 'co_author' && 'text-purple-500',
+                        collaborator.role === 'moderator' && 'text-blue-500',
+                        collaborator.role === 'reviewer' && 'text-cyan-500',
+                        collaborator.role === 'contributor' && 'text-gray-500'
                       )}
                     />
                   )}
@@ -197,7 +197,7 @@ const CollaboratorTable = ({ data, search }: ICollaboratorTableProps) => {
           const collaborator = row.original;
 
           // Don't show actions for owner
-          if (collaborator.role === 'OWNER') return null;
+          if (collaborator.role === 'owner') return null;
 
           return (
             <DropdownMenu>

@@ -5,13 +5,12 @@ import { createBadge } from '@/components/common/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { GENRE_CATEGORIES, ALL_GENRES } from '@/constants/story.constants';
+import { GENRE_CATEGORIES, ALL_GENRES, type Genre } from '@/constants/story.constants';
 
 // Re-export for backward compatibility
 export { GENRE_CATEGORIES } from '@/constants/story.constants';
 
-type GenreItem = { value: string; label: string; description: string };
-type CategoryMap = Record<string, { label: string; genres: readonly GenreItem[] }>;
+type CategoryMap = Record<string, { label: string; genres: readonly Genre[] }>;
 
 type GenrePickerProps = {
   value: string[];
@@ -25,10 +24,10 @@ export const GenrePicker = memo(
     const [open, setOpen] = useState(false);
     const [search, setSearch] = useState('');
 
-    const selectedGenres = useMemo((): GenreItem[] => {
+    const selectedGenres = useMemo((): Genre[] => {
       return value
         .map((v) => ALL_GENRES.find((g) => g.value === v))
-        .filter((g): g is GenreItem => g !== undefined);
+        .filter((g): g is Genre => g !== undefined);
     }, [value]);
 
     const filteredCategories = useMemo((): CategoryMap => {

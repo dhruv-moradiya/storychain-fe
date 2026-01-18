@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+import { cn, scrollReveal } from '@/lib/utils';
 import { Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 import type { Section } from '../how-to-use.types';
 
 interface FeatureSectionProps {
@@ -11,60 +11,37 @@ interface FeatureSectionProps {
 export function FeatureSection({ section, index }: FeatureSectionProps) {
   const isEven = index % 2 === 0;
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-  };
-
   return (
     <section className={cn('px-6 py-12', isEven ? 'bg-bg-cream' : 'bg-cream-95')}>
       <div className="mx-auto max-w-5xl">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
-          className="mb-10 text-center"
-        >
-          <span
+        <div className="mb-10 text-center">
+          <motion.span
+            {...scrollReveal.paragraph}
             className={cn(
               'font-yellowtail mb-2 block text-lg',
               isEven ? 'text-brand-blue' : 'text-brand-pink-500'
             )}
           >
             {section.subtitle}
-          </span>
-          <h2 className="font-libreBaskerville text-text-tertiary text-2xl tracking-tight sm:text-3xl">
+          </motion.span>
+          <motion.h2
+            {...scrollReveal.heading}
+            className="font-libreBaskerville text-text-tertiary text-2xl tracking-tight sm:text-3xl"
+          >
             {section.title}
-          </h2>
-        </motion.div>
+          </motion.h2>
+        </div>
 
         {/* Feature Cards */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="grid gap-6 md:grid-cols-3"
-        >
-          {section.items.map((item) => {
+        <div className="grid gap-6 md:grid-cols-3">
+          {section.items.map((item, itemIndex) => {
             const Icon = item.icon;
             return (
               <motion.div
                 key={item.title}
-                variants={itemVariants}
+                {...scrollReveal.card(itemIndex)}
+                whileHover={{ y: -4 }}
                 className={cn(
                   'group rounded-2xl border p-6 transition-all hover:shadow-md',
                   isEven
@@ -73,16 +50,17 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
                 )}
               >
                 {/* Icon */}
-                <div
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
                   className={cn(
-                    'mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform group-hover:scale-110',
+                    'mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform',
                     isEven ? 'bg-brand-blue/10' : 'bg-brand-pink-500/10'
                   )}
                 >
                   <Icon
                     className={cn('h-6 w-6', isEven ? 'text-brand-blue' : 'text-brand-pink-500')}
                   />
-                </div>
+                </motion.div>
 
                 {/* Content */}
                 <h3 className="text-text-primary mb-2 text-lg font-semibold">{item.title}</h3>
@@ -112,7 +90,7 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

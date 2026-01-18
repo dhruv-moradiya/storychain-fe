@@ -28,6 +28,11 @@ import type {
 import type { IBaseType } from '@/type';
 
 // Request payload types
+interface ISearchStoryPayload {
+  q: string;
+  limit?: number;
+}
+
 interface ICreateInvitationPayload {
   slug: string;
   role: TStoryCollaboratorRole;
@@ -104,6 +109,11 @@ const storyApi = (api: AxiosInstance) => ({
     return res.data;
   },
 
+  searchStories: async (payload: ISearchStoryPayload): Promise<IStory[]> => {
+    const res = await api.post<IGetMyStoriesResponse>('/stories/search', payload);
+    return res.data.data;
+  },
+
   // ===== MUTATIONS =====
 
   createStory: async (payload: TStoryFormValues) => {
@@ -176,6 +186,11 @@ const storyApi = (api: AxiosInstance) => ({
 });
 
 // Export types for external use
-export type { ICreateInvitationPayload, ICreateChapterPayload, IPublishStoryPayload };
+export type {
+  ISearchStoryPayload,
+  ICreateInvitationPayload,
+  ICreateChapterPayload,
+  IPublishStoryPayload,
+};
 
 export { storyApi };

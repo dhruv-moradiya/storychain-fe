@@ -26,8 +26,10 @@ import {
   ResponsiveDialogTitle,
 } from '@/components/ui/responsive-dialog';
 import { ChapterReader, type ChapterData } from '@/components/common/chapter-reader';
+import { SubmitRequestDialog } from '@/components/common/submit-request-dialog';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router';
+import { toast } from 'sonner';
 
 type ChapterStatus = 'draft' | 'pending' | 'published' | 'rejected';
 
@@ -38,11 +40,17 @@ interface BuilderHeaderProps {
   isSaving: boolean;
   onPublish?: () => void;
   onSaveAsDraft?: () => void;
-  onSubmitRequest?: () => void;
   editorContent?: string;
   authorName?: string;
   authorAvatar?: string;
   autoSaveId?: string | null;
+  // Context for submit request dialog
+  storyId?: string;
+  storyTitle?: string;
+  storySlug?: string;
+  parentChapterId?: string;
+  parentChapterTitle?: string;
+  draftId?: string;
 }
 
 const STATUS_CONFIG: Record<ChapterStatus, { label: string; color: string; dotColor: string }> = {
@@ -79,14 +87,20 @@ function BuilderHeader({
   isSaving,
   onPublish,
   onSaveAsDraft,
-  onSubmitRequest,
   editorContent = '',
   authorName = 'You',
   authorAvatar,
   autoSaveId,
+  storyId,
+  storyTitle,
+  storySlug,
+  parentChapterId,
+  parentChapterTitle,
+  draftId,
 }: BuilderHeaderProps) {
   const navigate = useNavigate();
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isSubmitRequestOpen, setIsSubmitRequestOpen] = useState(false);
   const status: ChapterStatus = 'draft';
   const statusConfig = STATUS_CONFIG[status];
 
@@ -214,7 +228,7 @@ function BuilderHeader({
                 <FileText className="h-4 w-4" />
                 Save as Draft
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={onSubmitRequest} className="gap-2">
+              <DropdownMenuItem onClick={() => setIsSubmitRequestOpen(true)} className="gap-2">
                 <GitPullRequest className="h-4 w-4" />
                 Create Submit Request
               </DropdownMenuItem>
@@ -222,6 +236,24 @@ function BuilderHeader({
           </DropdownMenu>
         </div>
       </div>
+
+      {/* Submit Request Dialog */}
+      <SubmitRequestDialog
+        open={isSubmitRequestOpen}
+        onOpenChange={setIsSubmitRequestOpen}
+        storyId={storyId}
+        storyTitle={storyTitle}
+        storySlug={storySlug}
+        parentChapterId={parentChapterId}
+        parentChapterTitle={parentChapterTitle}
+        draftId={draftId}
+        draftTitle={title}
+        draftContent={editorContent}
+        onSubmit={(data) => {
+          toast.success('Submit request created successfully!');
+          console.log('Submit request data:', data);
+        }}
+      />
     </div>
   );
 }

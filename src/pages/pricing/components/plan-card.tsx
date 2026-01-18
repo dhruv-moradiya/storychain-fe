@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+import { cn, scrollReveal } from '@/lib/utils';
 import { Check, Sparkles, ArrowRight, IndianRupee, DollarSign } from 'lucide-react';
 import { PaymentModal } from './payment-modal';
 import type { Plan, BillingInterval, Currency, PaymentState } from '../pricing.types';
 import { useNavigate } from 'react-router';
+import { motion } from 'framer-motion';
 
 interface PlanCardProps {
   plan: Plan;
   billingInterval: BillingInterval;
   currency: Currency;
-  index: number;
+  index?: number;
 }
 
 function formatPrice(amountInPaise: number, currency: Currency): string {
@@ -31,7 +31,7 @@ function formatPrice(amountInPaise: number, currency: Currency): string {
   }).format(amount);
 }
 
-export function PlanCard({ plan, billingInterval, currency, index }: PlanCardProps) {
+export function PlanCard({ plan, billingInterval, currency, index = 0 }: PlanCardProps) {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [paymentState, setPaymentState] = useState<PaymentState>({ status: 'idle' });
@@ -110,9 +110,9 @@ export function PlanCard({ plan, billingInterval, currency, index }: PlanCardPro
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
+      {...scrollReveal.card(index)}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.2 }}
       className={cn(
         'relative flex flex-col rounded-2xl border p-6 transition-all',
         plan.highlighted
@@ -130,9 +130,7 @@ export function PlanCard({ plan, billingInterval, currency, index }: PlanCardPro
       {/* Plan Header */}
       <div className="mb-6 text-center">
         <motion.div
-          initial={{ scale: 0.8 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
+          whileHover={{ scale: 1.05 }}
           className={cn(
             'mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl',
             plan.bgColor
@@ -166,17 +164,11 @@ export function PlanCard({ plan, billingInterval, currency, index }: PlanCardPro
 
       {/* Features List */}
       <ul className="mb-6 flex-1 space-y-3">
-        {plan.features.map((feature, i) => (
-          <motion.li
-            key={feature}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.1 + 0.3 + i * 0.05 }}
-            className="flex items-start gap-2"
-          >
+        {plan.features.map((feature) => (
+          <li key={feature} className="flex items-start gap-2">
             <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
             <span className="text-text-secondary-65 text-sm">{feature}</span>
-          </motion.li>
+          </li>
         ))}
       </ul>
 

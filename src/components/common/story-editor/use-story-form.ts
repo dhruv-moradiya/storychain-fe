@@ -42,37 +42,32 @@ export function useStoryForm(options?: UseStoryFormOptions) {
     defaultValues: DEFAULT_VALUES,
   });
 
-  const { handleSubmit, trigger, reset } = methods;
-
-  const onSubmit = useCallback(
-    (data: TStoryFormValues) => {
-      mutate(
-        { ...data },
-        {
-          onSuccess: () => {
-            options?.onSuccess?.();
-            setStep(1);
-            reset();
-          },
-          onError: (error) => {
-            const message = handleApiError(error);
-            toast.error(message);
-          },
-          onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: QueryKey.story.my });
-          },
-        }
-      );
-    },
-    [mutate, options, queryClient, reset]
-  );
+  const processSubmit = (data: TStoryFormValues) => {
+    mutate(
+      { ...data },
+      {
+        onSuccess: () => {
+          options?.onSuccess?.();
+          setStep(1);
+          methods.reset();
+        },
+        onError: (error) => {
+          const message = handleApiError(error);
+          toast.error(message);
+        },
+        onSettled: () => {
+          queryClient.invalidateQueries({ queryKey: QueryKey.story.my });
+        },
+      }
+    );
+  };
 
   const handleNext = useCallback(async () => {
-    const isValid = await trigger(['title', 'description']);
+    const isValid = await methods.trigger(['title', 'description']);
     if (isValid) {
       setStep(2);
     }
-  }, [trigger]);
+  }, [methods]);
 
   const handleBack = useCallback(() => {
     setStep(1);
@@ -80,12 +75,13 @@ export function useStoryForm(options?: UseStoryFormOptions) {
 
   const resetForm = useCallback(() => {
     setStep(1);
-    reset();
-  }, [reset]);
+    methods.reset();
+  }, [methods]);
 
-  const submitForm = useCallback(() => {
-    handleSubmit(onSubmit)();
-  }, [handleSubmit, onSubmit]);
+  const submitForm = (e?: React.BaseSyntheticEvent) => {
+    e?.preventDefault();
+    methods.handleSubmit(processSubmit)(e);
+  };
 
   return {
     // Form state

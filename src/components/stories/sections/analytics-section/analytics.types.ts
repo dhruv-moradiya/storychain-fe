@@ -40,6 +40,7 @@ export interface RecentActivityItem {
 export interface ReadingProgressData {
   label: string;
   value: number;
+  [key: string]: string | number;
 }
 
 export interface AnalyticsData {

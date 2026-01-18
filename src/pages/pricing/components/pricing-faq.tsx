@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import {
   Accordion,
@@ -7,6 +6,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { HelpCircle, MessageCircle, Mail, ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { scrollReveal } from '@/lib/utils';
 import type { FAQ } from '../pricing.types';
 
 interface PricingFAQProps {
@@ -17,27 +18,24 @@ export function PricingFAQ({ faqs }: PricingFAQProps) {
   return (
     <section className="px-6 pb-20">
       <div className="mx-auto max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5 }}
-          className="mb-10 text-center"
-        >
-          <div className="border-brand-pink-500/20 bg-brand-pink-500/5 mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5">
+        <div className="mb-10 text-center">
+          <motion.div
+            {...scrollReveal.paragraph}
+            className="border-brand-pink-500/20 bg-brand-pink-500/5 mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5"
+          >
             <HelpCircle className="text-brand-pink-500 h-4 w-4" />
             <span className="text-brand-pink-500 text-sm font-medium">Got questions?</span>
-          </div>
-          <h2 className="font-libreBaskerville text-text-tertiary text-2xl tracking-tight sm:text-3xl">
+          </motion.div>
+          <motion.h2
+            {...scrollReveal.heading}
+            className="font-libreBaskerville text-text-tertiary text-2xl tracking-tight sm:text-3xl"
+          >
             Frequently Asked Questions
-          </h2>
-        </motion.div>
+          </motion.h2>
+        </div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          {...scrollReveal.card(0)}
           className="border-border/50 bg-cream-95 hover:border-brand-pink-500/20 rounded-2xl border p-6 transition-all"
         >
           <Accordion type="single" collapsible className="w-full">
@@ -67,15 +65,16 @@ export function PricingFAQ({ faqs }: PricingFAQProps) {
 
         {/* Still have questions? */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          {...scrollReveal.card(1)}
+          whileHover={{ y: -2 }}
           className="border-border/50 from-brand-pink-500/5 to-brand-blue/5 mt-10 rounded-2xl border bg-gradient-to-br p-8 text-center"
         >
-          <div className="bg-brand-pink-500/10 mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl">
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="bg-brand-pink-500/10 mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl"
+          >
             <Mail className="text-brand-pink-500 h-7 w-7" />
-          </div>
+          </motion.div>
           <h3 className="text-text-primary mb-2 text-lg font-semibold">Still have questions?</h3>
           <p className="text-text-secondary-65 mb-6 text-sm">
             Can't find the answer you're looking for? Our support team is here to help!

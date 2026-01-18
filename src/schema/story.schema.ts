@@ -23,29 +23,19 @@ export const StoryFormSchema = z.object({
     })
     .optional(),
 
-  settings: z
-    .object({
-      isPublic: z.boolean().default(true),
-      allowBranching: z.boolean().default(true),
-      requireApproval: z.boolean().default(false),
-      allowComments: z.boolean().default(true),
-      allowVoting: z.boolean().default(true),
-      genres: z.array(z.enum(GENRE_VALUES)).default([]),
-      contentRating: z.enum(CONTENT_RATING_VALUES).default('general'),
-    })
-    .default({
-      isPublic: true,
-      allowBranching: true,
-      requireApproval: false,
-      allowComments: true,
-      allowVoting: true,
-      genres: [],
-      contentRating: 'general',
-    }),
+  settings: z.object({
+    isPublic: z.boolean(),
+    allowBranching: z.boolean(),
+    requireApproval: z.boolean(),
+    allowComments: z.boolean(),
+    allowVoting: z.boolean(),
+    genres: z.array(z.enum(GENRE_VALUES)),
+    contentRating: z.enum(CONTENT_RATING_VALUES),
+  }),
 
-  tags: z.array(z.string().trim().toLowerCase()).default([]),
+  tags: z.array(z.string().trim().toLowerCase()),
 
-  status: z.enum(STORY_STATUSES).default('draft'),
+  status: z.enum(STORY_STATUSES),
 });
 
 export type TStoryFormValues = z.infer<typeof StoryFormSchema>;

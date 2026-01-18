@@ -21,6 +21,7 @@ interface IChapterAutoSave {
   };
   autoSaveType: TautoSaveType;
   storyId: string;
+  storySlug?: string;
   parentChapterId?: string;
 }
 

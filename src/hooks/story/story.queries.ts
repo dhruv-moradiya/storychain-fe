@@ -1,11 +1,10 @@
-import { useApi } from '@/hooks/useApi';
-import { QueryKey } from '@/lib/query-keys';
 import { storyApi } from '@/api/story.api';
+import { useApi } from '@/hooks/useApi';
+import { STALE_TIME } from '@/lib/constants';
+import { QueryKey } from '@/lib/query-keys';
+import type { IGetStoryOverviewBySlugResponse, IStory } from '@/type/story';
 import { useAuth } from '@clerk/clerk-react';
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query';
-import type { IStory } from '@/type/story';
-import { STALE_TIME } from '@/lib/constants';
-import type { IGetStoryOverviewBySlugResponse } from '@/type/story';
 
 export function useGetUserStories() {
   const api = useApi();
@@ -106,5 +105,24 @@ export function useGetStorySignatureUrl(
     enabled: isSignedIn && !!slug,
     staleTime: STALE_TIME.MEDIUM,
     ...options,
+  });
+}
+
+export function useSearchStories(
+  query: string,
+  options?: Omit<UseQueryOptions<IStory[], Error, IStory[]>, 'queryKey' | 'queryFn'> & {
+    limit?: number;
+  }
+) {
+  const api = useApi();
+  const { isSignedIn } = useAuth();
+  const { limit, ...queryOptions } = options || {};
+
+  return useQuery({
+    queryKey: QueryKey.story.search(query),
+    queryFn: () => storyApi(api).searchStories({ q: query, limit }),
+    enabled: isSignedIn && query.length >= 2,
+    staleTime: STALE_TIME.SHORT,
+    ...queryOptions,
   });
 }

@@ -1,51 +1,48 @@
-import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, BookOpen, Sparkles, Zap } from 'lucide-react';
 import { Link } from 'react-router';
+import { motion } from 'framer-motion';
+import { scrollReveal } from '@/lib/utils';
 
 export function CTASection() {
   return (
     <section className="bg-cream-95 px-6 py-16">
       <div className="mx-auto max-w-4xl">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          {...scrollReveal.card(0)}
           className="border-border/50 from-brand-pink-500/5 to-brand-blue/5 relative overflow-hidden rounded-2xl border bg-gradient-to-br via-white/50 p-8 text-center"
         >
           {/* Background decorations */}
           <div className="pointer-events-none absolute inset-0">
-            <div className="bg-brand-pink-500/10 absolute -top-10 -right-10 h-40 w-40 rounded-full blur-3xl" />
-            <div className="bg-brand-blue/10 absolute -bottom-10 -left-10 h-40 w-40 rounded-full blur-3xl" />
+            <motion.div
+              className="bg-brand-pink-500/10 absolute -top-10 -right-10 h-40 w-40 rounded-full blur-3xl"
+              animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.15, 0.1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+            />
+            <motion.div
+              className="bg-brand-blue/10 absolute -bottom-10 -left-10 h-40 w-40 rounded-full blur-3xl"
+              animate={{ scale: [1, 1.15, 1], opacity: [0.1, 0.15, 0.1] }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+            />
           </div>
 
           <div className="relative">
             <motion.div
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{ scale: 1.05 }}
               className="bg-brand-pink-500/10 mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl"
             >
               <Sparkles className="text-brand-pink-500 h-8 w-8" />
             </motion.div>
 
             <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              {...scrollReveal.heading}
               className="font-libreBaskerville text-text-tertiary mb-4 text-2xl tracking-tight sm:text-3xl"
             >
               Ready to Start Your Story?
             </motion.h2>
 
             <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+              {...scrollReveal.paragraph}
               className="text-text-secondary-65 mx-auto mb-8 max-w-xl text-sm leading-relaxed"
             >
               Join thousands of writers creating interactive stories on StoryChain. Start for free
@@ -53,10 +50,7 @@ export function CTASection() {
             </motion.p>
 
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              {...scrollReveal.paragraph}
               className="flex flex-col items-center justify-center gap-4 sm:flex-row"
             >
               <Button
