@@ -10,7 +10,7 @@ import {
   CollaboratorsPreview,
   ChapterPreview,
 } from './overview-section/index';
-import { StoryCollaboratorRole } from '@/type/story.type';
+import { StoryCollaboratorRole } from '@/type/story';
 import { useGetStoryOverviewBySlug } from '@/hooks/story/story.queries';
 
 const OverviewSection = () => {
@@ -78,7 +78,7 @@ const OverviewSection = () => {
         title={story.title}
         slug={story.slug}
         status={story.status}
-        genre={story.genre}
+        genres={story.genres}
         contentRating={story.contentRating}
         totalVotes={inlineStats.totalVotes}
         onBack={() => navigate('/')}

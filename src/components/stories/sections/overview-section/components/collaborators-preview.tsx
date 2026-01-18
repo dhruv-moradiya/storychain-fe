@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Users, Crown, Pen, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { IStoryCollaboratorInfo } from '@/type/story.type';
+import type { IStoryCollaboratorInfo } from '@/type/story';
 
 interface CollaboratorsPreviewProps {
   owner?: IStoryCollaboratorInfo;

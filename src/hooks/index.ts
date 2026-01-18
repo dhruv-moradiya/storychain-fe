@@ -1,1 +1,1 @@
-export { useScrollDirection } from './components/navbar/useScrollDirection';
+export { useScrollDirection } from './use-scroll-direction';

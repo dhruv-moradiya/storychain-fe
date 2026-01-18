@@ -1,27 +1,16 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider } from 'react-hook-form';
+import { useCallback } from 'react';
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '../../ui/dialog';
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogBody,
+} from '../../ui/responsive-dialog';
 
-import { Button } from '../../ui/button';
-
-import { StoryFormSchema, type TStoryFormValues } from '@/schema/story.schema';
-
-import { BookOpen, Send } from 'lucide-react';
-import { StoryFormFields } from './story-form-fields';
-import { handleApiError } from '@/lib/utils';
-import { useQueryClient } from '@tanstack/react-query';
-import { Spinner } from '@/components/ui/spinner';
-import { useCreateStory } from '@/hooks/story/story.mutations';
-import { QueryKey } from '@/lib/query-keys';
-import toast from '../toast';
+import { BasicInfoStep, SettingsStep } from './story-form-fields';
+import { StoryDialogHeader } from './story-dialog-header';
+import { StoryDialogFooter } from './story-dialog-footer';
+import { useStoryForm } from './use-story-form';
 
 type StoryEditorDialogProps = {
   open: boolean;
@@ -29,96 +18,48 @@ type StoryEditorDialogProps = {
 };
 
 export default function StoryEditorDialog({ open, onOpenChange }: StoryEditorDialogProps) {
-  const queryClient = useQueryClient();
-
-  const { mutate, isPending } = useCreateStory();
-
-  const methods = useForm<TStoryFormValues>({
-    resolver: zodResolver(StoryFormSchema),
-    mode: 'onSubmit',
-    defaultValues: {
-      title: '',
-      slug: '',
-      description: '',
-      genre: 'OTHER',
-      rating: 'GENERAL',
-      visibility: 'public',
-      branching: false,
-      approvalMode: 'open',
-      commentsEnabled: true,
-      votingEnabled: true,
-    },
+  const { methods, step, isPending, handleNext, handleBack, resetForm, submitForm } = useStoryForm({
+    onSuccess: () => onOpenChange(false),
   });
 
-  const { handleSubmit } = methods;
-
-  const onSubmit = (data: TStoryFormValues) => {
-    mutate(
-      { ...data },
-      {
-        onSuccess: () => {
-          onOpenChange(false);
-        },
-        onError: (error) => {
-          const message = handleApiError(error);
-          toast.error(message);
-        },
-        onSettled: () => {
-          queryClient.invalidateQueries({ queryKey: QueryKey.story.my });
-        },
+  const handleOpenChange = useCallback(
+    (isOpen: boolean) => {
+      onOpenChange(isOpen);
+      if (!isOpen) {
+        resetForm();
       }
-    );
-  };
+    },
+    [onOpenChange, resetForm]
+  );
+
+  const handleCancel = useCallback(() => {
+    handleOpenChange(false);
+  }, [handleOpenChange]);
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="grid max-h-[90vh] grid-rows-[auto_1fr_auto] overflow-hidden border-black/10 bg-white sm:max-w-[600px]">
-        {/* HEADER */}
-        <DialogHeader>
-          <DialogTitle className="text-text-primary flex items-center gap-2 font-serif">
-            <div className="bg-brand-pink-500/15 flex h-8 w-8 items-center justify-center rounded-lg">
-              <BookOpen className="text-brand-pink-500 h-4 w-4" />
-            </div>
-            Create New Story
-          </DialogTitle>
-          <DialogDescription className="text-text-secondary-65 font-mono text-sm">
-            Fill in the details to start your new story
-          </DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog open={open} onOpenChange={handleOpenChange}>
+      <ResponsiveDialogContent
+        className="bg-bg-cream border-border/50 flex flex-col gap-0 p-0 sm:max-w-[520px]"
+        sheetHeight="90%"
+        showCloseButton={false}
+      >
+        <StoryDialogHeader step={step} />
 
-        {/* FORM */}
         <FormProvider {...methods}>
-          <form id="story-form" onSubmit={handleSubmit(onSubmit)} className="overflow-y-auto py-4">
-            <StoryFormFields />
-          </form>
+          <ResponsiveDialogBody className="flex-1 overflow-y-auto px-6 py-4">
+            {step === 1 ? <BasicInfoStep /> : <SettingsStep />}
+          </ResponsiveDialogBody>
         </FormProvider>
 
-        {/* FOOTER */}
-        <DialogFooter className="gap-2 sm:gap-0">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-            className="border-black/10 font-mono hover:bg-black/5"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            form="story-form"
-            disabled={isPending}
-            className="bg-brand-pink-500 hover:bg-brand-pink-600 gap-2 font-mono text-white"
-          >
-            {!isPending ? (
-              <>
-                <Send className="h-4 w-4" />
-                Create Story
-              </>
-            ) : (
-              <Spinner />
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        <StoryDialogFooter
+          step={step}
+          isPending={isPending}
+          onCancel={handleCancel}
+          onNext={handleNext}
+          onBack={handleBack}
+          onSubmit={submitForm}
+        />
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

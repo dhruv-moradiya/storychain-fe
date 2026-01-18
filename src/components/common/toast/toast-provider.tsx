@@ -15,9 +15,9 @@ const positionMap: Record<
 };
 
 export function ToastProvider({
-  position = 'top-right',
+  position = 'top-center',
   // maxToasts = 5,
-  gap = 8,
+  gap = 6,
   children,
 }: ToastProviderProps) {
   return (
@@ -26,13 +26,13 @@ export function ToastProvider({
       <Toaster
         position={positionMap[position]}
         toastOptions={{
-          duration: 4000,
+          duration: 3000,
         }}
         containerStyle={{
-          top: 16,
-          right: 16,
-          bottom: 16,
-          left: 16,
+          top: 12,
+          right: 12,
+          bottom: 12,
+          left: 12,
         }}
         gutter={gap}
         containerClassName="toast-container"

@@ -1,6 +1,7 @@
 import type { Editor } from '@tiptap/react';
 import { EditorContent } from '@tiptap/react';
 import { cn } from '@/lib/utils';
+import './builder-canvas.css';
 
 interface BuilderCanvasProps {
   editor: Editor;
@@ -8,7 +9,7 @@ interface BuilderCanvasProps {
 
 /**
  * Builder canvas component
- * Contains the main editor content area
+ * Contains the main editor content area with optimized typography
  */
 function BuilderCanvas({ editor }: BuilderCanvasProps) {
   return (
@@ -17,9 +18,9 @@ function BuilderCanvas({ editor }: BuilderCanvasProps) {
         <EditorContent
           editor={editor}
           className={cn(
-            'border-border/50 w-full rounded-xl border bg-white/50 shadow-sm',
-            'prose prose-gray prose-max-w-none text-text-primary min-h-[60vh] max-w-none p-5 font-serif text-base leading-[1] focus:outline-none sm:min-h-[70vh] sm:p-8 sm:text-[17px] lg:min-h-[11in] lg:p-12',
-            'prose-headings:text-text-primary prose-headings:font-serif prose-p:text-text-secondary prose-strong:text-text-primary'
+            'story-editor',
+            'border-border/30 w-full rounded-2xl border bg-white shadow-sm',
+            'min-h-[60vh] p-6 sm:min-h-[70vh] sm:p-10 lg:min-h-[11in] lg:p-14'
           )}
         />
       </div>

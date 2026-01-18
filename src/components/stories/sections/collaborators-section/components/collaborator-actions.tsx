@@ -62,7 +62,7 @@ function CollaboratorActions({
       </div>
 
       {/* Filter Tabs and Search */}
-      <div className="flex flex-col gap-4 rounded-2xl border border-black/10 bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
+      <div className="border-border/50 flex flex-col gap-4 rounded-xl border p-4 lg:flex-row lg:items-center lg:justify-between">
         {/* Role Filter Tabs */}
         <div className="flex flex-wrap items-center gap-2">
           {ROLE_FILTERS.map((filter) => {
@@ -78,10 +78,10 @@ function CollaboratorActions({
                 key={filter.key}
                 onClick={() => onFilterChange?.(filter.key)}
                 className={cn(
-                  'flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition-all',
+                  'flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium transition-all',
                   isActive
                     ? 'bg-brand-pink-500 text-white shadow-sm'
-                    : 'text-text-secondary-65 hover:text-text-primary bg-black/5 hover:bg-black/10'
+                    : 'text-text-secondary-65 hover:text-text-primary bg-muted/50 hover:bg-muted'
                 )}
               >
                 <Icon className="h-3.5 w-3.5" />
@@ -90,7 +90,7 @@ function CollaboratorActions({
                   <span
                     className={cn(
                       'ml-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium',
-                      isActive ? 'bg-white/20 text-white' : 'text-text-secondary-65 bg-black/10'
+                      isActive ? 'bg-white/20 text-white' : 'text-text-secondary-65 bg-muted'
                     )}
                   >
                     {count}
@@ -108,7 +108,7 @@ function CollaboratorActions({
             placeholder="Search by name or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-cream-95/50 border-black/10 pl-10 focus:bg-white"
+            className="border-border/50 pl-10"
           />
         </div>
       </div>

@@ -1,6 +1,6 @@
 import type { IChapterAutoSave } from '.';
 import type { IBaseType } from '..';
-import type { IStory } from '../story.type';
+import type { IStory } from '../story';
 
 interface IEnableAutoSaveResponse extends IBaseType {
   data: {

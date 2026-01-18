@@ -169,7 +169,7 @@ const HistorySection = () => {
         className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
       >
         <Select value={filter} onValueChange={(v) => setFilter(v as HistoryFilter)}>
-          <SelectTrigger className="border-border/50 w-full bg-white/80 sm:w-48">
+          <SelectTrigger className="border-border/50 bg-cream-90/80 w-full sm:w-44">
             <Filter size={16} className="text-text-secondary-65 mr-2" />
             <SelectValue />
           </SelectTrigger>
@@ -191,13 +191,13 @@ const HistorySection = () => {
             placeholder="Search history..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="border-border/50 w-full bg-white/80 pl-9 sm:w-64"
+            className="border-border/50 bg-cream-90/80 w-full pl-9 sm:w-56"
           />
         </div>
       </motion.div>
 
       {/* Timeline */}
-      <div className="space-y-8">
+      <div className="space-y-5">
         {filteredHistory.map((group, groupIndex) => (
           <motion.div
             key={group.label}
@@ -206,15 +206,15 @@ const HistorySection = () => {
             transition={{ delay: 0.15 + groupIndex * 0.1 }}
           >
             {/* Group Label */}
-            <div className="mb-4 flex items-center gap-3">
-              <h3 className="text-text-secondary-65 text-sm font-semibold tracking-wider uppercase">
+            <div className="mb-3 flex items-center gap-3">
+              <h3 className="text-text-secondary-65 text-xs font-semibold tracking-wider uppercase">
                 {group.label}
               </h3>
               <div className="bg-border/50 h-px flex-1" />
             </div>
 
             {/* Events */}
-            <div className="pl-1">
+            <div className="space-y-1">
               {group.events.map((event, eventIndex) => (
                 <HistoryEventCard
                   key={event.id}

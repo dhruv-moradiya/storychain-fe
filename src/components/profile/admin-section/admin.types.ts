@@ -11,6 +11,21 @@ export type ReportReason =
   | 'OFF_TOPIC'
   | 'OTHER';
 
+export type SubscriptionPlan = 'FREE' | 'PRO' | 'ENTERPRISE';
+export type SubscriptionStatus = 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PENDING';
+
+export interface UserSubscription {
+  id: string;
+  plan: SubscriptionPlan;
+  status: SubscriptionStatus;
+  startDate: Date;
+  endDate: Date;
+  amount: number;
+  currency: 'INR' | 'USD';
+  paymentMethod: string;
+  invoiceId?: string;
+}
+
 export interface PlatformUser {
   id: string;
   name: string;
@@ -22,6 +37,8 @@ export interface PlatformUser {
   assignedBy?: string;
   isBanned: boolean;
   banReason?: string;
+  currentSubscription?: UserSubscription;
+  subscriptionHistory?: UserSubscription[];
 }
 
 export interface Report {

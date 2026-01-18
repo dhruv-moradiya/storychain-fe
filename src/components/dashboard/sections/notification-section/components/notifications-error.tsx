@@ -11,7 +11,7 @@ import {
 
 export default function NotificationsError({ onRetry }: { onRetry: () => void }) {
   return (
-    <Empty className="to-muted/40 relative mx-auto max-w-lg overflow-hidden rounded-xl border bg-gradient-to-b from-red-50/40 py-14 shadow-lg dark:from-red-950/40">
+    <Empty className="from-cream-95 via-cream-90 to-cream-95 relative mx-auto max-w-lg overflow-hidden rounded-xl border border-red-200/50 bg-gradient-to-b py-14 shadow-lg">
       <EmptyHeader>
         <EmptyMedia variant="icon" className="text-red-500">
           <AlertTriangle size={46} />

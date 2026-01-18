@@ -112,6 +112,25 @@ export const ReadonlyRow = ({
 );
 
 /* ---------------------------------------------
+ * Badge Row - for displaying badges instead of text
+ * --------------------------------------------*/
+export const BadgeRow = ({
+  icon,
+  label,
+  children,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  children: React.ReactNode;
+}) => (
+  <BaseRow
+    icon={icon}
+    label={label}
+    action={<div className="flex flex-wrap gap-1.5">{children}</div>}
+  />
+);
+
+/* ---------------------------------------------
  * Image Upload Row
  * --------------------------------------------*/
 export const ImageRow = ({

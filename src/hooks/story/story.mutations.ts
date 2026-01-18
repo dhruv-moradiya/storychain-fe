@@ -2,7 +2,7 @@ import { useApi } from '@/hooks/useApi';
 import { storyApi } from '@/api/story.api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { TStoryFormValues } from '@/schema/story.schema';
-import type { TStoryCollaboratorRole } from '@/type/story.type';
+import type { TStoryCollaboratorRole } from '@/type/story';
 import type {
   IStorySettingUpdateRequest,
   IUpdateStoryCoverImageRequest,

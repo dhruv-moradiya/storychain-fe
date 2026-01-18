@@ -15,7 +15,7 @@ import {
   DraftRecoveryBanner,
 } from '@/components/story-builder';
 import { useGetAutoSaveDraft } from '@/hooks/chapterAutoSave/chapterAutoSave.queries';
-import { useBuilderSave } from '@/hooks/chapterAutoSave/useBuilderSave';
+import { useBuilderSave } from '@/hooks/components/storyBuilder';
 
 const DEFAULT_CONTENT = `
   <h2>Welcome to StoryChain</h2>
@@ -81,6 +81,13 @@ const StoryBuilder = () => {
         onTitleChange={setTitle}
         onSave={handleSave}
         isSaving={isSaving}
+        editorContent={editor.getHTML()}
+        autoSaveId={autoSaveId}
+        // Pass draft context for submit request dialog
+        storyId={selectedDraft?.storyId}
+        storySlug={selectedDraft?.storySlug}
+        parentChapterId={selectedDraft?.parentChapterId}
+        draftId={autoSaveId || undefined}
       />
       <BuilderToolbar editor={editor} />
       <BuilderCanvas editor={editor} />

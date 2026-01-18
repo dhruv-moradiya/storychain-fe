@@ -4,6 +4,7 @@ import {
   AuthSkeleton,
   ChapterSkeleton,
   DashboardSkeleton,
+  MinimalLoader,
   PageSkeleton,
   ProfileSkeleton,
   StoryBuilderSkeleton,
@@ -12,6 +13,7 @@ import {
 
 type SkeletonType =
   | 'page'
+  | 'minimal'
   | 'dashboard'
   | 'story'
   | 'chapter'
@@ -21,6 +23,7 @@ type SkeletonType =
 
 const skeletonMap: Record<SkeletonType, ComponentType> = {
   page: PageSkeleton,
+  minimal: MinimalLoader,
   dashboard: DashboardSkeleton,
   story: StorySkeleton,
   chapter: ChapterSkeleton,
@@ -41,7 +44,7 @@ const skeletonMap: Record<SkeletonType, ComponentType> = {
 // eslint-disable-next-line
 export function lazyRoute<T extends ComponentType<any>>(
   importFn: () => Promise<{ default: T }>,
-  skeleton: SkeletonType = 'page'
+  skeleton: SkeletonType = 'minimal'
 ) {
   const LazyComponent = lazy(importFn);
   const SkeletonComponent = skeletonMap[skeleton];

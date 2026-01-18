@@ -44,7 +44,7 @@ function ToastContent({
   return (
     <div
       className={cn(
-        'pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border p-4 shadow-lg backdrop-blur-sm transition-all',
+        'pointer-events-auto flex w-full max-w-[calc(100vw-32px)] items-center gap-2.5 rounded-lg border px-3 py-2.5 shadow-md backdrop-blur-sm transition-all sm:max-w-xs',
         t.visible
           ? 'animate-in fade-in slide-in-from-top-2'
           : 'animate-out fade-out slide-out-to-right-2'
@@ -56,14 +56,14 @@ function ToastContent({
     >
       {/* Icon */}
       <div
-        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg"
+        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md"
         style={{ backgroundColor: style.iconBg }}
       >
         {customIcon ? (
           <span style={{ color: style.icon }}>{customIcon}</span>
         ) : (
           <IconComponent
-            size={18}
+            size={14}
             className={cn(isLoading && 'animate-spin')}
             style={{ color: style.icon }}
           />
@@ -71,40 +71,42 @@ function ToastContent({
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col gap-1">
-        <p className="text-sm font-semibold" style={{ color: style.text }}>
+      <div className="flex min-w-0 flex-1 flex-col">
+        <p className="truncate text-xs font-medium" style={{ color: style.text }}>
           {title}
         </p>
         {description && (
-          <p className="text-xs opacity-80" style={{ color: style.text }}>
+          <p className="truncate text-[10px] opacity-75" style={{ color: style.text }}>
             {description}
           </p>
         )}
-        {action && (
-          <button
-            onClick={() => {
-              action.onClick();
-              hotToast.dismiss(t.id);
-            }}
-            className="mt-2 self-start rounded-md px-3 py-1.5 text-xs font-medium transition-colors hover:opacity-80"
-            style={{
-              backgroundColor: style.icon,
-              color: style.bg,
-            }}
-          >
-            {action.label}
-          </button>
-        )}
       </div>
+
+      {/* Action button */}
+      {action && (
+        <button
+          onClick={() => {
+            action.onClick();
+            hotToast.dismiss(t.id);
+          }}
+          className="shrink-0 rounded px-2 py-1 text-[10px] font-medium transition-colors hover:opacity-80"
+          style={{
+            backgroundColor: style.icon,
+            color: style.bg,
+          }}
+        >
+          {action.label}
+        </button>
+      )}
 
       {/* Dismiss button */}
       {dismissible && !isLoading && (
         <button
           onClick={() => hotToast.dismiss(t.id)}
-          className="shrink-0 rounded-md p-1 opacity-60 transition-opacity hover:opacity-100"
+          className="-mr-1 shrink-0 rounded p-0.5 opacity-50 transition-opacity hover:opacity-100"
           style={{ color: style.text }}
         >
-          <X size={16} />
+          <X size={14} />
         </button>
       )}
     </div>

@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
+import { cn, scrollReveal } from '@/lib/utils';
 import { Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 import type { Section } from '../how-to-use.types';
 
 interface FeatureSectionProps {
@@ -15,25 +15,23 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
     <section className={cn('px-6 py-12', isEven ? 'bg-bg-cream' : 'bg-cream-95')}>
       <div className="mx-auto max-w-5xl">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mb-10 text-center"
-        >
-          <span
+        <div className="mb-10 text-center">
+          <motion.span
+            {...scrollReveal.paragraph}
             className={cn(
               'font-yellowtail mb-2 block text-lg',
               isEven ? 'text-brand-blue' : 'text-brand-pink-500'
             )}
           >
             {section.subtitle}
-          </span>
-          <h2 className="font-libreBaskerville text-text-tertiary text-2xl tracking-tight sm:text-3xl">
+          </motion.span>
+          <motion.h2
+            {...scrollReveal.heading}
+            className="font-libreBaskerville text-text-tertiary text-2xl tracking-tight sm:text-3xl"
+          >
             {section.title}
-          </h2>
-        </motion.div>
+          </motion.h2>
+        </div>
 
         {/* Feature Cards */}
         <div className="grid gap-6 md:grid-cols-3">
@@ -42,10 +40,8 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
             return (
               <motion.div
                 key={item.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: itemIndex * 0.1 }}
+                {...scrollReveal.card(itemIndex)}
+                whileHover={{ y: -4 }}
                 className={cn(
                   'group rounded-2xl border p-6 transition-all hover:shadow-md',
                   isEven
@@ -55,12 +51,9 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
               >
                 {/* Icon */}
                 <motion.div
-                  initial={{ scale: 0.8 }}
-                  whileInView={{ scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: itemIndex * 0.1 + 0.2 }}
+                  whileHover={{ scale: 1.1 }}
                   className={cn(
-                    'mb-4 flex h-12 w-12 items-center justify-center rounded-xl',
+                    'mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform',
                     isEven ? 'bg-brand-blue/10' : 'bg-brand-pink-500/10'
                   )}
                 >
@@ -82,14 +75,7 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
                   </p>
                   <ul className="space-y-1.5">
                     {item.tips.map((tip, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.3, delay: itemIndex * 0.1 + 0.3 + i * 0.05 }}
-                        className="flex items-start gap-2"
-                      >
+                      <li key={i} className="flex items-start gap-2">
                         <Check
                           className={cn(
                             'mt-0.5 h-3 w-3 flex-shrink-0',
@@ -97,7 +83,7 @@ export function FeatureSection({ section, index }: FeatureSectionProps) {
                           )}
                         />
                         <span className="text-text-secondary-65 text-xs">{tip}</span>
-                      </motion.li>
+                      </li>
                     ))}
                   </ul>
                 </div>

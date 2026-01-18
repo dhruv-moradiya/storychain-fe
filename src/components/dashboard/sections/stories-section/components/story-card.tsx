@@ -1,8 +1,13 @@
-import { textBadge } from '@/components/common/badge';
-import TagSelector from '@/components/dashboard/tag-selector';
-import type { IStory } from '@/type/story.type';
+import {
+  BadgeGroup,
+  contentRatingBadge,
+  genresToBadgeConfigs,
+  storyStatusBadge,
+} from '@/components/common/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import type { IStory } from '@/type/story';
 import { formatDistance } from 'date-fns';
-import { ArrowRight, FileEdit, User } from 'lucide-react';
+import { ArrowRight, User } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 interface StoryCardProps {
@@ -27,36 +32,46 @@ const StoryCard = ({ story }: StoryCardProps) => {
 
         {/* USER + SLUG */}
         <div className="mb-3 flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-full border">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-full border">
             <User size={18} className="text-muted-foreground" />
           </div>
-          <div className="text-muted-foreground truncate text-sm">{story.slug}</div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="text-muted-foreground truncate text-sm">{story.slug}</div>
+            </TooltipTrigger>
+            <TooltipContent side="top">{story.slug}</TooltipContent>
+          </Tooltip>
         </div>
 
         {/* STATUS + TITLE */}
         <div className="mb-3 flex flex-col gap-2">
-          <span className="text-muted-foreground flex items-center gap-1 text-[11px]">
-            <FileEdit size={12} />
-            {story.status}
-          </span>
-          <h3 className="text-[15px] leading-tight font-medium">{story.title}</h3>
+          {storyStatusBadge(story.status, { size: 'xs', className: 'w-fit' })}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <h3 className="line-clamp-2 min-h-[2.5rem] text-[15px] leading-tight font-medium">
+                {story.title}
+              </h3>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="max-w-[250px]">
+              {story.title}
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         {/* RATING + TAGS */}
         <div className="mt-auto">
           <div className="mb-2 flex items-center gap-2 text-xs">
             <span className="text-muted-foreground font-medium">Rating:</span>
-            {textBadge(story.settings.contentRating, 'gray', {
-              shape: 'square',
-              className: 'rounded-[4px]',
-            })}
+            {contentRatingBadge(story.settings.contentRating, { size: 'xs' })}
           </div>
 
-          <TagSelector
-            allTags={['Fantasy', 'Romance', 'Action', 'Horror']}
-            value={['Fantasy', 'Action']}
-            onChange={() => {}}
-          />
+          {story.tags && story.tags.length > 0 && (
+            <BadgeGroup
+              badges={genresToBadgeConfigs(story.tags, { size: 'xs' })}
+              gap="xs"
+              max={2}
+            />
+          )}
         </div>
       </div>
 

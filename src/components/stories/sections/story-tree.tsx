@@ -24,7 +24,7 @@ import CommentsPanel from '../panels/comments/CommentsPanel';
 import MergeRequestPanel from '../panels/MergeRequest/MergeRequestPanel';
 import StorySettingsPanel from '../panels/setting/StorySettingsPanel';
 
-import type { IStory } from '@/type/story.type';
+import type { IStory } from '@/type/story';
 
 import { useGetStoryBySlug, useGetStoryTree } from '@/hooks/story/story.queries';
 import useChapterEdge from '@/hooks/useChapterEdge';

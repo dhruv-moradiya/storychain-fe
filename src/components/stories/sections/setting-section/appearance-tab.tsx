@@ -26,7 +26,7 @@ export function AppearanceTab({
   onCoverImageRemove,
 }: AppearanceTabProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Card Image */}
       <SettingCard
         title="Card Image"

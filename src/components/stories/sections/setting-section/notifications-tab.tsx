@@ -18,7 +18,7 @@ export function NotificationsTab() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Activity Notifications */}
       <SettingCard
         title="Activity Notifications"

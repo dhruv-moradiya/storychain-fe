@@ -98,63 +98,62 @@ export function HistoryEventCard({ event, index, isLast }: HistoryEventCardProps
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
+      initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className="relative flex gap-4"
+      transition={{ delay: index * 0.03 }}
+      whileHover={{ x: 2 }}
+      className={cn(
+        'group relative flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors',
+        'hover:bg-cream-90/60'
+      )}
     >
       {/* Timeline Line */}
-      {!isLast && <div className="bg-border/50 absolute top-10 left-5 h-[calc(100%+1rem)] w-0.5" />}
+      {!isLast && (
+        <div className="bg-border/40 absolute top-10 left-[22px] h-[calc(100%-16px)] w-0.5" />
+      )}
 
       {/* Icon */}
       <div
         className={cn(
-          'relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl',
+          'relative z-10 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg',
           config.bg
         )}
       >
-        <Icon size={18} className={config.color} />
+        <Icon size={14} className={config.color} />
       </div>
 
       {/* Content */}
-      <div className="flex-1 pb-6">
-        {/* Time */}
-        <span className="text-text-secondary-65 text-xs">{time}</span>
+      <div className="min-w-0 flex-1">
+        {/* Header row: user + time */}
+        <div className="flex items-center gap-2">
+          <img
+            src={event.user.avatarUrl}
+            alt={event.user.username}
+            className="h-5 w-5 rounded-full object-cover"
+          />
+          <span className="text-brand-pink-500 text-xs font-medium">@{event.user.username}</span>
+          <span className="text-text-secondary-65 text-[10px]">·</span>
+          <span className="text-text-secondary-65 text-[10px]">{time}</span>
+        </div>
 
-        {/* Card */}
-        <motion.div
-          whileHover={{ scale: 1.01 }}
-          className="border-border/50 hover:border-brand-pink-500/30 mt-2 rounded-xl border bg-white/80 p-4 shadow-sm transition hover:shadow-md"
-        >
-          {/* User Info */}
-          <div className="flex items-center gap-2">
-            <img
-              src={event.user.avatarUrl}
-              alt={event.user.username}
-              className="h-6 w-6 rounded-full object-cover"
-            />
-            <span className="text-brand-pink-500 text-sm font-medium">@{event.user.username}</span>
-          </div>
-
-          {/* Title */}
-          <h4 className="text-text-primary mt-2 font-medium">{event.title}</h4>
-
-          {/* Description */}
+        {/* Title + Description inline */}
+        <div className="mt-1">
+          <span className="text-text-primary text-sm font-medium">{event.title}</span>
           {event.description && (
-            <p className="text-text-secondary-65 mt-1 text-sm">{event.description}</p>
+            <span className="text-text-secondary-65 ml-1.5 text-sm">{event.description}</span>
           )}
+        </div>
 
-          {/* Link */}
-          {event.link && (
-            <a
-              href={event.link.href}
-              className="text-brand-pink-500 mt-3 inline-flex items-center gap-1 text-sm hover:underline"
-            >
-              {event.link.label}
-              <ArrowRight size={14} />
-            </a>
-          )}
-        </motion.div>
+        {/* Link */}
+        {event.link && (
+          <a
+            href={event.link.href}
+            className="text-brand-pink-500 mt-1 inline-flex items-center gap-1 text-xs hover:underline"
+          >
+            {event.link.label}
+            <ArrowRight size={12} />
+          </a>
+        )}
       </div>
     </motion.div>
   );

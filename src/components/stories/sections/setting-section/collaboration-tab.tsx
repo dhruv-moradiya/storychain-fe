@@ -4,7 +4,7 @@ import type { SettingTabProps } from './setting-section.types';
 
 export function CollaborationTab({ settings, onSettingUpdate }: SettingTabProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Contribution Settings */}
       <SettingCard
         title="Contribution Settings"
@@ -67,9 +67,9 @@ export function CollaborationTab({ settings, onSettingUpdate }: SettingTabProps)
 
       {/* Collaborators Info */}
       <SettingCard title="Team Management">
-        <div className="flex items-center gap-3 px-5 py-4">
-          <div className="bg-brand-pink-500/10 flex h-10 w-10 items-center justify-center rounded-lg">
-            <Users size={20} className="text-brand-pink-500" />
+        <div className="flex items-center gap-3 px-5 py-3">
+          <div className="bg-brand-pink-500/10 flex h-9 w-9 items-center justify-center rounded-lg">
+            <Users size={18} className="text-brand-pink-500" />
           </div>
           <div className="flex-1">
             <p className="text-text-primary text-sm font-medium">Manage Collaborators</p>
@@ -79,7 +79,7 @@ export function CollaborationTab({ settings, onSettingUpdate }: SettingTabProps)
           </div>
           <a
             href="#collaborators"
-            className="bg-brand-pink-500/10 text-brand-pink-500 hover:bg-brand-pink-500/20 rounded-lg px-4 py-2 text-sm font-medium transition"
+            className="bg-brand-pink-500/10 text-brand-pink-500 hover:bg-brand-pink-500/20 rounded-lg px-3 py-1.5 text-sm font-medium transition"
           >
             View Team
           </a>
