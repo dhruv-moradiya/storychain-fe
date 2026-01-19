@@ -1,5 +1,6 @@
 import { ErrorBoundary } from '@/components/error-boundary';
 import { ProtectedRoute } from '@/components/protected-route';
+import { PublicRoute } from '@/components/public-route';
 import { lazyRoute } from '@/lib/lazy-route';
 import { createBrowserRouter } from 'react-router';
 import NotFound from './components/common/not-found';
@@ -189,14 +190,22 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // Auth (unprotected)
+  // Auth (public only - redirect authenticated users to home)
   {
     path: '/sign-up',
-    element: <SignUp />,
+    element: (
+      <PublicRoute>
+        <SignUp />
+      </PublicRoute>
+    ),
   },
   {
     path: '/sign-in',
-    element: <SignIn />,
+    element: (
+      <PublicRoute>
+        <SignIn />
+      </PublicRoute>
+    ),
   },
 
   {
