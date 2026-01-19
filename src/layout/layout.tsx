@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from 'react-router';
 import { Analytics } from '@vercel/analytics/react';
 import { useUserProfile } from '@/hooks/users/user.queries';
+import { SentryUserContext } from '@/components/sentry-user-context';
 import Navbar from './navbar';
 
 const Layout = () => {
@@ -14,6 +15,7 @@ const Layout = () => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <SentryUserContext />
       {!isHomePage && <Navbar />}
       {/* Add padding-top to account for fixed navbar */}
       <main className={`bg-bg-cream flex-1 ${!isHomePage ? 'pt-14' : ''}`}>

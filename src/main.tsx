@@ -10,6 +10,9 @@ import { ErrorBoundary } from './components/error-boundary';
 import { PageSkeleton } from './components/skeletons/page-skeleton';
 import './index.css';
 import { ToastProvider } from './components/common/toast';
+import { initSentry } from './lib/sentry';
+
+initSentry();
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
