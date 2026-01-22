@@ -40,6 +40,14 @@ type TAutoSaveContentRequest =
   | TAutoSaveContentNewChapter
   | TAutoSaveContentUpdateChapter;
 
+interface IConvertAutoSaveToDraftRequest {
+  autoSaveId: string;
+}
+
+interface IConvertAutoSaveToPublishedRequest {
+  autoSaveId: string;
+}
+
 export type {
   IEnableAutoSaveRequest,
   IDisableAutoSaveRequest,
@@ -47,4 +55,6 @@ export type {
   TAutoSaveContentRootChapter,
   TAutoSaveContentNewChapter,
   TAutoSaveContentUpdateChapter,
+  IConvertAutoSaveToDraftRequest,
+  IConvertAutoSaveToPublishedRequest,
 };

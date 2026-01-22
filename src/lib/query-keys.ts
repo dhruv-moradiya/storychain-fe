@@ -8,6 +8,11 @@ export const QueryKey = {
     list: ['notification', 'list'] as const,
   },
 
+  chapter: {
+    byId: (chapterId: string) => ['chapter', 'detail', chapterId] as const,
+    my: ['chapter', 'my'] as const,
+  },
+
   story: {
     // ----------------
     // STORY ROUTES

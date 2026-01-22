@@ -48,4 +48,5 @@ export {
   genreBadge,
   genresBadges,
   genresToBadgeConfigs,
+  chapterStatusBadge,
 } from './story-badges';

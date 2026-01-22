@@ -165,3 +165,26 @@ export function genresToBadgeConfigs(
     } as BadgeConfig;
   });
 }
+
+// ============================================
+// CHAPTER STATUS BADGES
+// ============================================
+
+const CHAPTER_STATUS_CONFIG: Record<
+  string,
+  { color: BadgeColorKey; icon: LucideIcon; label: string }
+> = {
+  PUBLISHED: { color: 'success', icon: CheckCircle, label: 'Published' },
+  PENDING_APPROVAL: { color: 'warning', icon: Clock, label: 'Pending Approval' },
+  REJECTED: { color: 'error', icon: UserX, label: 'Rejected' },
+  DELETED: { color: 'slate', icon: Trash2, label: 'Deleted' },
+};
+
+export function chapterStatusBadge(status: string, options?: Partial<BadgeConfig>) {
+  const config = CHAPTER_STATUS_CONFIG[status] || {
+    color: 'gray' as BadgeColorKey,
+    icon: FileEdit,
+    label: status,
+  };
+  return iconBadge(config.label, config.icon, config.color, options);
+}

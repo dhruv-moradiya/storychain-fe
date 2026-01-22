@@ -1,7 +1,6 @@
 import StoryEditorDialog from '@/components/common/story-editor/story-editor-dialog';
 import { Plus } from 'lucide-react';
 import { useSearchParams } from 'react-router';
-// import { stories } from '../../../mock-data/stories';
 import { useState } from 'react';
 import {
   StoriesEmpty,
@@ -11,6 +10,7 @@ import {
   StoryStatusTabs,
 } from './stories-section/index';
 import { useGetUserStories } from '@/hooks/story/story.queries';
+import { DashboardContentLayout, DashboardGrid } from '@/components/dashboard';
 
 const StoriesSection = () => {
   const [searchParams] = useSearchParams();
@@ -45,10 +45,10 @@ const StoriesSection = () => {
 
   // 4️⃣ SUCCESS UI
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <DashboardContentLayout maxWidth="7xl" paddingSize="none">
       <StoryStatusTabs />
 
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(min(250px,100%),1fr))] gap-4">
+      <DashboardGrid minItemWidth={250} gap="md">
         {/* CREATE STORY BUTTON */}
         {selectedFilter === 'all' && (
           <div
@@ -71,10 +71,10 @@ const StoriesSection = () => {
         {filteredStories.map((story) => (
           <StoryCard key={story._id} story={story} />
         ))}
-      </div>
+      </DashboardGrid>
 
       <StoryEditorDialog open={openStoryEditor} onOpenChange={setOpenStoryEditor} />
-    </div>
+    </DashboardContentLayout>
   );
 };
 

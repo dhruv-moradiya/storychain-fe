@@ -3,6 +3,7 @@ import { FileText, X, ChevronUp, ChevronDown, Trash2, ArrowLeft, NotebookPen } f
 import { motion, AnimatePresence } from 'motion/react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { useDraftRecoveryBannerLogic } from '@/hooks/components/storyBuilder/useDraftRecoveryBannerLogic';
 import { useSearchParams } from 'react-router';
 import { formatDistanceToNow } from 'date-fns';
@@ -20,39 +21,68 @@ const DraftItem = ({ draft, onContinue }: { draft: IChapterAutoSave; onContinue:
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="border-border/50 bg-cream-95 hover:bg-cream-90 flex items-center gap-3 rounded-lg border p-2.5 transition-colors"
-    >
-      <div className="bg-brand-orange/15 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg">
-        <FileText className="text-brand-orange h-4 w-4" />
-      </div>
+    <TooltipProvider delayDuration={300}>
+      <motion.div
+        initial={{ opacity: 0, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="border-border/50 bg-cream-95 hover:bg-cream-90 flex items-center gap-2 rounded-lg border p-2.5 transition-colors"
+      >
+        <div className="bg-brand-orange/15 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg">
+          <FileText className="text-brand-orange h-4 w-4" />
+        </div>
 
-      <div className="min-w-0 flex-1">
-        <p className="text-text-primary truncate font-mono text-xs font-medium">{draft.title}</p>
-        <p className="text-text-secondary-65 font-mono text-[10px]">
-          {formatDistanceToNow(draft.lastSavedAt, { addSuffix: true })}
-        </p>
-      </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="max-w-[140px] min-w-0 flex-1 overflow-hidden">
+              <p className="text-text-primary line-clamp-1 font-mono text-xs font-medium">
+                {draft.title}
+              </p>
+              <p className="text-text-secondary-65 line-clamp-1 font-mono text-[10px]">
+                {formatDistanceToNow(draft.lastSavedAt, { addSuffix: true })}
+              </p>
+            </div>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="max-w-[200px]">
+            <p className="text-xs font-medium break-words">{draft.title}</p>
+            <p className="text-muted-foreground text-[10px]">
+              Saved {formatDistanceToNow(draft.lastSavedAt, { addSuffix: true })}
+            </p>
+          </TooltipContent>
+        </Tooltip>
 
-      <div className="flex flex-shrink-0 items-center gap-1">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-destructive hover:bg-destructive/10 hover:text-destructive h-7 w-7"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </Button>
-        <Button
-          size="icon"
-          className="bg-brand-pink-500 hover:bg-brand-pink-600 h-7 px-3 font-mono text-[10px] text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
-          onClick={handleContinue}
-        >
-          <NotebookPen />
-        </Button>
-      </div>
-    </motion.div>
+        <div className="ml-auto flex shrink-0 items-center gap-1">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive h-7 w-7"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p className="text-xs">Delete draft</p>
+            </TooltipContent>
+          </Tooltip>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                className="bg-brand-pink-500 hover:bg-brand-pink-600 h-7 w-7 text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
+                onClick={handleContinue}
+              >
+                <NotebookPen className="h-3.5 w-3.5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <p className="text-xs">Continue editing</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </motion.div>
+    </TooltipProvider>
   );
 };
 
@@ -224,40 +254,65 @@ export const DraftRecoveryBanner = () => {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="px-4 py-3">
-                {/* Draft Info */}
-                <div className="mb-3">
-                  <p className="text-text-primary truncate font-mono text-sm font-medium">
-                    "{banner.latestTitle}"
-                  </p>
-                  <p className="text-text-secondary-65 mt-1 font-mono text-xs">
-                    {banner.words && `${banner.words} words`}
-                    {banner.words && banner.timeAgo && ' • '}
-                    {banner.timeAgo && `saved ${banner.timeAgo}`}
-                  </p>
-                </div>
+              <TooltipProvider delayDuration={300}>
+                <div className="px-4 py-3">
+                  {/* Draft Info */}
+                  <div className="mb-3">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-text-primary line-clamp-2 cursor-default font-mono text-sm font-medium">
+                          "{banner.latestTitle}"
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="max-w-[280px]">
+                        <p className="text-xs break-words">{banner.latestTitle}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <p className="text-text-secondary-65 mt-1 font-mono text-xs">
+                      {banner.words && `${banner.words} words`}
+                      {banner.words && banner.timeAgo && ' • '}
+                      {banner.timeAgo && `saved ${banner.timeAgo}`}
+                    </p>
+                  </div>
 
-                {/* Action Buttons */}
-                <div className="flex gap-2">
-                  {banner.count > 1 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border-border text-text-secondary-75 hover:bg-muted/50 flex-1 font-mono text-xs"
-                      onClick={actions.handleDiscardLatest}
-                    >
-                      Discard
-                    </Button>
-                  )}
-                  <Button
-                    size="sm"
-                    className="bg-brand-pink-500 hover:bg-brand-pink-600 flex-1 font-mono text-xs text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
-                    onClick={handleViewDrafts}
-                  >
-                    {banner.count > 1 ? 'View All' : 'Continue'}
-                  </Button>
+                  {/* Action Buttons - Always visible with fixed widths */}
+                  <div className="flex gap-2">
+                    {banner.count > 1 && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border-border text-text-secondary-75 hover:bg-muted/50 min-w-[80px] shrink-0 font-mono text-xs"
+                            onClick={actions.handleDiscardLatest}
+                          >
+                            Discard
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent side="bottom">
+                          <p className="text-xs">Discard this draft</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          size="sm"
+                          className="bg-brand-pink-500 hover:bg-brand-pink-600 min-w-[80px] shrink-0 font-mono text-xs text-white shadow-[0_2px_8px_var(--brand-pink-shadow25)]"
+                          onClick={handleViewDrafts}
+                        >
+                          {banner.count > 1 ? 'View All' : 'Continue'}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">
+                        <p className="text-xs">
+                          {banner.count > 1 ? 'View all drafts' : 'Continue editing'}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
                 </div>
-              </div>
+              </TooltipProvider>
             </motion.div>
           )}
 

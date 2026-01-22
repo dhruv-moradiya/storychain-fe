@@ -1,11 +1,14 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useApi } from '../useApi';
 import type {
   TAutoSaveContentRequest,
   IDisableAutoSaveRequest,
   IEnableAutoSaveRequest,
+  IConvertAutoSaveToDraftRequest,
+  IConvertAutoSaveToPublishedRequest,
 } from '@/type/chapterAutoSave/chapterAutoSave.request.types';
 import { chapterAutoSaveApi } from '@/api/chapterAutoSave.api';
+import { QueryKey } from '@/lib/query-keys';
 
 export function useEnableAutoSave() {
   const api = useApi();
@@ -34,5 +37,35 @@ export function useDisableAutoSave() {
     mutationFn: (payload: IDisableAutoSaveRequest) =>
       chapterAutoSaveApi(api).disableAutoSave(payload),
     meta: { requiresAuth: true },
+  });
+}
+
+export function useConvertAutoSaveToDraft() {
+  const api = useApi();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: IConvertAutoSaveToDraftRequest) =>
+      chapterAutoSaveApi(api).convertToDraft(payload),
+    meta: { requiresAuth: true },
+    onSuccess: () => {
+      // Invalidate drafts list to refresh after conversion
+      queryClient.invalidateQueries({ queryKey: QueryKey.story.autoSave.draft() });
+    },
+  });
+}
+
+export function useConvertAutoSaveToPublished() {
+  const api = useApi();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: IConvertAutoSaveToPublishedRequest) =>
+      chapterAutoSaveApi(api).convertToPublished(payload),
+    meta: { requiresAuth: true },
+    onSuccess: () => {
+      // Invalidate drafts list to refresh after conversion
+      queryClient.invalidateQueries({ queryKey: QueryKey.story.autoSave.draft() });
+    },
   });
 }

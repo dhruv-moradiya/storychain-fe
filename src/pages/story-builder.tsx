@@ -5,7 +5,8 @@ import { FontSize, TextStyle, TextStyleKit } from '@tiptap/extension-text-style'
 import Underline from '@tiptap/extension-underline';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
+import { toast } from 'sonner';
 
 import {
   BuilderCanvas,
@@ -15,6 +16,10 @@ import {
   DraftRecoveryBanner,
 } from '@/components/story-builder';
 import { useGetAutoSaveDraft } from '@/hooks/chapterAutoSave/chapterAutoSave.queries';
+import {
+  useConvertAutoSaveToDraft,
+  useConvertAutoSaveToPublished,
+} from '@/hooks/chapterAutoSave/chapterAutoSave.mutations';
 import { useBuilderSave } from '@/hooks/components/storyBuilder';
 
 const DEFAULT_CONTENT = `
@@ -40,8 +45,13 @@ const StoryBuilder = () => {
   const [editorContent, setEditorContent] = useState<string>(DEFAULT_CONTENT);
   const [title, setTitle] = useState<string>('');
   const [params] = useSearchParams();
+  const navigate = useNavigate();
   const autoSaveId = params.get('autoSaveId');
   const { data: { data: draftList = [] } = {} } = useGetAutoSaveDraft();
+
+  // Convert mutations
+  const convertToDraft = useConvertAutoSaveToDraft();
+  const convertToPublished = useConvertAutoSaveToPublished();
 
   const selectedDraft = useMemo(() => {
     if (!draftList.length || !autoSaveId) return undefined;
@@ -58,6 +68,50 @@ const StoryBuilder = () => {
     title,
     selectedDraft,
   });
+
+  // Handler for converting autosave to draft chapter
+  const handleSaveAsDraft = () => {
+    if (!autoSaveId) {
+      toast.error('No draft to convert. Please save your work first.');
+      return;
+    }
+
+    convertToDraft.mutate(
+      { autoSaveId },
+      {
+        onSuccess: (response) => {
+          toast.success('Successfully saved as draft chapter!');
+          // Navigate to the newly created draft chapter
+          navigate(`/chapter/${response.data._id}`);
+        },
+        onError: (error) => {
+          toast.error(error.message || 'Failed to save as draft');
+        },
+      }
+    );
+  };
+
+  // Handler for converting autosave to published chapter
+  const handlePublish = () => {
+    if (!autoSaveId) {
+      toast.error('No draft to publish. Please save your work first.');
+      return;
+    }
+
+    convertToPublished.mutate(
+      { autoSaveId },
+      {
+        onSuccess: (response) => {
+          toast.success('Successfully published chapter!');
+          // Navigate to the published chapter
+          navigate(`/chapter/${response.data._id}`);
+        },
+        onError: (error) => {
+          toast.error(error.message || 'Failed to publish chapter');
+        },
+      }
+    );
+  };
 
   useEffect(() => {
     if (selectedDraft && editor) {
@@ -81,6 +135,8 @@ const StoryBuilder = () => {
         onTitleChange={setTitle}
         onSave={handleSave}
         isSaving={isSaving}
+        onPublish={handlePublish}
+        onSaveAsDraft={handleSaveAsDraft}
         editorContent={editor.getHTML()}
         autoSaveId={autoSaveId}
         // Pass draft context for submit request dialog

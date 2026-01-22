@@ -7,6 +7,7 @@ import {
   NotificationsEmpty,
   NotificationsError,
 } from './notification-section/index';
+import { DashboardContentLayout } from '@/components/dashboard';
 
 const NotificationSection = () => {
   const { data, isLoading, isError, refetch } = useGetNotifications();
@@ -21,18 +22,17 @@ const NotificationSection = () => {
   }
 
   return (
-    <motion.div
-      {...fadeIn(0.05)}
-      className="mx-auto max-w-5xl overflow-hidden rounded-xl border shadow-sm"
-    >
-      <div className="bg-muted/40 border-b p-3 text-sm font-medium">Notifications</div>
+    <DashboardContentLayout maxWidth="5xl" paddingSize="none">
+      <motion.div {...fadeIn(0.05)} className="overflow-hidden rounded-xl border shadow-sm">
+        <div className="bg-muted/40 border-b p-3 text-sm font-medium">Notifications</div>
 
-      <div className="divide-y">
-        {notifications.map((n) => (
-          <NotificationItem key={n._id} notification={n} />
-        ))}
-      </div>
-    </motion.div>
+        <div className="divide-y">
+          {notifications.map((n) => (
+            <NotificationItem key={n._id} notification={n} />
+          ))}
+        </div>
+      </motion.div>
+    </DashboardContentLayout>
   );
 };
 

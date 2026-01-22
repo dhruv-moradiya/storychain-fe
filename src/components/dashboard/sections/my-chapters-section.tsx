@@ -1,10 +1,11 @@
 import MyChapterList from './my-chapters/components/my-chapter-list';
+import { DashboardContentLayout } from '@/components/dashboard';
 
 function MyChaptersSection() {
   return (
-    <div className="mx-auto max-w-7xl space-y-6">
+    <DashboardContentLayout maxWidth="7xl" paddingSize="none">
       <MyChapterList />
-    </div>
+    </DashboardContentLayout>
   );
 }
 

@@ -12,6 +12,7 @@ const Dashboard = lazyRoute(() => import('./pages/dashboard'), 'dashboard');
 const Story = lazyRoute(() => import('./pages/stories'), 'story');
 const StoryBuilder = lazyRoute(() => import('./pages/story-builder'), 'storyBuilder');
 const ChapterRead = lazyRoute(() => import('./pages/chapter-read'), 'chapter');
+const ChapterDetails = lazyRoute(() => import('./pages/chapter-details'), 'chapter');
 const UserProfile = lazyRoute(() => import('./pages/user-profile'), 'profile');
 const Reports = lazyRoute(() => import('./pages/reports'), 'dashboard');
 const Appeals = lazyRoute(() => import('./pages/appeals'), 'dashboard');
@@ -91,6 +92,11 @@ export const router = createBrowserRouter([
       {
         path: 'stories/:storyId/chapter/:chapterId',
         element: <ChapterRead />,
+      },
+      // Chapter details page for author's own chapters (from dashboard)
+      {
+        path: 'chapters/:chapterId',
+        element: <ChapterDetails />,
       },
       // Stories
       // Query params: mode (new|edit|continue), parent (root|chapterId), chapter (chapterId), draft (autoSaveId)
