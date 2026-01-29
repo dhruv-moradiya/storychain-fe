@@ -124,7 +124,7 @@ export const StoryTabs = () => {
 
   // Desktop: Show horizontal tabs
   return (
-    <div className="bg-bg-cream/80 border-border/30 sticky top-0 z-50 w-full border-b backdrop-blur-xl">
+    <div className="bg-bg-cream/80 border-border/30 sticky top-0 z-50 w-full overflow-x-hidden border-b backdrop-blur-xl">
       <div className="scrollbar-none -mx-1 flex gap-1 overflow-x-auto px-3 sm:gap-2 sm:px-4">
         {tabs.map((t) => {
           const fullPath = `/stories/${slug}/${t.path}`;

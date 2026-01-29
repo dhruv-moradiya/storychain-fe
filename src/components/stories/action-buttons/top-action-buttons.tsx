@@ -89,7 +89,7 @@ const TopActionButtons = ({ setOpenPanel }: TopActionButtonsProps) => {
       transition={{ duration: 0.3, delay: 0.1 }}
       className="absolute top-4 left-1/2 z-10 -translate-x-1/2"
     >
-      <div className="border-border/50 bg-bg-cream flex items-center gap-2 rounded-xl border p-2">
+      <div className="border-border/50 bg-bg-cream flex items-center gap-2 rounded-xl border">
         <TooltipProvider delayDuration={0}>
           {mainButtons.map((btn, index) => {
             const Icon = btn.icon;
@@ -110,26 +110,14 @@ const TopActionButtons = ({ setOpenPanel }: TopActionButtonsProps) => {
                     >
                       <Icon size={18} />
                     </Button>
-                    {btn.badge && btn.badge > 0 && (
-                      <span className="bg-brand-pink-500 absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold text-white">
-                        {btn.badge > 9 ? '9+' : btn.badge}
-                      </span>
-                    )}
                   </motion.div>
                 </TooltipTrigger>
-                <TooltipContent
-                  side="bottom"
-                  sideOffset={8}
-                  className="border-border/50 bg-bg-cream text-text-primary rounded-lg border px-3 py-2 text-xs font-medium"
-                >
+                <TooltipContent side="bottom" sideOffset={8}>
                   {btn.tooltip}
                 </TooltipContent>
               </Tooltip>
             );
           })}
-
-          {/* Divider */}
-          <div className="bg-border/50 mx-1 h-6 w-px" />
 
           {/* More Actions Dropdown */}
           <DropdownMenu>
@@ -144,7 +132,7 @@ const TopActionButtons = ({ setOpenPanel }: TopActionButtonsProps) => {
                     <Button
                       size="icon"
                       variant="ghost"
-                      className="text-text-secondary-65 hover:bg-brand-pink-500/10 hover:text-brand-pink-500 h-10 w-10 rounded-lg transition-all"
+                      // className="text-text-secondary-65 hover:bg-brand-pink-500/10 hover:text-brand-pink-500 h-10 w-10 rounded-lg transition-all"
                     >
                       <MoreHorizontal size={18} />
                     </Button>

@@ -5,8 +5,6 @@ import { motion } from 'framer-motion';
 
 function NavItem({ to, label, icon }: { to: string; label: string; icon: React.ReactNode }) {
   const { pathname } = useLocation();
-  console.log('pathname :>> ', pathname);
-  console.log('to :>> ', to);
   const isActive = pathname.includes(to);
 
   return (

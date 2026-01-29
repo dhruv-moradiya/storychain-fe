@@ -63,7 +63,7 @@ const LeftActionButtons = ({
       transition={{ duration: 0.3, delay: 0.1 }}
       className="absolute top-1/2 left-4 z-10 -translate-y-1/2"
     >
-      <div className="border-border/50 bg-bg-cream flex flex-col gap-2 rounded-xl border p-2">
+      <div className="border-border/50 bg-bg-cream flex flex-col rounded-xl border">
         <TooltipProvider delayDuration={0}>
           {buttons.map((btn, index) => {
             const Icon = btn.icon;
@@ -80,7 +80,7 @@ const LeftActionButtons = ({
                       variant="ghost"
                       onClick={btn.onClick}
                       className={cn(
-                        'h-10 w-10 rounded-lg transition-all',
+                        'rounded-lg transition-all',
                         btn.primary
                           ? 'bg-brand-pink-500 hover:bg-brand-pink-600 text-white'
                           : 'text-text-secondary-65 hover:bg-brand-pink-500/10 hover:text-brand-pink-500'
@@ -90,11 +90,7 @@ const LeftActionButtons = ({
                     </Button>
                   </motion.div>
                 </TooltipTrigger>
-                <TooltipContent
-                  side="right"
-                  sideOffset={8}
-                  className="border-border/50 bg-bg-cream text-text-primary rounded-lg border px-3 py-2 text-xs font-medium"
-                >
+                <TooltipContent side="right" sideOffset={8}>
                   {btn.tooltip}
                 </TooltipContent>
               </Tooltip>

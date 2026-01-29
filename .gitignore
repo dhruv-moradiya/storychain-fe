@@ -28,4 +28,7 @@ package-lock.json
 .vercel
 build
 
-docs
+# docs
+
+.env
+.env.*

@@ -22,7 +22,7 @@ export default function Story() {
         onOpenChange={(open) => setOpenStoryEditor(open)}
         onSubmit={() => {}}
       /> */}
-      <div className="container mx-auto">
+      <div>
         <Routes>
           <Route index element={<Navigate to="overview" />} />
 
