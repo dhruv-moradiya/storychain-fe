@@ -36,12 +36,12 @@ import {
 } from 'lucide-react';
 
 import { fadeIn } from '@/lib/utils';
-import { chaptersData, type IChapter } from '@/mock-data/chapters';
+import { chaptersData, type IMockChapter } from '@/mock-data/chapters';
 import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
-const columnHelper = createColumnHelper<IChapter>();
+const columnHelper = createColumnHelper<IMockChapter>();
 
-function expandAllRows(rows: IChapter[], path: string[] = [], acc: ExpandedState = {}) {
+function expandAllRows(rows: IMockChapter[], path: string[] = [], acc: ExpandedState = {}) {
   rows.forEach((_row, idx) => {
     const rowId = [...path, String(idx)].join('.');
 
@@ -132,10 +132,10 @@ export default function ChaptersSection() {
 
           return (
             <span className={badgeBase}>
-              {value === 'PUBLISHED' && <CheckCircle size={12} className="text-green-600" />}
-              {value === 'PENDING_APPROVAL' && <Clock size={12} className="text-yellow-600" />}
-              {value === 'REJECTED' && <XCircle size={12} className="text-red-600" />}
-              {value === 'DELETED' && <Trash size={12} className="text-red-600" />}
+              {value === 'published' && <CheckCircle size={12} className="text-green-600" />}
+              {value === 'pending_approval' && <Clock size={12} className="text-yellow-600" />}
+              {value === 'rejected' && <XCircle size={12} className="text-red-600" />}
+              {value === 'deleted' && <Trash size={12} className="text-red-600" />}
               {value}
             </span>
           );
@@ -198,11 +198,11 @@ export default function ChaptersSection() {
           if (!pr.isPR) return <span className="text-muted-foreground text-xs">—</span>;
 
           const icon =
-            pr.status === 'APPROVED' ? (
+            pr.status === 'approved' ? (
               <CheckCircle size={14} className="text-green-600" />
-            ) : pr.status === 'PENDING' ? (
+            ) : pr.status === 'pending' ? (
               <Clock size={14} className="text-yellow-600" />
-            ) : pr.status === 'REJECTED' ? (
+            ) : pr.status === 'rejected' ? (
               <XCircle size={14} className="text-red-600" />
             ) : (
               <GitMerge size={14} className="text-purple-600" />

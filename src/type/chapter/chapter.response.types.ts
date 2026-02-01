@@ -1,8 +1,8 @@
 // Chapter API Response Types
 
 import type { IBaseType } from '..';
-import type { IChapter } from '../chapter.type';
 import type { IPublicViewUser } from '../user';
+import type { IChapter, TChapterPRStatus } from './chapter.types';
 
 // Lightweight chapter item for list views (matches actual API response)
 interface IMyChapterListItem {
@@ -14,7 +14,7 @@ interface IMyChapterListItem {
   pullRequest: {
     isPR: boolean;
     prId?: string;
-    status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'MERGED';
+    status?: TChapterPRStatus;
   };
   stats: {
     reads: number;

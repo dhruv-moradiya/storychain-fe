@@ -1,21 +1,13 @@
+import type { TStoryContentRating, TStoryGenres } from './story.types';
+
 interface IStorySettingUpdateRequestBase {
   isPublic: boolean;
   allowBranching: boolean;
   requireApproval: boolean;
   allowComments: boolean;
   allowVoting: boolean;
-  genre:
-    | 'FANTASY'
-    | 'SCI_FI'
-    | 'MYSTERY'
-    | 'ROMANCE'
-    | 'HORROR'
-    | 'THRILLER'
-    | 'ADVENTURE'
-    | 'DRAMA'
-    | 'COMEDY'
-    | 'OTHER';
-  contentRating: 'GENERAL' | 'TEEN' | 'MATURE';
+  genres: TStoryGenres[];
+  contentRating: TStoryContentRating;
 }
 
 type IStorySettingUpdateRequest = { slug: string } & Partial<IStorySettingUpdateRequestBase>;

@@ -1,5 +1,6 @@
 import { BookOpen, Sparkles, Clock, Users } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { fadeIn } from '@/lib/utils';
 
 export function HowToUseHero() {
   return (
@@ -34,9 +35,7 @@ export function HowToUseHero() {
 
       <div className="relative mx-auto max-w-4xl text-center">
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          {...fadeIn(0.1)}
           className="border-brand-blue/20 bg-brand-blue/5 mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-2"
         >
           <BookOpen className="text-brand-blue h-4 w-4" />
@@ -44,9 +43,7 @@ export function HowToUseHero() {
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          {...fadeIn(0.2)}
           className="font-libreBaskerville text-text-tertiary mb-5 text-4xl leading-tight tracking-tight sm:text-5xl lg:text-6xl"
         >
           How to Use
@@ -55,9 +52,7 @@ export function HowToUseHero() {
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          {...fadeIn(0.3)}
           className="text-text-secondary-65 mx-auto mb-8 max-w-2xl text-base leading-relaxed"
         >
           Everything you need to know to create, share, and enjoy interactive stories. From your
@@ -83,9 +78,7 @@ export function HowToUseHero() {
           ].map((stat, index) => (
             <motion.div
               key={stat.text}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+              {...fadeIn(0.4 + index * 0.1)}
               className="text-text-secondary-65 flex items-center gap-2"
             >
               <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${stat.bg}`}>
