@@ -20,10 +20,11 @@ interface MyChapterCardProps {
 }
 
 const STATUS_CONFIG = {
-  PUBLISHED: { icon: CheckCircle, label: 'Published', color: 'text-green-600', bg: 'bg-green-50' },
-  PENDING_APPROVAL: { icon: Clock, label: 'Pending', color: 'text-yellow-600', bg: 'bg-yellow-50' },
-  REJECTED: { icon: XCircle, label: 'Rejected', color: 'text-red-500', bg: 'bg-red-50' },
-  DELETED: { icon: FileEdit, label: 'Deleted', color: 'text-gray-500', bg: 'bg-gray-50' },
+  published: { icon: CheckCircle, label: 'Published', color: 'text-green-600', bg: 'bg-green-50' },
+  pending_approval: { icon: Clock, label: 'Pending', color: 'text-yellow-600', bg: 'bg-yellow-50' },
+  rejected: { icon: XCircle, label: 'Rejected', color: 'text-red-500', bg: 'bg-red-50' },
+  deleted: { icon: FileEdit, label: 'Deleted', color: 'text-gray-500', bg: 'bg-gray-50' },
+  draft: { icon: FileEdit, label: 'Draft', color: 'text-gray-500', bg: 'bg-gray-50' },
 } as const;
 
 // Helper to format numbers
@@ -37,7 +38,7 @@ function formatNumber(num: number): string {
 export default function MyChapterCard({ chapter }: MyChapterCardProps) {
   const navigate = useNavigate();
 
-  const statusConfig = STATUS_CONFIG[chapter.status] || STATUS_CONFIG.PUBLISHED;
+  const statusConfig = STATUS_CONFIG[chapter.status] || STATUS_CONFIG.published;
   const StatusIcon = statusConfig.icon;
 
   return (

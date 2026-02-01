@@ -1,5 +1,14 @@
+import { CHAPTER_PR_STATUSES, CHAPTER_STATUSES } from './chapter-enum';
+
+export type TChapterStatus = (typeof CHAPTER_STATUSES)[number];
+export type TChapterPRStatus = (typeof CHAPTER_PR_STATUSES)[number];
+
+/**
+ * Represents a single chapter within a story.
+ */
 export interface IChapter {
   _id: string;
+  slug: string;
   storyId: string;
 
   parentChapterId?: string | null;
@@ -13,16 +22,16 @@ export interface IChapter {
   votes: {
     upvotes: number;
     downvotes: number;
-    score: number; // Derived metric for ranking
+    score: number;
   };
 
-  status: 'PUBLISHED' | 'PENDING_APPROVAL' | 'REJECTED' | 'DELETED';
+  status: TChapterStatus;
   isEnding: boolean;
 
   pullRequest: {
     isPR: boolean;
     prId?: string;
-    status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'MERGED';
+    status: TChapterPRStatus;
     submittedAt?: Date;
     reviewedBy?: string;
     reviewedAt?: Date;

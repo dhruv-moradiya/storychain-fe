@@ -22,7 +22,7 @@ export function Loader({ size = 'md', fullScreen = false, text }: LoaderProps) {
   ];
 
   const content = (
-    <div className="bg-bg-cream flex min-h-[50vh] w-full flex-col items-center justify-center gap-4">
+    <div className="bg-bg-cream flex min-h-screen w-full flex-col items-center justify-center gap-4">
       {/* Bouncing dots */}
       <div className="flex items-center justify-center" style={{ gap: config.gap }}>
         {dots.map((dot, index) => (

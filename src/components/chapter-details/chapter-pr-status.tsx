@@ -11,28 +11,28 @@ interface ChapterPRStatusProps {
 }
 
 const PR_STATUS_CONFIG = {
-  PENDING: {
+  pending: {
     icon: Clock,
     label: 'Pending',
     color: 'text-yellow-600',
     bgColor: 'bg-yellow-50',
     borderColor: 'border-yellow-200',
   },
-  APPROVED: {
+  approved: {
     icon: CheckCircle,
     label: 'Approved',
     color: 'text-green-600',
     bgColor: 'bg-green-50',
     borderColor: 'border-green-200',
   },
-  REJECTED: {
+  rejected: {
     icon: XCircle,
     label: 'Rejected',
     color: 'text-red-500',
     bgColor: 'bg-red-50',
     borderColor: 'border-red-200',
   },
-  MERGED: {
+  merged: {
     icon: GitMerge,
     label: 'Merged',
     color: 'text-purple-600',
@@ -53,7 +53,7 @@ export function ChapterPRStatus({ pullRequest, className, onViewPR }: ChapterPRS
     return null;
   }
 
-  const status = pullRequest.status || 'PENDING';
+  const status = pullRequest.status || 'pending';
   const config = PR_STATUS_CONFIG[status];
   const StatusIcon = config.icon;
 

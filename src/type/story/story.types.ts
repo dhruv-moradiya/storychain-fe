@@ -1,4 +1,4 @@
-import type { IChapter } from '../chapter.type';
+import type { IChapter } from '../chapter/chapter.types';
 import type { IChapterNodeData } from '../story-canvas.type';
 import type {
   STORY_COLLABORATOR_ROLES,

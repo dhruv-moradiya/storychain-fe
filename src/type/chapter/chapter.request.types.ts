@@ -1,5 +1,7 @@
 // Chapter API Request Types
 
+import type { TChapterStatus } from './chapter.types';
+
 interface IGetChapterByIdRequest {
   chapterId: string;
 }
@@ -17,7 +19,7 @@ interface IDeleteChapterRequest {
 interface IGetMyChaptersRequest {
   page?: number;
   limit?: number;
-  status?: 'PUBLISHED' | 'PENDING_APPROVAL' | 'REJECTED' | 'DELETED';
+  status?: TChapterStatus;
 }
 
 export type {

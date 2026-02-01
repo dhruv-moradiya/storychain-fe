@@ -20,8 +20,8 @@ export function useChapterFlowLayout() {
       // ✅ Set graph config ONCE
       dagreGraph.setGraph({
         rankdir: direction,
-        nodesep: 120, // horizontal gap
-        ranksep: 100, // vertical gap
+        nodesep: 20, // horizontal gap
+        ranksep: 70, // vertical gap
         edgesep: 40,
         marginx: 60,
         marginy: 60,

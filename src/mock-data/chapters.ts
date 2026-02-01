@@ -1,4 +1,6 @@
-export interface IChapter {
+import type { TChapterPRStatus, TChapterStatus } from '@/type/chapter/chapter.types';
+
+export interface IMockChapter {
   _id: string;
   storyId: string;
 
@@ -18,13 +20,13 @@ export interface IChapter {
     score: number;
   };
 
-  status: 'PUBLISHED' | 'PENDING_APPROVAL' | 'REJECTED' | 'DELETED';
+  status: TChapterStatus;
   isEnding: boolean;
 
   pullRequest: {
     isPR: boolean;
     prId?: string;
-    status?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'MERGED';
+    status?: TChapterPRStatus;
     submittedAt?: string;
     reviewedBy?: string;
     reviewedAt?: string;
@@ -44,10 +46,10 @@ export interface IChapter {
   isFlagged: boolean;
 
   // IMPORTANT PART ↓↓↓
-  childChapters: IChapter[];
+  childChapters: IMockChapter[];
 }
 
-export const chaptersData: IChapter[] = [
+export const chaptersData: IMockChapter[] = [
   {
     _id: 'c1',
     storyId: 's1',
@@ -57,7 +59,7 @@ export const chaptersData: IChapter[] = [
     title: 'Root Chapter',
     authorId: 'user_1',
     content: 'This is the start of the story where the world and the hero are introduced.',
-    status: 'PUBLISHED',
+    status: 'published',
     chapterNumber: 1,
 
     votes: { upvotes: 0, downvotes: 0, score: 0 },
@@ -80,7 +82,7 @@ export const chaptersData: IChapter[] = [
         authorId: 'user_2',
         content: 'The hero begins exploring the eastern forest, discovering new dangers.',
         chapterNumber: 2,
-        status: 'PENDING_APPROVAL',
+        status: 'pending_approval',
 
         votes: { upvotes: 0, downvotes: 0, score: 0 },
         isEnding: false,
@@ -102,7 +104,7 @@ export const chaptersData: IChapter[] = [
             authorId: 'user_3',
             content: 'The hero finds a mysterious clue glowing beneath an old tree.',
             chapterNumber: 3,
-            status: 'PUBLISHED',
+            status: 'published',
 
             votes: { upvotes: 0, downvotes: 0, score: 0 },
             isEnding: false,
@@ -125,7 +127,7 @@ export const chaptersData: IChapter[] = [
             authorId: 'user_4',
             content: 'A strange figure appears and warns the hero about a coming threat.',
             chapterNumber: 3,
-            status: 'PUBLISHED',
+            status: 'published',
 
             votes: { upvotes: 0, downvotes: 0, score: 0 },
             isEnding: false,
@@ -151,7 +153,7 @@ export const chaptersData: IChapter[] = [
         authorId: 'user_5',
         content: 'A different route leads the hero into a deserted ancient village.',
         chapterNumber: 2,
-        status: 'DELETED',
+        status: 'deleted',
 
         votes: { upvotes: 0, downvotes: 0, score: 0 },
         isEnding: false,
@@ -173,7 +175,7 @@ export const chaptersData: IChapter[] = [
             authorId: 'user_6',
             content: 'Inside a ruined house, the hero discovers an injured traveler.',
             chapterNumber: 3,
-            status: 'PUBLISHED',
+            status: 'published',
 
             votes: { upvotes: 0, downvotes: 0, score: 0 },
             isEnding: false,
@@ -199,7 +201,7 @@ export const chaptersData: IChapter[] = [
         authorId: 'user_7',
         content: 'A hidden cave is revealed, rumored to hold ancient secrets.',
         chapterNumber: 2,
-        status: 'PUBLISHED',
+        status: 'published',
 
         votes: { upvotes: 0, downvotes: 0, score: 0 },
         isEnding: false,
@@ -221,7 +223,7 @@ export const chaptersData: IChapter[] = [
             authorId: 'user_8',
             content: 'The hero enters the cave and finds ancient carvings on the wall.',
             chapterNumber: 3,
-            status: 'REJECTED',
+            status: 'rejected',
 
             votes: { upvotes: 0, downvotes: 0, score: 0 },
             isEnding: false,
@@ -244,7 +246,7 @@ export const chaptersData: IChapter[] = [
             authorId: 'user_9',
             content: 'A deep rumble suggests something is awakening beneath the cave.',
             chapterNumber: 3,
-            status: 'PUBLISHED',
+            status: 'published',
 
             votes: { upvotes: 0, downvotes: 0, score: 0 },
             isEnding: false,
@@ -267,7 +269,7 @@ export const chaptersData: IChapter[] = [
             authorId: 'user_10',
             content: 'The cave collapses, trapping the hero inside a hidden chamber.',
             chapterNumber: 3,
-            status: 'PENDING_APPROVAL',
+            status: 'pending_approval',
 
             votes: { upvotes: 0, downvotes: 0, score: 0 },
             isEnding: false,

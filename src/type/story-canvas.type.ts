@@ -7,12 +7,13 @@ import LoadMorePlaceholder, {
   type LoadMorePlaceholderData,
 } from '@/components/nodes/load-more-placeholder';
 import type { Edge, EdgeProps, Node, NodeProps } from '@xyflow/react';
+import type { TChapterStatus } from './chapter/chapter.types';
 
 export interface IChapterNode {
   _id: string;
   title: string;
   storyId: string;
-  status: 'PUBLISHED' | 'PENDING_APPROVAL' | 'REJECTED' | 'DELETED';
+  status: TChapterStatus;
 
   reportCount: number;
   prId: string | null;
