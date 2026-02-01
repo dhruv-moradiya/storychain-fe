@@ -94,7 +94,7 @@ export default function ChapterDetailsPage() {
     chapterNumber: chapter.chapterNumber,
     createdAt: chapter.createdAt,
     updatedAt: chapter.updatedAt,
-    status: chapter.status === 'PUBLISHED' ? 'published' : 'draft',
+    status: chapter.status === 'published' ? 'published' : 'draft',
     stats: {
       views: chapter.stats.reads,
       likes: chapter.votes.upvotes,
